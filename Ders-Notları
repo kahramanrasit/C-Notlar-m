@@ -1,0 +1,1428 @@
+
+#### Token (Atom)
+
+ - Derleyicinin anlamlandırabildiği en küçük program parçasıdır.
+
+ - Derleyici "Tokenizing" işlemi ile kodu atomlarına ayırır.
+
+Tokenlar aşağıdaki gibi sınıflandırılabilirler:
+
+ 1- Keywords (Anahtar Kelime) 
+ 
+ 3- Identifiers (İsimler)   	
+ 
+ 4- Constant (Sabitler) 
+ 
+ 5- Strings	
+ 
+ 6- Special Symbols
+ 
+ 7- Operators (Operatörler)				
+
+1-Keywords: Programlama dilinde ön tanımlama yapılmış ve rezerve edilmiş 
+kelimelerdir.
+Bu kelimeleri bir değişken olarak tanımlayıp kullanamayız. Anahtar kelimelere
+tekrar tanımlama veya atama yapamayız.
+
+C programlama dilinde anahtar kelimeler aşağıdaki gibidir.
+
+auto  -  double  - int  -  struct  - break -  else  - long  -  switch  - case
+enum -   register  - typedef  - char  - extern -  return -  union -  const   
+float  - short -  unsigned  - continue - for  - signed - void -  default 
+goto -  sizeof -  volatile -  do  -  if   - static  -  while  - inline - restrict 
+_Bool -    _Complex -  _Imaginary
+
+
+2.Identifiers: İsimler Genel terminolojide değişkenleri, fonksiyonları 
+ve dizileri tanımlamak için kullanılır.
+
+ - Harfle veya _(Underscore) ile başlamalıdır.
+ - Sadece harf, sayi ve _ içerebilirler.
+ - Anahtar kelimeler kullanılamaz.
+ - Boşluk içeremez (whitespace).
+ - 31 karakteri geçmemelidir. Geçerse ilk 31 karakter kabul edilir.
+ - Büyük-küçük harf duyarlılığı vardır.
+
+
+
+ 3.Constant: Const belirteci, programcının derleyiciye belirli bir değişkenin
+ değerinin değiştirilmemesi gerektiğinin bildirmesini sağlar.
+ Ayrıca literals olarak ingilizcede adlandırılabilir.
+
+
+ 
+ 4.Strings: Değişken tipi char yani karakter olan dizilerdir.
+ TR'de "Katar" olarak karşımıza çıkabilir.
+
+
+ 5.Special Symbols: C programlamada bazı özel anlamları olan sembollerdir.
+ Bu sebeple farklı amaçlarda kullanılamaz.
+
+ - Brackets[]: Dizilerin tanımlanmasında ve elemanlarının çağırılmasını
+ anlamlandıran semboldür.
+ 
+ opening bracket  [
+ 
+ closing bracket  ]
+
+ - Parentheses() : Bu sembol fonksiyon tanımlanmasında ve fonksiyonun 
+ çağırılmasında kullanılır.
+
+ - Braces {} : Küme parantezi birden fazla çalıştırılabilir ifade içeren 
+ bir kod bloğunun başlangıcını ve sonunu belirtir.  
+ 
+ opening curly brace {
+ 
+ closing curly brace }
+ 
+ ```
+ {// Main Block( ana block)
+
+     {
+       //Nested Blok(içsel block)
+     }
+ 
+ }
+ ```
+
+ - Comma ( , ): Birden fazla deyimin ayrımında kullanılır. Mesela fonksiyon
+ çağrılırken argümanların ayrımı için kullanılır.
+
+ - Colon ( : ) : Bir başlatma listesi adı verilen bir şeyi çağırırken 
+ kullanılır.
+
+ - Semicolon (;): Deyim sonlandırıcı olarak bilinir.Bir mantıksal varlığın 
+ sonunu gösterir. Bu nedenle her bir deyimin noktalı virgülle bitmesi gerekir.
+
+ - Asterisk (*) : Pointer değişkeni tanımlamak için kullanılır.,
+
+ - Assignment operator( = ) : Bir değer ataması yapılırken kullanılır.
+  
+     - Atama Operatörü (=)
+
+ -Pre-processor(#): Ön işlemciye verilen komutlarda kullanılan semboldür.
+    - number sign 
+    - sharp
+    - pound sign 
+    - diyez
+
+ 6. Operators: C değişkenlerine ve diğer nesnelere uygulandığında bir 
+ eylemi tetikleyen sembollerdir. Operatörlerin üzerinde hareket ettiği
+ veri öğelerine operant denir.
+    - Side effect ( Yan Etki)
+    - Sequence Point (Yan Etki Noktası)
+
+ Tekli Operatörler:
+ Sadece tek bir işlenene ihtiyaç duyan operatörler, tekli operatörler 
+ olarak bilinir.  Örnek artırma ve azaltma operatörleri için
+
+
+İkili Operatörler:
+iki işlenen gerektiren işleçlere ikili işleçler denir. 
+İkili operatörler şu şekilde sınıflandırılır:
+
+- Aritmetik operatörler (Arithmetic operators)
+- İlişkisel Operatörler (Relational Operators)
+- Mantıksal operatörler  (Logical Operators)
+- Atama Operatörleri   (Assignment Operators)
+- Koşullu Operatörler   (Conditional Operators)
+- Bitsel Operatörler  (Bitwise Operators)
+
+
+===========================================================================
+ 
+ T bir tür olmak üzere :
+
+ T x;
+ 
+ T:değişken Türü
+ 
+ x:değişkenin ismi
+ 
+ [Tür] [isim] = İlk değer ifadesi:
+ 
+ İnitializer expression:ilk değer ifadesi
+ 
+ Not: Initialization is not a assignment (ilk değer ifadesi bir atama 
+ değildir.)
+
+ y=5; // bu bir atamadır (assignment).
+ 
+ int y = 5; //bu bir ilk değer atamasıdır. (initialize).
+
+ ==========================================================================
+ 
+ Storage Duration (Ömür)
+
+ - Automatic storage class
+ 
+ - Static storage class
+ 
+ - Synamic storage class
+
+
+ Automatic storage duration: Bu nesneler, programın akışı programın 
+ çalışma zamanında bir Fonksiyona girdiğinde bunlar belleğe yerleşir. Programın
+ akışı o koddan çıktığında bellekten boşaltılır.
+ örnek olarak bir fonksiyonda tanımlanan int bir değişkene atanan bir değer
+ o fonksiyon her çağırıldığında belleğe yerleşir ve o fonksiyondan çıkarken
+ o değişkenin bellekteki yeri boşaltılır.
+ 
+ #### TANIMSIZ DAVRANIŞ
+ 
+   ```
+   ->Otomatik ömürlü değişkenler'e ilk değer ataması yapılmazsa hayata
+   belirsiz değer (Garbage Value) ile başlar. Eğer değişken bu değeri ile
+   kullanılırsa tanımsız davranışa yol açar.
+   ```
+
+ - Static storage class: Programın daha çalışmaya başlamasından, yani 
+ main fonksiyonu çalışmaya başlamadan önce çalışmaya başlarlar.
+ Programın sonuna kadar da bellekde hayatları devam eder.
+
+ - Statik ömürlü değişkenlerde ilk değer ataması yapılırken sabit ifedesi
+ olması gerekir.
+ 
+ Bir nesne Global Dğişken ise statik ömürlüdür. Local değişkenler
+ otomatik ömürlüdür. Ancak static anahtar kelimesi ile tanımlandığında static
+ ömürlü olur. Static ömürlü değişkenler hayata 0 değeri ile başlarlar.
+ 
+ ```
+ ->Static ömürlü değişkene ilk değer başlatması yapılırken sabit ifade 
+ kullanılmalıdır.
+ int x=10+20;// global alanda yazılan bu kod kabul görür.
+ int y=x;// ancak bu kod hatalıdır. çünkü y 'ye değişken ilk değer
+ ataması yapılmaya çalışılmıştır. 
+```
+
+
+ 
+ **Not:** Global değişkenler static ömürlü olmak zorundadır. 
+ Ancak lokal değişkeni static yapabilmek için başına static anahtar 
+ kelimesini eklememiz gerekir.
+
+```
+ #include <stdio.h>
+
+ int g=7 ;// global değişken 
+ // global değişken olarak atanan g programın tamamen çalışması bitene kadar
+ bellekte yer almaktadır.
+
+ int main()
+ {
+ 
+ }
+ 
+ void func()
+ {
+   int X=10;
+   //local variable 
+   // yerel değişken
+
+   /* bu fonksiyon her çağırıldığında x değerine 10 ilk değer 
+   ataması yapılarak bellekte yeri oluşturulur. Fonksiyon bittiğinde
+   x değeri bellekten silinir.*/
+ }
+ void func()
+ {
+   /*eğer bir fonksiyon içerisinde static bir değer tanımlaması yapmak 
+   istiyorsak aşağıdaki gibi yapılır.
+   static int x=1;*/
+   // burada biz "static lokal değişken" tanımlamış olduk
+
+ }
+
+  void func()
+ {
+   static int x=10;
+   x+=10;
+   /*bu fonksiyon ilk çağırıldığında x değişkeni statik lokal değişken
+   olarak tanımlanıp ilk değeri verilir ve her çağırılmada tanımlaması 
+   tekrar yapılıp ilk değeri verilmez. Yani diğer çağırılmalarda 
+   tanımlama kodu işleve girmez.*/
+
+ }
+ ```
+ **Not:** statik ömürlü değişkenlere ilk değer verilmeden tanımlanırlarsa eğer
+ hayata 0 değeri ile başlarlar. 
+ Ancak otomatik ömürlü değişkenlere ilk değer verilmezse eğer buna belirsiz 
+ değer "garbage value", ya da "indetermined value" denir.
+ Eğer bu değişken belirsiz değer halinde kullanılırsa 
+ tanımsız davranış "undefined behavior" olarak adlandırılır.
+
+ - Behavior 
+ 
+ - Defined behavior "tanımlı davranış"
+  
+ - Undefined behavior "tanımsız davranış"
+
+Undefined-Behavior: C programlama dilinde "optimizing compiler" söz
+konusu olduğu için aslında biz derleyiciyle şöyle bir anlaşma yapıyoruz. 
+Benim yazdığım kodu daha hızlı çalıştırabilecek şekilde optimize ederek 
+makine diline optimize ediyor. Ancak bunu yaparken de bir garanti istiyor.
+Yazılan kodunda undefined behavior olmaması gerektiği konusunda. 
+Olduğu takdirde bu durumu optimize ederken tanımlayamadığı halde 
+çalıştırdığı için çeşitli problemlerle karşılaşabiliyor.
+
+Bu sebeple mümkün olan her yerde değişkenlere ilk değer ataması
+yapılmalıdır.
+
+
+=======================================================================
+
+
+ declare declaration //Bildirim
+ 
+ define defination // tanımlama
+
+ Bildirim ismin ne olduğunu anlatan cümledir.
+ Eğer bildirim sonucunda derleyici bellekte yer alıyorsa bu tanımlamadır.
+
+
+ =======================================================================
+ 
+ Scope (kapsam)
+
+ Bir tanımlayıcının kapsamı, tanımlayıcının (Identifiers) doğrudan 
+ erişebildiği programın bir parçasıdır. C'de tüm tanımlayıcılar kapsamlıdır.
+
+ File scope: Bir tanımlayıcının dosya kapsamı, dosyanın başlangıcından
+ başlar ve dosyanın sonunda sona erer.
+
+ Block Scope: Bir tanımlayıcının kapsamı, { bloğun açılmasıyla başlar ve }
+ bloğun bitmesiyle sonunda sona erer. Blok kapsamına sahip tanımlayıcılar kendi blokları
+ için yereldir.
+```
+ #include <stdio.h>
+
+ int x; 
+
+ int main()
+ {
+
+ int x; 
+
+ /* Burada bir programda aynı iki isim kullanılmış ancak
+ Kapsamları farklıdıfr. Bu durumda program sentaks hatası vermez ancak
+ kullanım açısından doğru bir kullanım değildir.*/
+ 
+ }
+```
+ ====================================================================
+
+ #### Look Up(isim arama)
+
+```
+  #include <stdio.h>
+  
+  int x=20;
+
+  int main()
+  {
+  int x=10;
+
+  printf("x=%d\n", x);
+  
+  /*Burada isim arama söz konusu olduğu için
+  printf ile x aranmaya başlar. Bu arama yukarı doğru gerçekleşir ve
+  ilk olarak kendi bloğunun içerisinde yukarı doğru arama başlar. Eğer 
+  aranan değişkenin ne olduğu bulunursa arama anında biter ve bu değişkenin 
+  ne olduğu bulunan değer ile yazdırılır. Yani ekranda x = 10 görürüz.*/
+  
+  }
+``` 
+
+   #### Örnek:
+  
+  ```
+  #include <stdio.h>
+  
+  int x=36;
+
+  int main()
+  {
+
+
+  printf("[1] x=%d\n", x);
+  int x =10;
+  printf("[2] x=%d\n", x);
+        {
+
+
+    int x=89;
+    printf("[3] x=%d\n", x);
+
+
+        }
+   printf("[4] x=%d\n", x);
+
+
+  }
+  ```
+  
+  Ekran Çıktısı:
+  
+```
+  [1]=36
+  [2]=10
+  [3]=89
+  [4]=10
+```
+
+
+ #### Örnek:
+  ```
+  #include <stdio.h>
+
+  int main()
+  {
+  
+  int printf=0;
+  printf ("selam");
+
+  // program printf'i main fonksiyonu içerisinde int olarak tanımlandı.
+  sonra printf fonksiyonunu ilk algıladığında keywords olmadığı için
+  name lookup yaparken kendi kapsamında arama yapar. Bu kapsamda printf 
+  int olarak tanımlandığı için bu kod hata verir.
+  normalde int olarak tanımlanmasaydı printf'i  ilk okuduğunda isim araması 
+  yaparak standart kütüphaneye ulaşarak printf fonksiyonunu çağıracaktı.
+
+  
+  }
+```
+  #### Örnek:
+  
+  ```
+  #include <stdio.h>
+
+  int main()
+  {
+  
+  int printf=20;
+  printf=30;
+
+  // bu kodda sentaks hatası yoktur. düzgün bir şekilde çalışır.
+
+
+  
+  }
+  ```
+  ======================================================================
+  
+ #### Function (Fonksiyonlar) "method, procedure, yordam, altprogram"
+
+  - to define a function 
+  - to call a function
+  - to declare a fuction
+
+  double func (int x , int y);
+
+  // Burada "double", fonksiyonun geri dönüş türü (the type of return value).
+  
+  //"func", fonksiyon ismi.
+  
+  // "Parantezler", parametre parantezi
+  
+  //int x, int y ise formal parameters (parametre değişkenleri)
+
+
+  Örnek olarak;
+  
+
+  int func(void)   ile int func() aynıdır. Buradaki void fonksiyonun 
+  parametre değişkeninin olmadığı anlamına gelir. Void kullanılmasada 
+  fonksiyonun parametre değişkeni yoktur.
+  Ancak Void kullanılmasının C'de bir avantajı vardır.
+  ilerleyen derslerde göreceğiz.
+
+  ======================================================================
+  
+  statement
+
+  - expression sstatement (ifade deyimi)
+  - compound statement (bileşik deyim)
+  - null statement (boş deyim)
+  - control statement (kontrol deyimi)
+
+
+  - z=10 (bu bir ifade) "expression"
+  
+  - z=10; (bu bir deyim) "expression statement"
+
+
+ Compound statement örnek olarak
+ 
+  ```
+ if(x>5)
+ {
+
+ ++a;
+ x=5;
+
+ // if koşulunun içerisindeki deyimlerin bütününe compound (bileşik) 
+ deyim denir. Bir blok içerisinde olduğu için bu böyledir.
+
+ }
+
+  ```
+ null statement:  ";" kendisinden önce bir ifade olmadan tek başına
+ kullanılırsa deyim olur ve null statement denir.
+ 
+ Control statement: Önceden belirlenmiş bir sentaksı olmalı ve en az bir
+ anahtar kelime içermelidir.
+ - if statement
+ - loop statement
+ - while statement
+ - for statement
+ 
+ =======================================================================
+
+ Return statement
+ 
+ a-)Bir fonksiyonun kodunun çalışmasını sonlandırmak için
+ 
+ b-)Fonksiyonun kendisini çağıran koda (iletecek ise) bir değer iletmesini
+ sağlamak için kullanılır.
+
+ return ; // yalın (ifadesiz) return deyimi
+ 
+ return exp; // ifadeli return deyimi
+
+ **Not:** 
+ 
+  ```
+ void func(void) 
+ {
+ yukarıdaki fonkiyonun adlandırılmasında ilk void fonksiyonun bir geri 
+ dönüş değerinin olmadığı anlamına gelir. Parantez içerisindeki void ise
+ fonksiyonun parametre değişkeninin olmadığı anlamına gelir.
+ }
+
+ void function: A function doesn't have return value. Geri dönüş mekanizması
+ ile bir değer gönderilmeyeceği anlamına gelir.
+
+
+  ```
+
+ örnek olarak :
+```
+
+ void func (void)
+ {
+ // statement
+ //statement
+  if(exp)
+      return;// bu bir yalın return statement dır.
+ //statement
+ //statement
+
+
+ } 
+```
+ **Not:** yalın return statement'ı asla geri dönüş değeri olan bir fonksiyonun 
+ içerisinde kullanamayız.Sadece void fonksiyonu içerisinde kullanılır.
+
+ İfadeli return:
+
+ return exp;
+ 
+ Fonksiyonumuzun bir geri dönüş değeri olması gerekiyor. Kullanıldığında 
+ yine fonksiyon sonlandırılır ancak bu sefer fonksiyon sonlandırıldığında 
+ bir geri dönüş ifadesi gönderilir. Geri dönüş ifadesi genelde 
+ fonksiyonda hesaplanır ve geri dönüş değeri olarak verilir.
+
+ return 0; // bu kodda geri dönüş değeri 0'dır.
+ 
+ #### UNDEFINED BEHAVIOR
+ 
+```
+ int func (void)
+{
+Eğer bir fonksiyonun geri dönüş değeri türü var ise fonksiyonun bir geri
+dönüş değeri olması lazım. Eğer yoksa ve geri dönüş değeri kullanılıyorsa
+Undefined behavior (tanımsız davranış) olur.
+}
+```
+
+**Not:** c programlama dilinde bir fonksiyon içerisinde bir fonksiyon 
+tanımlanamaz. Tüm fonksiyonlar global isim alanında olmalıdır.
+Yani C'de nested func ve local func yok.
+
+-Ayrıca C'de global isim alanında bir fonksiyon çağırılamaz.
+
+Test function: Return statement test fonksiyonlarında soruya cevap
+vermek amacıyla da kullanılır. Evet/hayır gibi sorular.
+
+query function
+
+- Genellikle C'de _bool yerine int geri dönüş değerleri kullanılır.
+Eğer geri dönüş değeri sıfır dışı bir değer ise (nan-zero value) lojik doğru
+anlamına gelmektedir. Eğer sıfır değeri gönderilmişse yanlış olduğu anlamına 
+gelir.
+
+- Fonksiyonu çağıran kodun, çağırılan fonksiyonun bir geri dönüş değeri 
+olmasına karşın bu geri dönüş değerini kullanmamasına "to discard the return
+value" denir.
+
+- Başarı bilgisi olarak kullanılabilir. Herhangi bir hata durumunda koşul 
+ifadeleri ile hata dönütü sağlayabilir.
+
+Eğer toparlarsak bir fonksiyonun geri dönüş değeri neler olabilir?
+
+- Hesaplanan bir değer
+- Test fonksiyonları
+- Tamamlayıcı bir değer
+- Başarı bilgisi
+- Ya da hiç olmayabilir(void func)
+
+
+==========================================================================
+
+#### Fonksiyon çağrıları (to call a function)
+
+Parantez operatörü ile sağlanır.
+
+func() -> bu bir ifadedir. 
+
+Eğer çağırılan fonksiyonun parametre 
+değişkeni yoksa bu parantezin içerisine hiçbirşey yazılmaz.
+Parametre değişkeni olduğunda ise her bir değişken için kopyalanacak, 
+değeri oluşturacak ifade yazılır.
+
+Fonksiyon çağırılırken parantezin içerisine yazılan değerlere argüman denir.
+
+- argument(arguman)
+- actual parameter
+
+func(10,20) // expression (ifade)
+
+func(10,20); // statement(deyim)
+
+**örnek:**
+
+```
+int main()
+{
+
+int x = 10;
+int x = 45;
+max (x+30,y-10);
+
+//Burada max fonksiyonunun argümanı (40,35)'dir.
+
+}
+```
+- Aynı geri dönüş değerini elde edeceğimiz şekilde bir fonksiyonu birden 
+fazla kere çağırmak kötü kod'dur.
+
+call by value (değerle çağırma)
+
+call by referance (referansla çağrı)
+
+C dilinde tüm fonksiyon çağrıları call by value (değerle çağırma)'dır.
+fakat bu özellik dilden dile değişir.
+
+
+call by value olduğuna dair bir örnek:
+
+```
+int foo(int a)
+{
+a=99;
+return a;
+}
+
+int main()
+{
+
+int x=10,y;
+printf("x=%d\n",x);
+y=foo(x);
+printf("x=%d\n",x);
+
+
+}
+```
+// Yukarıdaki programda ikinci printf değeri ile yazdırılan x değeri 10'dur.
+çünkü x Değeri foo fonksiyonundaki a değerine atanmaz kopyalanır.
+Yani foo(x) ifadesi 99'dur. x gönderilen bir ifade ve foo(x) gelen ifadedir.
+
+
+
+#### Standart Kütüphane (Standard Library)
+
+-Printf standart bir C fonksiyonudur.
+-Standat kütüphane alt birimlere bölünmüştür (module).
+
+Variadic Function: Fonksiyon çağırılırken parametre sayısının değişken olduğu fonksiyon türüdür.
+
+Tanımlanma şekli:
+
+```
+void func(int x, int y,...)
+{
+Variadic Function
+}
+//Yukarıdaki tanımlanan fonksiyona en az 2 tane argüman gönderilebilir. 
+
+```
+Not: Bazı programlama dillerinde "Default Argument" kavramı vardır. Yani
+argüman gönderilmediğinde varsayılan argümanlar kullanılır.
+
+- C'de neler yok !
+
+```
+- Nested Function
+- Function Over Loading: Bir foksiyonu 2 farklı tür için kullanamazsınız.
+Mesela abs fonksiyonunu hem int hem double türü için kullanamazsınız.
+
+```
+#### CONSTANT (SABİTLER)
+
+- İnteger Constant (Tam sayı sabitleri)
+- Floating Constant ( Gerçek sayı sabitleri)
+
+
+Sabitlerin türleri olması gerekir.
+- Tam sayı sabitlerinin yazımında 3 farklı sayı sistemi kullanılabilir.
+      - Hexadecimal (Onaltılık sayı sistemi)
+      - Decimal (Onluk sayı sistemi)
+      - Octav (Sekizlik sayı sistemi)
+
+x=123;//decimal
+
+x=0123;//octal
+
+x=0x13;//hexadecimal
+
+Sabitlerin Türleri:
+
+- Signed int =>783
+- Unsigned int=>783U
+
+- Signed long => 7834L ya da 7834l
+- Unsigned long =>7834UL -ul
+
+- Signed long long =>7833LL
+- Unsigned long long =>7833LLU -ULL
+
+- Float
+- Double
+- Long Double
+
+
+#### UNDEFİNED BEHAVİOR
+
+```
+
+İşaretli tamsayı türlerinde yapılan işlemlerde taşma durumu tanımsız davranıştır.
+
+```
+
+Gerçek Sayı Türleri Gösterimi:
+
+- Float -> 2.3F
+- Double -> 3.48, 5. , 5.0, .5
+- Long Double -> 2.3L
+
+**Not:** Nokta içeren sabitlerin türü double'dır.
+
+
+Scintific Notation:
+
+Aşağıdaki değerler double türüne aittir.
+
+   - 2.3e5----> 2.3 x^5
+   - 0.5e-3 --->0.5x10^-3
+
+#### KARAKTER SABİTLERİ (STRİNG LİTERALS)
+
+C'de karakter sabitlerinin türü int'dir.
+
+"Raşit" --> String Literals
+
+- 'A' Bu karakter, sistemde kullanılan karakter kodlamasında (character encoding)
+gerçekleşerek bu karakterin kod numarası tutulur.
+
+'A'---> 65 --ASCII
+
+**Not:** ASCII karakter kodlamasında büyük harf ve küçük harf sıralaması tek bir blok halinde değildir.
+Sebebi ise büyük harf ile küçük harf arasındaki sayı farkını 32 yani 2^5 yapabilmektir. 
+Böylece bitsel işlemlerde büyük-küçük harf değişimi tek bir biti set-reset yapılarak yapılabilmektedir.
+
+- Karakter kodlamalarında, harf karakterine Alphabetic Character,
+Rakam kodlamalarına ise Numeric/digit Character denilir.
+Alpha-Numeric Character ikisini içeren bir kümedir.
+
+- Control Character: Kontrol karakterleri görüntüsü olmayan özel araçlarla kullanılan karakterlerdir.
+Mesela Space, Enter gibi.
+
+- Printable Character: Görüntüsü olan karakterlerdir.
+
+- Punctation Character: Görüntüsü olan ama Alpha-Numeric olmayan karakterlerdir.
+- 
+Mesela . , ! ' ^ gibi karakterler.
+
+
+- Escape (Kaçış)
+- 
+Escape Sequence (Kaçış Noktası)
+
+ Bir kodlamada eğer bir karakter özel bir anlamda kullanılıyorsa o karaktere escape denir.
+ 
+ \ -> escape olarak kullanıyoruz.
+ 
+ '\'  ---> Yani biz tırnak içerisinde ters bölü yazdığımızda bı ters bölü karakterinin kodu değil
+ sadece escape olduğunu ve ayrı bir kurala göre değerlendirilmesi gerektiğini anlıyoruz.
+ 
+ '\a'-->alert(bell)
+ 
+ '\t' -->horizantal tab
+ 
+ '\v' --> vertical tab
+ 
+ '\n' --> new line
+ 
+ '\r' --> carriage return
+ 
+ '\f' -->form feed
+ 
+ '\b' -->Back space
+ 
+ '\o' -->null character
+ 
+ '\'' --> single quote
+ 
+ '"' veya '\1' --> double quote
+ 
+ '\' veya '\\' --> backslach
+ 
+ '\?' veya '?' --> question mark
+ 
+ 
+ #### İNPUT-OUTPUT OPERATİON
+ 
+ 
+- Bir program çalışır haldeyken dış dünya ile veri alış-verişi 
+sağlamasına denir.
+    - standard input stream (klavya)
+    - standart output stream (Consol a  bağlı)
+    - standard error stream
+
+- Bir giriş-çıkış işlemi 2 farklı şekilde yapılabilie.
+     - Formatted
+     - Unformatted
+
+Formatsız: Gönderilen ya da alınan kodları olduğu gibi almaya veya göndermeye yönelik kullanımdır.
+
+Formatlı: Girişin ya da çıkışıninsanın anlayacağı formata getirilmesine denir.
+
+- printf ve scanf fonksiyonları formatlıdır.
+
+- Çıktı alınırken formatın türü de önemlidir.
+
+Mesela bir sayı yazdırılacağı zaman hangi sayı sisteminde olduğunu bildirmek bir format bildirimidir.
+
+Output Width(yazma alanı genişliği): Yazma alanı genişliği bir yazı veya rakam dizisini yukarından 
+aşağı sıralarken hizalamaya yarayan kavramdır.
+
+Fill character -> bu hizalama yapılırken kullanılan karakterdir. Genelde boşluk karakteri kullanılır.
+
+#### PRİNTF FONKSİYONU
+
+Printf fonksiyonu stdio kütüphanesinde bildirilen formatlı çıkış fonksiyonudur.
+
+Tanımlanma şekli:
+
+int printf(const char*p,...);
+
+- C'de yazılar dizilerde tutuluyor. Dizilerin fonksiyonlara gönderilmesi Call By Referance biçiminde olmak zorundadır.
+Bu yüzden bir fonksiyona bir yazıyı göndermenin yolu yazıyı tutan adresi göndermektir.
+
+Printf fonksiyonu tanımlanırken *p gönderilecek olan adresi ifade etmektedir. 
+
+Yani bir pointer olmasının sebebi bir yazıyı isterken aslında yazının tutulan char dizisinin adresini istiyor olmasıdır.
+
+... ise bu fonksiyonun variadic olduğunu ifade etmektedir.
+
+Printf fonksiyonun sayı sistemlerinin formatları:
+
+%d-->decimal--int türden
+
+%0--> Octal
+
+%x--> hexadecimal--sign/unsign int türden
+
+%Ld-->long türden 10 luk sayı sistemi
+
+%u-->unsigned int
+
+%f-->double  ve float türünde
+
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+
+int main()
+{
+    int x=987;
+    printf("%d",printf("%d",printf("%d",x)));
+    /*Bu kodun çalışma şekli ilk olarak en içteki printf fonksiyonu çalışır.
+    Yani ekrana 987 yazılır. Bir dıştaki printf fonksiyonu bi önceki fonksiyon çalışırken ürettiği değeri yazar.
+    Printf fonksiyonu yürütüldüğünde ekrana kaç karakter yazdıysa, yazdığı karakter sayısını üretir. Yani ekrana 
+    3 basamaklı olduğu için 3 sayısı yazılır. bir kez daha yürütüldüpünde 3 sayısı 1 karakterli lduğu için 
+    1 sayısı yazdırılır.*/
+
+}
+
+```
+
+
+-  %c formatı ASCII'ye göre bir karakterin sayı karşılığını girerseniz eğer o karakteri ekrana yazdırır.
+
+```
+int main()
+{
+
+	int x;
+	
+	printf(" %c", 65);
+
+}
+
+// Ekrana yazılan değer A olur. 
+```
+
+#### SCANF FONKSİYONU
+
+İnt scanf(const char*p,...);
+
+- Scanf fonksiyonu call by referance olmak zorundadır.
+örnek olarak scanf("%d",&x); &x kullanılmasının sebebi call by referance olmasıdır.
+- Scanf fonksiyonu Line-Buffered(Satır Tamponlu) yapıdadır.
+- 
+Yani new-line karakteri gelene kadar devam eder.
+
+- Örnek olarak :
+- 
+scanf("%d",&x); yazıldığında ekrana giriş olarak 1234abc yazıldığında 
+ekrana sadece 1234 yazılır. Çünkü %d formatı onluk sayı sisteminde bir tam sayı girilecek demektir.
+
+scanf'in geri dönüş değeri başarılı olup olmadığını anlatmaktadır.
+
+**Uyarı:** Scanf çağrısı yapıldığında standar inputun buffer'ı boş değil ise giriş için bir karakter girilmesi
+beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullanır.
+
+
+ #### OPERATÖRLER(OPERATORS)
+
+- İşleçler
+- İşlemci
+
+- C'de 45 tane operatör vardır.
+- Sizeof hem anahtar sözcük hem de operatördür.
+
+-  a+b --> burada + bir operatör, a ve b operanttır.
+- unary operator--> tek terimli operatör
+- binary operator--> çift terimli operator
+- ternery operator--> 3 terimli operator
+
+- a+b---> + operatorü ortada olduğu için bu operator burada infix konumda kullanılmıştır.
+- !x---> burada ! operatörü başta olduğu için prefix konumunda kullanılmıştır.
+- y++  ----> burada ++ operatörü sonda kullanıldığı için postfix konumunda kullanılmıştır.
+
+örnek olarak
+
+- a+b-->binary infix
+- !x-->unary prefix
+- y++ -->unary postfix
+
+
+- Her operatörün ürettiği bir değer vardır.(Operators generate value),(generate yerine yield,return kullanılabiliyor.)
+- 
+8*5=40--> Burada 40 değeri çarpma operatörünün ürettiği değerdir.
+
+- Constraint = Operatörlerle ilgili uyulması gerekn kurallara verilen addır.
+- Constant(sabit)
+- 
+
+====Operatör Önceliği====
+
+- precedence
+- priority
+
+- Operatör önceliği hangi işlemin daha önce yapılacağını belirleyen kurallar değildir.
+- Operatör önceliği bir ifade içinde birden fazla operatör yer aldığında hangi operatörün 
+ürettiği değer , hangi operatörün operantı olacağını belirliyor.
+
+
+#### OPERATÖR ÖNCELİK TABLOSU
+
+```
+1-)  ( ) [ ] . ->
+2-)  + - ! ~ sizeof  type & *0 ++ -- (Sağdan sola)
+3-)  *   /  %
+4-)  + -
+5-)  >>  <<
+6-)  > >= < <=
+7-)  ==   !=
+8-)  &
+9-)  ^
+10-) |
+11-) &&
+12-) ||
+13-) ? : (sağdan sola)
+14-)=  +=  -=  *=  /=  %0  &0  |=  ^=  >>=  <<=  (sağdan sola)
+15-) ,
+```
+
+-Bazı operatörlerin C'de iki anlamı vardır.
+
+"+" ---> +x veya a+b ,+x işaret belirtir. a+b 'deki + ise toplama işlemi.
+
+"*" ---> *ptr (Pointer), a*b(çarpma)
+
+"&" ---> &x (adres tanımlama) , x&y (bitsel işlemler)
+
+
+- Associativity (öncelik yönü)
+   - left associative (soldan sağa)
+   - right associativity (sağdan sola)
+
+- Side Effect (Yan etki) 
+    - !x burada lojik değil operatörünün yan etkisi yoktur. Yani x değişkeninde herhangi bir değişiklik olmaz.
+    - ++x burada artı artı operatörünün bir yan etkisi vardır ve x'i 1 artırmıştır.
+   
+   
+   
+   ==Addition Substraction (+,-)==
+   
+   - Binary infix operatörlerdir.
+   - Ürettikleri değer toplamı ya da farkı olur.
+   - Yan etkileri yoktur.
+   
+   #### UNDEFİNED BEHAVİOR
+   ```
+   İşaretli türlerde taşma tanımsız daranıştır.
+   ```
+   
+   
+   İntegral Promotion: Tam sayıya yükseltmek demektir.
+   
+   
+   ==Multiplicative Operators==
+    
+   "*"  multiplication
+   
+  " / " division
+  
+  " %"  module
+   
+   - Binary infix operators. (ara ek)
+   - Yan etkileri yok.
+   
+   **Dikkat:** Mod operatörünün operantları gerçek sayı türden olamaz.
+   
+   - Eğer ekrana %3.5 yazdırmak istersek % operatörünün escape olduğunu unutmamak lazım.
+   
+   double dval=3.5;
+   
+   printf("%% %f",dval);// ekran çıktısı %3.5
+   
+   #### UNDEFİNED BEHAVİOR
+   
+  ```
+  Bölme ve mod operatörünün sağ operantı 0 olamaz. Olması durumunda tanımsız davranış olur.
+  
+  ```
+ 
+  
+  
+  - İncreament (++) plus plus
+  - Decrement  (--) minus minus
+  
+  - Ön ek olarak ve son ek olarak kullanılabilirler.
+  ++x veya x++ şeklinde.
+  
+  - Bu operatörün operantı Lvalue olmak zorundadır.
+  -  "++x" ifadesi rvalue'dür.
+   
+  -Yan etkisi vardır.
+     - ++x önce x'i artır sonra x'i kullan demek.
+     - x++ önce x'i kullan yan etki noktasına gelince x'i artır demek.
+   
+   ===Karşılaştırma Operatörleri===
+   
+   - İlişkisel operatörler
+   - Relational Operators
+   - Comparison Operators
+    
+   <         >          <=           >=
+   
+   ===Lojik Karşılaştırma Operatörleri===
+   
+   "== "  
+   
+   "!="
+   
+  " >" greater
+  
+  " <" less
+  
+  " >=" greater than
+  
+  " >= "less than
+  
+ - Binary infix Operators
+ - Yan etkisi yok !
+ 
+ 
+ 
+ - C dilinde karşılaştırma operatörleri int türünden değer üretirler. 
+ Diğer dillerde Bool türünden değer üretilir.
+ 
+ örnek:
+ 
+ x=y==z; // Burada == operatörü = operatöründen daha önceliklidir. Aşağıdaki ifadeyle aynıdır.
+ 
+ if(y==z)
+ 
+    x=1;
+    
+ else 
+ 
+    x=0;
+    
+  
+  if(x==5) koşulunu daha güvenli kullanmak istersek 
+  
+  if(5==x) olarak da kullanılabilir.
+  
+  === Logical Operators===
+  
+  - Önermeler
+  
+  - lojik değil işlemi (!)  logical not
+  - lojik ve   (&&)     logical and
+  - lojik veya (||)     logical or
+  
+  
+  
+  - Short Circuit Behavior (kısa devre davranışı)
+  
+  örnek olarak:
+  
+  expr1 && expr2 // eğer expr1 değişkeni 0 ise expr2'ye bakılmaksızın sonuç olarak 0 değeri üretilir.
+  expr1 || expr2 // eğer exp1 değişkeni non-zero bir değer  ise expr2'ye bakılmaksızın 1 değeri üretilir.
+  
+  
+ Uyarı: Lojik && ve || operatörlerinde kısa devre davranışı var olmasına karşın
+ bitsel & ve | operatörlerinde kısa devre davranışı söz konusu değildir.
+ 
+ 
+ - De Morgan Kuralları:
+ 
+         !(p && q) = !p || !q
+	 
+         !(p || P) = !p && !q
+   
+   
+  
+  
+   ==Atama Operatörleri===
+   
+    =      atama operatörü
+   
+   +=       -=      *=      /=             ---->(İşlemli Atama Operatörleri)
+   
+   %=     >>=     <=     &=     ^=    |=    ---->(Compound Assignment Operators)
+   
+   - C dilinde atama operatörleri de diğer tüm operatörler gibi bir değer üretir.
+   - Atama operatörünün ürettiği değer nesneye atanan değerdir.
+   x=y  ifadesinin ürettiği değer y'nin değeridir.
+   
+   
+   örnek:
+   
+    
+       ```
+    int x=10,y=24,t=5,z=7;
+    x+=y+=t*=z%=5;
+    // Atama operatörlerinde işlem önceliği sağdan sola olduğu için sağdan başlanarak sola doğru işlemler yapılır.
+   
+       ```
+  
+    
+   ===Virgül Operatörü===
+    
+  - Öncelik tablosunda en son sırada. 
+    - Binary infix 'dir.
+    - Virgül operatörüyle oluşturulmuş ifadeler C dilinde R value olur.
+    
+  - Sequence Point (Yan Etki Noktası) 
+           - sequencing
+           - 
+     Bir ifade ile oluşak yan etkilerin gerçekleşeceği nokta.
+     
+    Yan etki noktaları:
+    - Deyim sonu yani ilk noktalı virgülün olduğu nokta bir yan etki noktasıdır.
+    - Bazı operatörlerin operandlarının değerlendirilmesinden sonra.(lojik ve, lojik veya, ternary op. , virgül operatörü)
+    
+   Örnek olarak :
+   
+   ```  
+  int  y=0;
+    y++ || f(y); // yandaki deyimde lojik veya bir yan etki noktasına sahip olduğu için y 1 artırıldıktan 
+    sonra f fonksiyonuna y değeri 1 olarak gönderilir.
+    
+   ```
+   
+   Örnek olarak :
+
+  
+     
+      
+       ```
+        int x=10,y;
+        x++ , y=x; // Bu deyimde virgül bir yan etki noktası olduğu için x değeri 1 artırılıp 
+        11 olduktan sonra y değişkenine 11 olarak atanır.
+      ```
+    
+    
+    
+   #### Undefined Behavior
+   
+    
+    ``` 
+     Bir yan etki noktasından önce bir yan etkiye maruz kalmış nesneyi tekrar kullanırsak bu tanımsız davranış olur.
+     
+     y = x++ + +x;/* burada x son ek olarak ++ operatörü kullanılarak 1 artırıldığı için x kendi değeriyle yann etki 
+     noktasına kadar kullanılığ yan etki noktasında artırılacaktı. Anca yan etki noktasına gelmeden x bir kez daha kullanıldığı için 
+     tanımsız davranış görülüyor.*/
+     
+     y=x++ + x++;
+     x=++x;
+    ```
+     
+   **Bir Mülakat Sorusu:
+     
+      ```
+      
+     int x=10;
+     int y= (x=7)+x;
+     /*Burada yine x'e 7 ataması yapılarak bir yan etkisi vardır. Ancak bu yan etkinin oluşması için kod, yan etki noktasına ulaşmalı.
+     Bu kodda yan etki noktasına ulaşılmadan x tekrar kullanılmıştır.*/
+    ```
+     
+     
+  - Her operantın ürettiği değer gibi virgül operatörü de bir değer üretir.
+     Virgül operatörünün ürettiği değer sağ operantın ürettiği değerdir.
+     
+  örnek:
+     
+     ```
+      
+      int a,b=10,c=20;
+      a=(b,c); //Burada a'ya atanan değer 20'dir.
+      
+      ```
+      
+   Block Elimination:
+   
+  
+      if (x>20)
+      {
+      a++;
+      b++;
+      }
+      
+  yerine 
+  
+      if(x>20)
+         a++,b++;
+	 
+   Bu bir block elimination örneğidir.
+      
+      
+     
+      
+  **Dikkat :** Gerçek sayı sabitlerinin yazımında nokta yerine yanlışlıkla virgül karakterinin yazılması çok tipik bir hatadır.
+      
+      
+  Örnek Bir Mülakat Sorusu:
+       
+       ```
+       double x=2.5;
+       
+       while(x<5,0)  /*Burada tam sayı yazılırken nokta yerine virgül kullanıldığında, virgül operatörünün 
+       sağ operantı değer üreteceği için while,sonsuz döngüde alır.*/
+       {
+       //kodlar
+       }
+       
+        ```
+	
+  Örnek:
+      
+      
+       ```
+      func(x,y);// Burada fonksiyona 2 argüman gönderilmiş.
+      func((x,y));// Burada ise fonksiyona 1 argüman gönderilmiş. Paranteziin içerisindeki virgül operatörünün sağ operantı gönderilmiştir.
+      
+       ```
+      
+      
+      
+      
+  #### Değer Kategorisi (Value Category)
+      
+  L Value: Bellekte o ifadenin bir yere karşılık geliyor olması demektir. Sol taraf olan ifadeler nesne gösteren ifadelerdir.
+  
+      Bu ifadeler adres operatörünün operantı yapılabiliyor. Yani bu bellekta kalıcı bir verlığa ilişkin yeri temsil ediyor.
+      
+  R Value:  Bir değere sahip olabilmekle birlikte, bellekte bir yere karşılık gelmiyor. Yani bu ifadenin değeri runtime'da hesaplanıyor 
+  
+      olabilir ama o ifade varlık için ayrılmış bellek bloğuna karşılık gelmiyor.
+      
+   Nasıl anlayabiliriz: Adres operatörünün (&) operantı yapabilirsiz. Eğer oluyorsa L value olmuyorsa R value'dur.
+      
+      
+  #### Kontrol Deyimleri (Control Statement)
+     
+   - İf statement
+     - While statement
+     - Do while statement
+     - For statement
+     - Switch statement
+     - Goto statement
+     - Return statement
+     - Break statement
+     - Continue statement
+     
+     
+     
+     ===İf Statement===
+     
+     if(expr)// Conditional expression
+     
+         Statement; //True Path (body)
+	 
+      Hatırlatma: Lojik değil ifadesinin bir yan etkisi yoktur.
+      
+      
+       ```
+      if(x != 0)
+          ++a;
+	  
+	  
+      if(x)
+          ++b;
+	   
+	   /*Yukarıdaki iki if'in işlevi aynıdır.*/
+	   
+	 if(x == 0)
+          ++b;
+	  
+	  
+      if('x)
+          ++b; 
+	  
+	  /* Yukarıdaki iki if'in işlemi de aynıdır.*/
+      
+       ```
+       
+       Örnek yazım şekilleri:
+       
+      
+       ```
+       
+     -->  if (a=func(),a>10)
+       {       }
+       ile
+       a=func();
+       if(a>10)
+       {  }
+       
+       aynıdır.
+       
+       
+     --> if((x=func)<10)
+         {    }
+	 
+	 
+       ```
+       
+       
+       - C dilinde Koşul ifadelerinde yapılan en sık yazım hataları:
+       
+       
+       ```
+       
+       
+       --> if(x==5) yerine if(x=5) yazmak.
+       Lojik eşit yerine atama operatörü kullanıldığında x 'e atanan değer yani 5 üretilir.
+       if koşul ifadesi olduğu için sorulan soru 0 veya 0 dışında bir değer olduğu için
+       bu durumda sıfır dışında bir değer olarak algılar ve x değeri 5 olsa da olmasa da
+       if'in içine girilir.
+       
+       -->if(5<x<20)
+       Doğru yazımı if(x>5 && x<20) olacaktır.
+       Matematiksel notasyon şeklinde yazıldığında ise derleyicinin algılama şekli operatör öncelik sırasına göre
+       (5<x)<20 olacaktır. Bu değer de her zaman doğru olarak algılanacağı için ve sentaks hatası olmadığı için 
+       problemli bir durumdur.
+       
+       -->if(dval>4,5) // burada yazılmak istenen gerçek sayı nokta ile değil de virgül operatörüyle ayrıldığı için
+       ve virgül operatörü sağ operantının değerini üreteceği için 5 değeri de lojik doğru olarak algılandığından dolayı
+       bu değer her zaman doğru olarak algılanır.
+       
+       -->if(func()) yerine if(func) yazılması. Sentaks hatası vermez ama istediniz işlemi yapmaz.
+       
+       -->if(x!=5 || x!=13)
+         Bu ifade de && operatörü yerine veya operatörü kullanılmış ve her zaman doğru bir ifadedir.
+	 
+       -->if(x==3); Bu koşulda noktalı virgül bir ifade olduğu için if'in altındaki kodlar koşturulurken 
+       if'in içerisinden çıkılmış olur.
+         derleyici bu koşulu şöyle algılar:
+	 if(x==3) 
+	     ; //null statement
+	 x=2;
+	 ```
+	 
+	 
+
+
+    
+      
+      
+       
+       
+       
+     
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+
+    
+  
+   
+   
+   
+ 
+
+       
