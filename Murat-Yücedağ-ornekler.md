@@ -133,6 +133,58 @@ int main()
 
 ```
 
+#### diziler örnek:
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+
+
+
+
+int main()
+{
+	int dizi[100];
+
+	int  sayi;
+
+	printf("Eleman sayisi:  ");
+	scanf("%d", &sayi);
+
+	for (int i = 0; i < sayi; i++)
+	{
+		printf("dizinin %d . degerini giriniz: ", i + 1);
+		scanf("%d", &dizi[i]);
+
+	}
+
+	printf("\n\n");
+
+	for (int i = 0; i < sayi; i++)
+	{
+		printf("dizinin %d. degeri = %d\n", i + 1, dizi[i]);
+
+	}
+	int sum = 0;
+	int average = 0;
+	for (int i = 0; i < sayi; i++)
+	{
+		
+		sum += dizi[i];
+
+	}
+	average = sum / sayi;
+	printf("dizi icerisindeki sayilarin toplami:%d\n", sum);
+
+	printf("dizi icerisindeki sayilarin ortalamasi:%d\n", average);
+
+	
+
+}
+
+```
 
 
 
