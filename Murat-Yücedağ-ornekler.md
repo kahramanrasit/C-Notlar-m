@@ -62,3 +62,47 @@ int main()
 
 }
 ```
+
+#### konsolda bir sayı girilsin. bu sayının basamakları toplamı ve basamaklarının yer değiştirilmiş hali ekrana yazılsın
+
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+
+
+
+int sumvalue(int y)
+{
+	int retval=0;
+	while (y != 0)
+	{
+		retval += y % 10;
+		y /= 10;
+	}
+	return retval;
+}
+int chvalue(int x)
+{
+	int val = 0,y;
+	while (x != 0)
+	{
+		y = x % 10;          
+		val = val * 10 + y;
+		x /= 10;
+	}
+	return val;
+}
+
+int main()
+{
+	int val;
+
+	printf("bir sayi giriniz: ");
+	scanf("%d", &val);
+
+	printf("basamaklarinin toplami: %d\n", sumvalue(val));
+	printf("basamaklarinin yer degistirmis hali: %d\n", chvalue(val));
+}
+```
