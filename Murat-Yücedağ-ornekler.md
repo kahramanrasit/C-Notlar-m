@@ -106,3 +106,35 @@ int main()
 	printf("basamaklarinin yer degistirmis hali: %d\n", chvalue(val));
 }
 ```
+
+
+
+#### Diziler Örnekler
+
+```
+
+int main()
+{
+	
+	int digit[] = { 75,58,57,32,15,86 };
+
+	int sum = 0;
+
+
+	for (int i = 0; i < 6; i++)
+	{
+
+		sum += digit[i];
+
+	}
+	printf("dizideki sayilarin toplami:  %d", sum);
+
+}
+
+```
+
+
+
+
+
+
