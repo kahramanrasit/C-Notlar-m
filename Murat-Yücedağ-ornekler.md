@@ -186,7 +186,72 @@ int main()
 
 ```
 
+#### Yıldızlarla Kelebek Çizdirme:
+```
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
 
 
 
+
+int main()
+{
+
+	for (int i = 1; i < 6; i++)
+	{
+		for (int j = 0; j < i; j++)
+		{
+			printf("*");
+
+		}
+
+		if (i == 1)
+			printf("        *");//8
+
+		else if (i == 2)
+			printf("      **"); //6
+		else if (i == 3)
+			printf("    ***");//4
+		else if (i == 4)
+			printf("  ****"); //2
+		else if (i == 5)
+			printf("*****");
+		printf("\n");
+	}
+	for (int j = 5; j > 0; j--)
+	{
+		for (int i = j; i > 0; i--)
+			printf("*");
+		if (j == 5)
+			printf("*****");
+		else if (j == 4)
+			printf("  ****");
+		else if (j == 3)
+			printf("    ***");
+		else if (j == 2)
+			printf("      **");
+		else if (j == 1)
+			printf("        *");
+
+	
+		
+		printf("\n");
+	}
+}
+
+
+/*   *        *  //8 boşluk
+     **      **  //6 boşluk
+	 ***    ***  //4
+	 ****  ****  //2
+	 **********  //0
+	 **********  //0
+	 ****  ****  //2
+	 ***    ***   //4
+	 **      **   //6
+	 *        *   //8    */
+
+```
 
