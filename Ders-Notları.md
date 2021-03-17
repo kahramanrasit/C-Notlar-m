@@ -36,7 +36,7 @@ _Bool -    _Complex -  _Imaginary
 2.Identifiers: İsimler Genel terminolojide değişkenleri, fonksiyonları 
 ve dizileri tanımlamak için kullanılır.
 
- - Harfle veya _(Underscore) ile başlamalıdır.
+ - Harfle veya  _ (Underscore) ile başlamalıdır.
  - Sadece harf, sayi ve _ içerebilirler.
  - Anahtar kelimeler kullanılamaz.
  - Boşluk içeremez (whitespace).
@@ -146,9 +146,9 @@ iki işlenen gerektiren işleçlere ikili işleçler denir.
  Not: Initialization is not a assignment (ilk değer ifadesi bir atama 
  değildir.)
 
- y=5; // bu bir atamadır (assignment).
+ y=5; // Bu bir atamadır (assignment).
  
- int y = 5; //bu bir ilk değer atamasıdır. (initialize).
+ int y = 5; //Bu bir ilk değer ifadesi. (initialize).
 
  ==========================================================================
  
@@ -158,7 +158,7 @@ iki işlenen gerektiren işleçlere ikili işleçler denir.
  
  - Static storage class
  
- - Synamic storage class
+ - Dynamic storage class
 
 
  Automatic storage duration: Bu nesneler, programın akışı programın 
@@ -171,7 +171,7 @@ iki işlenen gerektiren işleçlere ikili işleçler denir.
  #### TANIMSIZ DAVRANIŞ
  
    ```
-   ->Otomatik ömürlü değişkenler'e ilk değer ataması yapılmazsa hayata
+   -> Otomatik ömürlü değişkenler'e ilk değer ataması yapılmazsa hayata
    belirsiz değer (Garbage Value) ile başlar. Eğer değişken bu değeri ile
    kullanılırsa tanımsız davranışa yol açar.
    ```
@@ -183,7 +183,7 @@ iki işlenen gerektiren işleçlere ikili işleçler denir.
  - Statik ömürlü değişkenlerde ilk değer ataması yapılırken sabit ifedesi
  olması gerekir.
  
- Bir nesne Global Dğişken ise statik ömürlüdür. Local değişkenler
+ Bir nesne Global Değişken ise statik ömürlüdür. Local değişkenler
  otomatik ömürlüdür. Ancak static anahtar kelimesi ile tanımlandığında static
  ömürlü olur. Static ömürlü değişkenler hayata 0 değeri ile başlarlar.
  
@@ -200,6 +200,7 @@ iki işlenen gerektiren işleçlere ikili işleçler denir.
  **Not:** Global değişkenler static ömürlü olmak zorundadır. 
  Ancak lokal değişkeni static yapabilmek için başına static anahtar 
  kelimesini eklememiz gerekir.
+
 
 ```
  #include <stdio.h>
@@ -292,6 +293,7 @@ yapılmalıdır.
  Block Scope: Bir tanımlayıcının kapsamı, { bloğun açılmasıyla başlar ve }
  bloğun bitmesiyle sonunda sona erer. Blok kapsamına sahip tanımlayıcılar kendi blokları
  için yereldir.
+ 
 ```
  #include <stdio.h>
 
@@ -472,8 +474,8 @@ yapılmalıdır.
  anahtar kelime içermelidir.
  - if statement
  - loop statement
- - while statement
- - for statement
+     - while statement
+     - for statement
  
  =======================================================================
 
@@ -520,7 +522,7 @@ yapılmalıdır.
  } 
 ```
  **Not:** yalın return statement'ı asla geri dönüş değeri olan bir fonksiyonun 
- içerisinde kullanamayız.Sadece void fonksiyonu içerisinde kullanılır.
+ içerisinde kullanamayız. Sadece void fonksiyonu içerisinde kullanılır.
 
  İfadeli return:
 
@@ -585,7 +587,7 @@ Parantez operatörü ile sağlanır.
 func() -> bu bir ifadedir. 
 
 Eğer çağırılan fonksiyonun parametre 
-değişkeni yoksa bu parantezin içerisine hiçbirşey yazılmaz.
+değişkeni yoksa bu parantezin içerisine hiçbirşey yazılamaz.
 Parametre değişkeni olduğunda ise her bir değişken için kopyalanacak, 
 değeri oluşturacak ifade yazılır.
 
@@ -626,10 +628,10 @@ fakat bu özellik dilden dile değişir.
 call by value olduğuna dair bir örnek:
 
 ```
-int foo(int a)
+int foo(int x)
 {
-a=99;
-return a;
+x = 99;
+return x;
 }
 
 int main()
@@ -637,7 +639,7 @@ int main()
 
 int x=10,y;
 printf("x=%d\n",x);
-y=foo(x);
+y = foo(x);
 printf("x=%d\n",x);
 
 
@@ -652,7 +654,7 @@ Yani foo(x) ifadesi 99'dur. x gönderilen bir ifade ve foo(x) gelen ifadedir.
 #### Standart Kütüphane (Standard Library)
 
 -Printf standart bir C fonksiyonudur.
--Standat kütüphane alt birimlere bölünmüştür (module).
+-Standart kütüphane alt birimlere bölünmüştür (module).
 
 Variadic Function: Fonksiyon çağırılırken parametre sayısının değişken olduğu fonksiyon türüdür.
 
@@ -687,7 +689,7 @@ Sabitlerin türleri olması gerekir.
 - Tam sayı sabitlerinin yazımında 3 farklı sayı sistemi kullanılabilir.
       - Hexadecimal (Onaltılık sayı sistemi)
       - Decimal (Onluk sayı sistemi)
-      - Octav (Sekizlik sayı sistemi)
+      - Octal (Sekizlik sayı sistemi)
 
 x=123;//decimal
 
@@ -732,8 +734,8 @@ Scintific Notation:
 
 Aşağıdaki değerler double türüne aittir.
 
-   - 2.3e5----> 2.3 x^5
-   - 0.5e-3 --->0.5x10^-3
+   - 2.3e5----> 2.3 x 10^5
+   - 0.5e-3 --->0.5 x 10^-3
 
 #### KARAKTER SABİTLERİ (STRİNG LİTERALS)
 
@@ -748,7 +750,7 @@ gerçekleşerek bu karakterin kod numarası tutulur.
 
 **Not:** ASCII karakter kodlamasında büyük harf ve küçük harf sıralaması tek bir blok halinde değildir.
 Sebebi ise büyük harf ile küçük harf arasındaki sayı farkını 32 yani 2^5 yapabilmektir. 
-Böylece bitsel işlemlerde büyük-küçük harf değişimi tek bir biti set-reset yapılarak yapılabilmektedir.
+Böylece bitsel işlemlerde büyük-küçük harf değişimi tek bir biti set-reset yapılarak sağlanabilmektedir.
 
 - Karakter kodlamalarında, harf karakterine Alphabetic Character,
 Rakam kodlamalarına ise Numeric/digit Character denilir.
@@ -772,7 +774,7 @@ Escape Sequence (Kaçış Noktası)
  
  \ -> escape olarak kullanıyoruz.
  
- '\'  ---> Yani biz tırnak içerisinde ters bölü yazdığımızda bı ters bölü karakterinin kodu değil
+ '\'  ---> Yani biz tırnak içerisinde ters bölü yazdığımızda bu ters bölü karakterinin kodu değil
  sadece escape olduğunu ve ayrı bir kurala göre değerlendirilmesi gerektiğini anlıyoruz.
  
  '\a'-->alert(bell)
@@ -793,7 +795,7 @@ Escape Sequence (Kaçış Noktası)
  
  '\'' --> single quote
  
- '"' veya '\1' --> double quote
+ '"' veya '\"' --> double quote
  
  '\' veya '\\' --> backslach
  
@@ -805,17 +807,17 @@ Escape Sequence (Kaçış Noktası)
  
 - Bir program çalışır haldeyken dış dünya ile veri alış-verişi 
 sağlamasına denir.
-    - standard input stream (klavya)
+    - standard input stream (klavye)
     - standart output stream (Consol a  bağlı)
     - standard error stream
 
-- Bir giriş-çıkış işlemi 2 farklı şekilde yapılabilie.
+- Bir giriş-çıkış işlemi 2 farklı şekilde yapılabilir.
      - Formatted
      - Unformatted
 
 Formatsız: Gönderilen ya da alınan kodları olduğu gibi almaya veya göndermeye yönelik kullanımdır.
 
-Formatlı: Girişin ya da çıkışıninsanın anlayacağı formata getirilmesine denir.
+Formatlı: Girişin ya da çıkışın insanın anlayacağı formata getirilmesine denir.
 
 - printf ve scanf fonksiyonları formatlıdır.
 
@@ -823,10 +825,10 @@ Formatlı: Girişin ya da çıkışıninsanın anlayacağı formata getirilmesin
 
 Mesela bir sayı yazdırılacağı zaman hangi sayı sisteminde olduğunu bildirmek bir format bildirimidir.
 
-Output Width(yazma alanı genişliği): Yazma alanı genişliği bir yazı veya rakam dizisini yukarından 
+Output Width(yazma alanı genişliği): Yazma alanı genişliği bir yazı veya rakam dizisini yukarıdan 
 aşağı sıralarken hizalamaya yarayan kavramdır.
 
-Fill character -> bu hizalama yapılırken kullanılan karakterdir. Genelde boşluk karakteri kullanılır.
+Fill character -> Bu hizalama yapılırken kullanılan karakterdir. Genelde boşluk karakteri kullanılır.
 
 #### PRİNTF FONKSİYONU
 
@@ -858,6 +860,8 @@ Printf fonksiyonun sayı sistemlerinin formatları:
 %u-->unsigned int
 
 %f-->double  ve float türünde
+
+%lf --> long double veya float türünde
 
 
 ```
@@ -901,12 +905,12 @@ int main()
 
 - Scanf fonksiyonu call by referance olmak zorundadır.
 örnek olarak scanf("%d",&x); &x kullanılmasının sebebi call by referance olmasıdır.
-- Scanf fonksiyonu Line-Buffered(Satır Tamponlu) yapıdadır.
+- Scanf fonksiyonu Line-Buffered (Satır Tamponlu) yapıdadır.
 - 
 Yani new-line karakteri gelene kadar devam eder.
 
 - Örnek olarak :
-- 
+
 scanf("%d",&x); yazıldığında ekrana giriş olarak 1234abc yazıldığında 
 ekrana sadece 1234 yazılır. Çünkü %d formatı onluk sayı sisteminde bir tam sayı girilecek demektir.
 
@@ -924,7 +928,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
 - C'de 45 tane operatör vardır.
 - Sizeof hem anahtar sözcük hem de operatördür.
 
--  a+b --> burada + bir operatör, a ve b operanttır.
+- a + b --> burada + bir operatör, a ve b operanttır.
 - unary operator--> tek terimli operatör
 - binary operator--> çift terimli operator
 - ternery operator--> 3 terimli operator
@@ -944,9 +948,9 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
 - 
 8*5=40--> Burada 40 değeri çarpma operatörünün ürettiği değerdir.
 
-- Constraint = Operatörlerle ilgili uyulması gerekn kurallara verilen addır.
+- Constraint = Operatörlerle ilgili uyulması gereken kurallara verilen ad'dır.
 - Constant(sabit)
-- 
+ 
 
 ====Operatör Önceliği====
 
@@ -1005,7 +1009,9 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
    
    #### UNDEFİNED BEHAVİOR
    ```
+   
    İşaretli türlerde taşma tanımsız daranıştır.
+   
    ```
    
    
@@ -1135,9 +1141,9 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
    
     =      atama operatörü
    
-   +=       -=      *=      /=             ---->(İşlemli Atama Operatörleri)
+   +=       -=      *=      /=             ----> (İşlemli Atama Operatörleri)
    
-   %=     >>=     <=     &=     ^=    |=    ---->(Compound Assignment Operators)
+   %=     >>=     <=     &=     ^=    |=    ----> (Compound Assignment Operators)
    
    - C dilinde atama operatörleri de diğer tüm operatörler gibi bir değer üretir.
    - Atama operatörünün ürettiği değer nesneye atanan değerdir.
@@ -1148,7 +1154,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
    
     
        ```
-    int x=10,y=24,t=5,z=7;
+    int x=10, y=24, t=5, z=7;
     x+=y+=t*=z%=5;
     // Atama operatörlerinde işlem önceliği sağdan sola olduğu için sağdan başlanarak sola doğru işlemler yapılır.
    
@@ -1164,11 +1170,13 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
   - Sequence Point (Yan Etki Noktası) 
            - sequencing
            - 
-     Bir ifade ile oluşak yan etkilerin gerçekleşeceği nokta.
+     Bir ifade ile oluşacak yan etkilerin gerçekleşeceği nokta.
      
     Yan etki noktaları:
     - Deyim sonu yani ilk noktalı virgülün olduğu nokta bir yan etki noktasıdır.
     - Bazı operatörlerin operandlarının değerlendirilmesinden sonra.(lojik ve, lojik veya, ternary op. , virgül operatörü)
+    - Kosul operatorlerinde sonra (if, else if,while )
+    
     
    Örnek olarak :
    
@@ -1198,12 +1206,12 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
     ``` 
      Bir yan etki noktasından önce bir yan etkiye maruz kalmış nesneyi tekrar kullanırsak bu tanımsız davranış olur.
      
-     y = x++ + +x;/* burada x son ek olarak ++ operatörü kullanılarak 1 artırıldığı için x kendi değeriyle yann etki 
-     noktasına kadar kullanılığ yan etki noktasında artırılacaktı. Anca yan etki noktasına gelmeden x bir kez daha kullanıldığı için 
+     y = x++ + +x;/* burada x son ek olarak ++ operatörü kullanılarak 1 artırıldığı için x kendi değeriyle yan etki 
+     noktasına kadar kullanılarak yan etki noktasında artırılacaktı. Ancak yan etki noktasına gelmeden x bir kez daha kullanıldığı için 
      tanımsız davranış görülüyor.*/
      
      y=x++ + x++;
-     x=++x;
+     x = ++x ;
     ```
      
    **Bir Mülakat Sorusu:
@@ -1211,7 +1219,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
       ```
       
      int x=10;
-     int y= (x=7)+x;
+     int y = (x=7) + x;
      /*Burada yine x'e 7 ataması yapılarak bir yan etkisi vardır. Ancak bu yan etkinin oluşması için kod, yan etki noktasına ulaşmalı.
      Bu kodda yan etki noktasına ulaşılmadan x tekrar kullanılmıştır.*/
     ```
@@ -1388,8 +1396,360 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
 	 if(x==3) 
 	     ; //null statement
 	 x=2;
+	
 	 ```
+	 
+
+
+#### Standart getchar,putchar İşlemleri
+
+
+- Fonksiyon yapıları
+      - int getchar(void);
+      - int putchar(int);
+    
+- Standart giriş akımının tamponundan bir akrakter alır. (extract eder)
+Ve karakter kodunu döndürür.
+- scanf ve getchar fonksiyonları aynı buffer'ı kullanır. 
+
+		```
+		
+		int c;
+		
+		printf("bir karakter girin:");
+		c = getchar();
+		printf("c(ascii kodu) = %d , c (girilen karakter) = %c ",c,c");
+		//ekrana girilen karakterin ascii kodu ve hangi karakter girildiği yazdırılımıştır.
+		
+		```
+	
+	
+Buffer (Tampon Bellek) : Ara bellek olarak adlandırılır. 
+Bir cihazda verilerin topluca yazılmadan önce biriktirdikleri bellektir.
+Bu işlemdeki amaç, ilgili belleğin o anda başka bir işle uğraşırken o işin bitmesini 
+beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
+
+- getchar fonksiyonu, ekrana girilen değerin bize ascii kodunu decimal olarak gönderir.
+- %c formatı ise bir karakterin ascii kodu girildiğinde o karakterin görüntüsünü yazdıran formattır.
+
+
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+#### Ders 14 - Tarih 05.03.2021
+	 
+	 - Modül bir kütüphanenin modüllerine verilen değerler isimdir.
+	 
+	 - <ctype.h> 
+	 
+	 Test fonksiyonları
+	 
+	 - White space karakterleri:
+
+	 '\n'  , ' ' , '\t' , '\v' , '\f' , '\r'
+	 
+	 - <ctype.h> kütüphanesi hangi fonksiyonları içerir.
+	  
+	 -  int isupper(int c);  -->  büyük harf mi?
+	 -  int isalpha(int c); -->küçük harf mi?
+	 -  int digit (int c);  -->rakam mı?
+	 -  int alnum (int c);  -->alpha-numeric mi?
+	 -  int isxdigit (int c);  -->hex mi 
+	 -  int space(int c);      -->white space mi?
+	 -  int ispunct(int c);
+	 -  int print(int c);
+	 -  int isgraph(int c);
+	 -  int isblank(int c);
+	 -  int iscntrl(int c);
+
+          
+	 
+	 Örnek:
+	 
+	 - İki sayının aynı anda asal olup olmadığına göre koşul içeren bir kod yazalım.
+
+
+	```
+	
+	int a,b
+	printf("iki tam sayı giriniz:")
+	scanf("%d%d",&a,&b);
+	
+	if(isprime(a) == isprime(b))
+        /*if'in içerisindeki koşul böümünü böyle kullanırsak isprime fonksiyonu,
+	test fonksiyonu olduğu için sıfır veya sıfır dışında bir değer gönderecektir.
+	BU değer eğer sıfır dışında bir değer ise  1 olmak zorunda değildir. Bu da koşulu düzgün 
+	kullanmamıza engel olabilir. Bunun yerine aşağıdaki if koşulu şeklinde kullanılabilir.*/
+	
+	if(!!isprime(a) == !!isprime(b))
+	//şeklinde kullanım daha doğru olacaktır.
+	
+	
+	```
+	
+	
+- Ayrıca <ctype.h> fonksiyonun içerisinde büyük harfden küçük harfe ve büyük harften küçük harfe dönüştüren fonksiyonlar vardır.
+	   
+	       
+    - int toupper(int);
+    - int tolower(int);
+ 	
+	Örnek: 
+	
+	```
+	
+	   #include <ctype.h>
+	
+	   int ch;
+	
+	    print ("bir karakter girin:");
+	    ch = getchar();
+	    printf("%c ==> %c\n",ch,toupper(ch));
+	
+	
+	```
+	Ekran Çıktısı:
+	
+	
+	```
+	                                    
+	      h ==> H  //Eğer h değeri girilmişse.
+	
+	```
+	
+
+
+ 	
+	- Basit bir hileyle klavyeyi belirli bir karakter grubu dışındaki 
+	 karakterlere kilitleyebiliriz.
+	 
+	     ```
+	     #include<ctype.h>
+	     int main()
+	     {
+	           for(;;)
+	           {
+	           int c=_getch();
+		   
+	           if(isxdigit(c))
+	           	putchar(c);
+             	   }
+	     }
+	     
+	     
+	     // Bu program ekrana sadece hex sayı formatında yazdırır.
+	     ```
+	     
+	- Clamp nedir?
+	  Bir aralık belirtilir ve bu aralığın dışında olan değerler üst sınırın üzerindeyse üst sınır değeri olarak algılanır.
+	  Alt sınırın altındaysa alt sınır değeri olarak algılanır. Örnek vermek gerekirse 18,36 sınır değerleri olsun
+	  eğer 20 sayısı girilirse o sayı 20 olarak kullanılır. Eğer 39 girilirse o sayı 36 olarak, 15 girilirse 18 olarak kullanılır.
+	  
+	 
+	 
+	
+     #### Ternary Operator (Koşul Operatörü)
+	
+	
+	- Conditional Operator
+	- Bazı programlama dillerinde var her porgramlama dilinde yok.
+	- 3 operant alan operatör
+	- Bu operatörün 2 tane token'ı var.
+	               - op1 ? op2 : op3
+	-Atama ve virgül operatörlerinden daha öncelikli, diğer tüm operatörler daha öncelikli.
+	
+	- Op1 lojik yorumlamaya tabi tutulur. 
+	                     - Eğer lojik doğru (non-zero) ise op2 elde edilir.
+	                     - Eğer lojik yanlış ise op3 elde edilir.
+	                      
+	- Birinci operattan sonra yan etki noktası (sequence point) vardır.
+	
+	Örnek:
+	
+	     ```
+	      m = x > 10 ? a : b
+	     //x >10 ise m'ye a'yı ata, değil ise m'ye b'yi ata.
+	     
+	     
+	     a > b ? a : b;
+	     // İki sayıdan büyük olanı üretir.
+	     
+	     
+	     
+	     x > 0 ? x : -x
+	     // Mutlakk değer alma
+	     
+	     
+	     a++ > b ? a : b
+	     // Sequence point'i olduğu unutulmamalıdır.
+	     // a ile b'nin ilk değerine göre karşılaştırma yapılır sonra artan değeri üretilir.
+	          
+	     
+	     ```
+	     
+	     
+	     
+	
+
+
+           
 
    
    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
