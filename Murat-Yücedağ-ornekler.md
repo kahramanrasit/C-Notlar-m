@@ -254,4 +254,56 @@ int main()
 	 *        *   //8    */
 
 ```
+#### Yıldızlarla Eşkenar Üçgen
 
+```
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+
+
+
+
+int main()
+{
+
+	int val,counter;
+	printf("eskenar ucgenin bir kenari kac yildiz  olsun?");
+	scanf("%d",&val);
+	counter = val;
+
+
+	for (int i = 0; i < val; i++)
+	{
+		--counter;
+		for (int k = counter ; k > 0; k--)
+		{
+			printf(" ");
+		}
+		for (int j = 0; j < i + 1; j++)
+		{
+			
+			
+			printf("* ");
+		}
+		printf("\n");
+	}
+
+
+
+}
+/*
+
+  *   //2 bosluk
+ * *  //1 bosluk
+* * * //0 bosluk
+
+   *     //3 
+  * *    //2
+ * * *    //1
+* * * *   //0
+
+*/
+```
