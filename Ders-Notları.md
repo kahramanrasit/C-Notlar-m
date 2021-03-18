@@ -1432,133 +1432,166 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 - getchar fonksiyonu, ekrana girilen değerin bize ascii kodunu decimal olarak gönderir.
 - %c formatı ise bir karakterin ascii kodu girildiğinde o karakterin görüntüsünü yazdıran formattır.
 
+  Örnek Soru:
+  
+  		```
+		int c;
+		
+		printf("Bir giriş yapın:");
+		
+		while ((c=getchar()) != '\n')
+		{
+		     printf("%c  %d\n",c,c);
+		}
+		
+		/* Bu programda ekrana enter(new line) karakteri giriline kadar ekrana girilen karakter ve ascii kodu yazdırılır.
+		örnek giriş: 14
+		
+		Ekran Çıktısı: 
+		
+		1   49
+		4   52
+		
+		*/
+		
+		
+		```
+		
+ 	Yukarıdaki soruya ek olarak ortak buffer'ı daha iyi anlamamız için ;
+	
+		```
+		int c,x;
+		
+		printf("Bir giriş yapın:");
+		scanf("%d",&x);
+		printf("%d\n",x);
+		
+		
+		while ((c=getchar()) != '\n')
+		{
+		      printf("%c  %d\n",c,c);
+		}
+		
+		```
+	Şimdi yukarıdaki koda aşağıda ekrana girilen değerler ve çıktıları verilmiştir.
+	   
+	           13abc   		 	12 57 		    ab12				
+		   
+		   
+		   13				12	 	    -85456416
+		   a   97			   32		    a   97
+		   b   98 			5  53	   	    b   98
+		   c   99    			7  55		    1   49
+		   						    2   50
+								    
+	Görüldüğü üzere scanf ve getchar fonksiyonları ortak bellek kullanıyorlar. Ayrıca bir şeye daha dikkat 
+	çekmek gerekiyor. 2 ekrana girilen 12 57 değerinde 12'yi scanf yazdırdı ve boşluk(whitespace) atomunu gördüğünde
+	yazdırma işlemini durdurdu ve scanf fonksiyonundan çıktı. Sonrasında getchar fonksiyonu boşluk atomunu da yazdırdı. 
+	boşluk atomu ascii de 32 kodunu aldığı için karşısına 32 yazıldı.
+	Ayrıca bu kodda bir hususa daha dikkat çekmek gerekirse scanf fonksiyonu çağırılırken decimal formatta çağırılıyor 
+	yani siz decimal formatta bir değer gönderip enter(new line"\n) kullanırsanız bu karakterde buffer'da kalacağı için while 
+	döngüsüne gelindiğinde derleyici new line karakterini görerek while döngüsünün içine girmeden geçer.
+	
+	
+	
+	  
+	            ```
+		    
+		    int c;
+		    int sum = 0;
 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
+	            printf("bir tamsayi giriniz:");
+
+		    while ((c = getchar()) != '\n')
+	 	    {
+			sum += c - '0';
+		    }
+
+		    printf("sum = %d\n", sum);
+
+		    if (sum % 3 == 0)
+				printf("evet tam bolunur\n");
+		    else
+				printf("hayir tam bolunmez:");
+
+		    ```
+   Açıklama: Yukarıdaki programda getchar foksiyonu girilen karakterin ascii kodunu girdiği için c'ye atanan değer bir 
+   rakamın ascii kodu olur. Bu kod 0'ın kodu olan 48 den çıkarılırsa tam olarak o rakam elde edilir. Bu yüzde c-'0' olarak kullanılmıştır.
+   
+   
+   
+   - Tıpkı scanf fonksiyonunda olduğu gibi getchar fonksiyonu da standart inputun buffer'ı boş ise -1 değerini döndürür.
+   
+   
+   - Echo nedir?  
+         - Echo girilen karakter ekranda gözükmesine echo denir. Bu sebeple şifre fonksiyonları echo vermeyen fonksiyonlar
+         olarak kullanılır.
+	 
+   
+   - getchar' a benzer 2 adet standart olmayan <conio.h> kütüphanesinde fonksiyon vardır.
+                  - int _getch(void)
+                  - int _getche (void)
+                  
+	
+	Hatırlatma: Line-buffered func new line karakterini görene kadar değer almayan fonksiyondur.
+	
+    - Bu üç fonksiyonu kıyaslarsak;
+    		- getchar() -->  standart kütüphanede / line-Buffered func/ Echo veriyor
+    		- _getch()  --> standart kütüphanede değil/ line-buffered değil/echo vermiyor
+    		- _getche() --> standard kütüphanede değil/line-buffered değil/ echo veriyor
+     
+     
+     Parola Örneği:
+	 
+	 			```
+		   		#define _CRT_SECURE_NO_WARNINGS
+
+				#include <stdio.h>
+				#include <math.h>
+				#include <stdlib.h>
+				#include <conio.h>
+
+
+
+
+
+				int main()
+				{
+					int c1, c2, c3,c4;
+
+					printf("parolayi giriniz:");
+
+					c1 = _getch();
+					printf("*");
+					c2 = _getch();
+					printf("*");
+					c3 = _getch();
+					printf("*");
+					c4 = _getch();
+					printf("*");
+
+					printf("\n parola : %c %c %c %c", c1, c2, c3, c4);
+
+	
+				}
+
+		
+			
+				```
+	 
+	 
+	 - int putchar(int);
+	 
+	 - putchar sizden bir sayı alıyor ve bu sayıyı karakter kodlamsına göre ekrana yazdırıyor.
+	 - getchar, standard bufferdan bir karakter alıp onun karakter sayısını yazdırıyor.
+	 
+	 
+	 		- c1=getchar();//ekrana A yazılırsa 65 sayısını c'ye atar. Giriş Fonksiyonudur.
+	 		- c2=putchar(65)// 65 sayısını fonksiyona gönderir ve ekrana A yazdırır. Çıkış fonksiyonudur.
+
+
+
+	
 	 
 	 
 	 
