@@ -27,3 +27,59 @@ int main()
 ```
 
 	
+#### Break deyimini daha iyi anlayabilmek için bir örnek:
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <conio.h>
+a da h tuşuna basılınca döngüden çıkacak.
+
+
+
+int main()
+{
+	
+
+	int c;
+	int ival;
+	int cnt = 0;
+	int sum=0;
+	int min, max;
+
+
+
+	while (1)
+	{
+		printf("tam sayi girecek misiniz(e) (h)?--->");
+		while ((c = _getch()) != 'e' && c != 'h')
+			;//Null Statement
+		printf("%c\n", c);
+
+		if (c == 'h')
+			break;
+		printf("tam sayiyi giriniz:  ");
+		ival = (rand() % 2 ? 1 : -1) * rand();
+		printf("%d\n", ival);
+
+		if (cnt == 0)
+			min = max = ival;
+		max = ival > max ? ival : max;
+		min = ival < min ? ival : min;
+
+		++cnt;
+		sum += ival;
+
+
+	}
+	if (cnt == 0)
+		printf("hic sayi girmediniz..\n");
+	else 
+	{
+		printf("%d sayi girdini.\n ", cnt);
+		printf(" ortalama : %d\n ", sum / cnt);
+
+	}
+
+}
+```
