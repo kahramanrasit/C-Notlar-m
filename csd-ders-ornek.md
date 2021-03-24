@@ -83,3 +83,55 @@ int main()
 
 }
 ```
+
+
+
+
+#### ASAL SAYI ÖRNEK
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+
+
+int isprime(int val)
+{
+	if (val % 2 == 0)
+		return val == 2;
+	if (val % 3 == 0)
+		return val == 3;
+	if (val % 5 == 0)
+		return val == 5;
+
+	for (int i = 7; i * i < val; i++)
+	{
+		if (val % i == 0)
+			return 0;
+		
+
+	}
+
+	return 1;
+
+}
+
+int main()
+{
+	int low, high, count = 0;
+	printf("Bir aralik giriniz:");
+	scanf("%d%d", &low, &high);
+
+	for (int i = low; i < high; i++)
+	{
+		if (isprime(i)) {
+			printf("%d ", i);
+			++count;
+		}
+
+	}
+	printf("\n [%d  %d] araliğinda %d adet asal sayi vardir.", low, high, count);
+
+
+}
+```
