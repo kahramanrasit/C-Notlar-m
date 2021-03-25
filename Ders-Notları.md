@@ -1965,7 +1965,47 @@ while( ---)
 		
 	
 	
+#### Ders 16 Tarih 10/03/2021
 
+
+Örnek:
+
+```
+
+	int x;
+	scanf("%d",&x);
+	
+	if(x>10)
+		a=5;
+	else 
+		a=7;
+	// Burada  a' ya ilk değer ataması ypılmak istenmiş, ancak scope farklılığı sebebiyle doğru bir kullanım olmamıştır.
+	
+	Bunun yerine  a = x<10 ? 5: 7; daha doğru bir kullanımdır.
+ 			- Koşul operatörünün ilk değer verme amaçlı kullanımı oldukça yaygındır.
+ ```
+ 
+ #
+	
+	
+Örnek :  Aşağıdaki kodda ya bir karakter ekleyerek ya da bu kodda bir karakteri değiştirerek ekrana 5 kere something yazdırılacaktır.
+
+```
+	int n=5;
+	for(int i=0; i<n; i--)
+		printf("something\n");
+		
+	// cevap:
+		- i<n ifadesinde i yerine -i yazmak.
+		- i<n ifadesinde < yerine + yazmak.
+		- i-- yerine n-- yazmak.
+```
+
+
+#
+
+
+			
 
 
 
