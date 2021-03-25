@@ -95,9 +95,10 @@ int main()
 
 #include <stdio.h>
 
-
 int isprime(int val)
 {
+	if (val<=1)
+		return 0;
 	if (val % 2 == 0)
 		return val == 2;
 	if (val % 3 == 0)
@@ -109,7 +110,7 @@ int isprime(int val)
 	{
 		if (val % i == 0)
 			return 0;
-		
+
 
 	}
 
