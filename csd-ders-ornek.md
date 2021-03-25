@@ -87,6 +87,7 @@ int main()
 
 
 
+
 #### ASAL SAYI ÖRNEK
 
 ```
