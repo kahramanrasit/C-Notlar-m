@@ -1809,14 +1809,14 @@ Burada x++ derleyicinin algılayabileceği en uzun atom olduğu için x++ +y ola
 	- Break Statement.
 	- Goto Statement.
 
--Programın sonlandırılmasını sağlayan bazı C fonksiyonları:
+- Programın sonlandırılmasını sağlayan bazı C fonksiyonları:
 	- abord();
 	- exit();
 
 - Break Statement:
- 	-Geçerli olabilmesi için ya bir döngü deyiminin gövdesinde, ya da switch deyiminin gövdesinde olması gerekiyor.
+ 	- Geçerli olabilmesi için ya bir döngü deyiminin gövdesinde, ya da switch deyiminin gövdesinde olması gerekiyor.
 	
--Sonsuz Döngü idiomu - infinite Loop
+- Sonsuz Döngü idiomu - infinite Loop
 
 Örnek: 
 ```
@@ -1873,9 +1873,9 @@ else
 
 - Nested Loops (İç içe döngüler)
 
--Break deyimi sadece içinde bulunduğu döngüden çıkış yapar.
+- Break deyimi sadece içinde bulunduğu döngüden çıkış yapar.
 
--Eğer biz bulunulan iç içe döngüden en dışa çıkmak istersek;
+- Eğer biz bulunulan iç içe döngüden en dışa çıkmak istersek;
 	flags (Bayrak) değişkenleri kullanabiliriz.
 
 		
@@ -1913,7 +1913,7 @@ while( ---)
 	
 
 - Continue statement 
-	- yardımcı bir kontrol deyimi
+	- Yardımcı bir kontrol deyimi
 	- Continue sadece döngü deyimlerinin gövdelerinde kullanılır. 
 		- break ;(loops/switch)
 		- continue; (just loops)
@@ -1934,7 +1934,7 @@ while( ---)
 
 
 - Basit bir mülakat sorusu: Aşağıdaki kodda yanlışlık nerededir.
-- 
+ 
 ```
 	if(x != 0)
 		y=x;
@@ -1961,7 +1961,7 @@ while( ---)
 	- for(expr1 ; expr2 ;expr3)
 	- Eğer expr2'ye hiç birşey yazılmazsa lojik 1 kabul edilir.
 	- for(;;) -> infinite loop  <- while(1)
-	-  
+	 
 		
 	
 	
