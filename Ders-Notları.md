@@ -1745,6 +1745,238 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 	          
 	     
 	     ```
+	    
+#### Ders 15- 08/03/2021
+
+ #### Loop Statement 
+ 
+ - While 
+ - Do while 
+ - For
+
+	  - break 
+	  - continue
+	  	
+	
+- Genellikle yanlış yapılan bir mülakat sorusu:
+ 
+ 		  int i=0;
+                  while (i++<100);
+		  	printf("%d",i);
+-> Yukarıdaki kodda küme parentezi kullanılmadığı için ilk deyim olarak ; alınmıştır.  Ve i++ olduğu için while'dan çıkıldığında i=101 olur.
+
+
+
+
+- n Klavyeden girilen bir sayı olsun. 
+	- while(n--) ile while(n--<0) arasında bir fark yoktur.
+
+
+
+
+- Maksimum munch kuralı :
+		int z= x+++y;
+Burada x++ derleyicinin algılayabileceği en uzun atom olduğu için x++ +y olarak tokenize edilir.
+
+
+
+Örnek: 
+```
+	int power(int base, int exp)
+	{
+		int result =1;
+		while(expr--)
+			result *=base;
+			
+		return result ;
+	}
+	
+	int main()
+	{
+		int x,y;
+		printf("iki tam sayı giriniz:);
+		scanf("%d%d",&x,&y);
+		printf("%d ussu %d =%d\n",x,y,power(x,y));
+		
+	}
+```
+#
+
+
+- Bir döngüden hangi biçimlerde çıkılır:
+	- Kontrol ifadesinin yanlış olması.
+	- Döngü gövdesi içinde return deyiminin yürütülmesi.
+	- Break Statement.
+	- Goto Statement.
+
+-Programın sonlandırılmasını sağlayan bazı C fonksiyonları:
+	- abord();
+	- exit();
+
+- Break Statement:
+ 	-Geçerli olabilmesi için ya bir döngü deyiminin gövdesinde, ya da switch deyiminin gövdesinde olması gerekiyor.
+	
+-Sonsuz Döngü idiomu - infinite Loop
+
+Örnek: 
+```
+		
+		int i=1,n=5;
+		
+		while (i<100)
+		{
+			if(i % n == 0);
+			{
+				printf("%d",i);
+				i++;
+			}
+		}
+		//i'nin yeri yanlış yazıldığı için ilk döngüye 1 ile başlayıp if'e giremediği için sonsuz döngüde kalır.
+```
+
+#
+
+Örnek:  e ya da h tuşları dışında bir tuşa basıldığında program tepki vermeyecek. Sadece e ya da h tuşlarına 
+basıldığında döngüden çıkacak.
+
+
+```
+#include <conio.h>
+
+int ch;
+printf("evet mi hayir mi ? (e) (h)");
+while(1)
+{
+	ch=_getch();
+	if(ch == 'e' || ch == 'h')
+		break;
+}
+
+putchar(ch);
+
+if(ch == 'e')
+	printf("\n ever dediniz.\n");
+	
+else
+	prinf("\n hayir dediniz\n");
+	
+	
+///Yukarıdaki koda alternatif olarak :
+
+	while((ch == _getch()) !='e' && ch != 'h')
+		;  //Null Statement
+
+```
+
+
+#
+
+- Nested Loops (İç içe döngüler)
+
+-Break deyimi sadece içinde bulunduğu döngüden çıkış yapar.
+
+-Eğer biz bulunulan iç içe döngüden en dışa çıkmak istersek;
+	flags (Bayrak) değişkenleri kullanabiliriz.
+
+		
+
+Peki bayrakları nasıl kullanabiliriz?
+
+```
+flag=0
+while( ---)
+{
+	statement;
+	statement;
+	statement;
+	while(---)
+	{
+		if(exp)
+		{
+			flags=1;
+			break;
+		}
+	}
+	
+	if(flag)///-------> Burada flag kontrol edildi ve eğer break sebebi ile geliyorsa ikinci break atılıdı.
+		break;
+}
+
+```
+
+
+#
+
+- Break yerine programın herhangi bir yerinde goto deyimi kullanılarak gidilecek etiket belirlenip istenilen noktaya ulaşılabilir.
+	etiket-label
+	
+	
+
+- Continue statement 
+	- yardımcı bir kontrol deyimi
+	- Continue sadece döngü deyimlerinin gövdelerinde kullanılır. 
+		- break ;(loops/switch)
+		- continue; (just loops)
+	- Continue deyiminin yürütülmesi döngünün kalan kısmını by-pass ediyor yani kalan kısmı yapılmış gibi diğer tura geçiyor.
+
+
+
+
+- if ile alakalı bir not:
+ 	- if(val <= 0 )
+ 		return val;
+	  else 
+	  	return val;
+		//burada else yazmakla yazmamak arasında bir fark yoktur. (gizli else)
+			- redundant else 
+			- redundancy = fuzuli
+
+
+
+- Basit bir mülakat sorusu: Aşağıdaki kodda yanlışlık nerededir.
+- 
+```
+	if(x != 0)
+		y=x;
+	else 
+		y=0; // if kullanılmasına gerek yoktur. bu kodun karşılığı zaten y=x'dir.
+		
+		
+```
+
+#
+
+- Klavye Kısaltmaları:
+	- ctrl k c -> açıklama satırı yap
+	- ctrl k u -> açıklama satırını kaldır.
+	- ctrl shift L -> bulunan satırı direk siler.
+	- ctrl D -> bulunan satırı aşağıya kopyalar.
+	- shft alt -> satırsal olarak seçip satırsal olarak işlem yapabiliriz.
+	
+	
+	
+	
+	
+-For statement
+	- for(expr1 ; expr2 ;expr3)
+	- Eğer expr2'ye hiç birşey yazılmazsa lojik 1 kabul edilir.
+	- for(;;) -> infinite loop  <- while(1)
+	-  
+		
+	
+	
+
+
+
+
+
+
+  
+	
+	
+	
+
+
 	     
 	     
 	     
