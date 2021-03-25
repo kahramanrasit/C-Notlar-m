@@ -197,10 +197,41 @@ int main()
 	scanf("%d", &val);
 	print_prime_factors(val);
 
-	
+}
+```
+
+#### Prime Factors (asal çarpanlarını yazdırma) (alternatif)
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
 
 
+void print_prime_factor(int x)
+{
+	int val = 2;
+	while (x != 1)
+	{
+		while (x % val == 0) {
+			printf("%3d", val);
+			x /= val;
+		}
+
+		++val;
+	}
+
+}
+
+int main()
+{
 	
+	int val;
+	printf("enter the integer: ");
+	scanf("%d", &val);
+	print_prime_factor(val);
+
 
 
 }
+
+```
