@@ -137,3 +137,70 @@ int main()
 
 }
 ```
+
+#### Prime Factors (asal çarpanlarını yazdırma)
+
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+
+
+int isprime(int val)
+{
+	if(val==1)
+		return 0;
+	if (val % 2 == 0)
+		return val == 2;
+	if (val % 3 == 0)
+		return val == 3;
+	if (val % 5 == 0)
+		return val == 5;
+
+	for (int i = 7; i * i < val; i++)
+	{
+		if (val % i == 0)
+			return 0;
+
+
+	}
+
+	return 1;
+}
+
+void print_prime_factors(int val)
+{
+	
+	int x = val;
+	for (int i = 0; i < val; i++)
+	{
+		if (isprime(i)) {
+		
+			while (x % i == 0)
+			{
+				printf("%3d", i);
+				x /= i;
+			}
+
+		}
+	}
+	
+	
+
+}
+
+int main()
+{
+	int val;
+	printf("input the integer : ");
+	scanf("%d", &val);
+	print_prime_factors(val);
+
+	
+
+
+	
+
+
+}
