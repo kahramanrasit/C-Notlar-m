@@ -2004,18 +2004,233 @@ while( ---)
 
 #
 
+- Collatz Sanısı 
+	- Sayı tek ise 3 katının 1 fazlası bulunan sayı çifti 2'ye bölünecek.
+	- Örnek olarak sayı 23 ise 3 katının 1 fazlası 70. 2'ye bölünecek. 35. tekrar  katının 1 fazlası alınır 106 diye devam eder.
+	
 
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+
+void print_collatz(unsigned long long n)
+{
+	while (n != 1)
+	{
+		printf("%llu ", n);
+		if (n % 2 == 0)
+			n /= 2;
+		else
+			n = n * 3 + 1;
+	}
+	printf("1\n");
+
+}
+
+
+
+
+int main()
+{
+	unsigned long long x;
+	printf("enter the integer:");
+	scanf("%llu", &x);
+	print_collatz(x);
+
+
+}
 			
+```
+
+
+#
+
+- Asal Sayı Örneği: Bir aralık girin ve bu aralıktaki bütün asal sayıları ekrana yazdırın.
+
+ 
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+
+int isprime(int val)
+{
+	if (val <= 1)
+		return 0;
+	if (val % 2 == 0)
+		return val == 2;
+	if (val % 3 == 0)
+		return val == 3;
+	if (val % 5 == 5)
+		return val == 5;
+	for (int i = 7; i * i < val; i++)
+	{
+		if (val % i == 0)
+			return 0;
+	}
+	return 1;
+
+}
 
 
 
+int main()
+{
+	int low, high;
+	int prime_count=0;
+	printf("bir aralik girin:");
+	scanf("%d%d", &low, &high);
+	for (int i = low; i < high; i++)
+	{
+		if (isprime(i))
+		{
+			printf("%d  ", i);
+			++prime_count;
+		}
+	}
+	printf("\n [%d  %d  araliginda] %d asal sayi bulundu.\n", low, high, prime_count);
+
+}
+```
+
+
+#
 
 
   
+- Factorial işlevinin recursive implementasyonu:
+
+
+```
+	int factorial (int n)
+	{
+	return n<2?1:n*factorial(n-1);
+	}
+```
+
+
+#
+
+- Mülakat Sorusu:
+
+```
+int i=0;
+do
+{
+	printf("%d\n",i);
+	i++;
+	if(i<15)
+		continue;
+		}while(0);
+
+// Bu kodda ekrana 1 yazdırılır. Continue komutunu görünce koşul ifadesi neredeyse program oraya dallanır.
+```
+
+#
+
+#### UNDEFİNED BEHAVİOUR 
+
+```
+for(int i=0; i<1;--i)
+	;
 	
+//İşaretli int türünde taşma tanımsız davranıştır.
+
+```
+
+
+#
+
+- Nested Loops:
+	 - Armstrong sayısı; bir sayının rakamlarının, basamak sayısı derecesinden kökleri toplamı kendisine eşit ise o sayıa armstrong sayısı denir.
+	 
+	 
+- Örnek: 3 basamaklı armstrong sayılarını bulan programı yazınız:
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+
+
+
+
+
+
+int main()
+{
+
+	int x = 100;
+	for (int i = 1; i < 10; ++i)
+	{
+		for (int j = 0; j < 10; ++j)
+		{
+			for (int k = 0; k < 10; ++k)
+			{
+				if (x == (i * i * i) + (j * j * j) + (k * k * k))
+					printf("%d\n", x);
+				++x;
+			}
 	
+		}
+	}
+
+
+}
+```
+
+#
+
+
+
+#### DERS 17 - 12/03/2021
+
+- Eğer iç içe döngülerde içteki bir döngüden tüm döngüleri kırarak çıkmak istiyorsak ideal olarak goto deyimi kullanılmalı.
+
+
+
+- Fonksiyon Bildirimleri - Function Declaratition
+	- Bir fonksiyon çağrısı yapıldığında o fpnksiyonun tanımı name look up ile bulunur.
+	Derleyici o fonksiyonun tanımını neden bulmalı?
+		- Çağrıda kullanılan argüman sayısı ile parametre sayısının uyumunu kontrol edecektir.
+		- Fonksiyonun parametresi int türden ise ancak bu fonksiyona gönderdiğimiz parametre şnt türden değil ise dil kurallarına göre derleyicinin tür dönüşümü (type 			conversion) yapması gerekiyor.
+		
+- ! Derleyici fonksiyonun kodunu bilmiyor. Fonksiyon çağrısını içeren fonksiyonun koduyla, çağırılan fonksiyonun derlenmiş kodunu birleştiren Linker dediğimiz program ,
+Derleyici fonksiyonunun çıkış kodlarını da üretiyor. Fonksiyonun geri dönüş değerinin yazılacağı adres gibi araya da kendinden sonra birleştirme işlemi yapacak  linker için referans bir isim yazıyor. Böyle referanslara external refereans deniyor.
+
+- Derleyicinin bir fonksiyon çağrısı karşılığı 
+	- Doğru şekilde fonksiyona giriş kodları üretebilmesi için 
+	- Doğru şekilde fonksiyondan çıkış kodlarını üretebilmesi için 
+	- programcının yapmış olabileceği lojik hatalara karşı uyarabilmek için çağrılan fonksiyon ile ilgili bazı bilgilere sahip olması gerekiyor.
+	- Derleyicinin fonksiyon kodunu görmesi zorunlu değil 
+	- Derleyiciye bu bilgileri veren bildirime "function declaration" deniyor.
 	
 
+- void func(); ile void func(void); arasındaki fark; parantezin içerisi boş ise bu tanımlamada fonksiyunun parametreleri hakkında bilgi vermiyorum anlamına geliyor. Parantezin içerisine void yazıldığında ise fonksiyonun geri dönüş değerinin olmadığı bildiriliyor. Bu C diline ait bir kural.
+
+- function prototype scope:
+	- Bir fonksiyonun bazı durumlarda kodunu göremeyiz ve sadece bildirimini görebiliriz. Bu bildirimde gönderilen değişkenin ne olduğunu bildirmek için ve sadece bildirim satırındaki parantezi kapsayan scope'dur.
+	
+
+
+- Bir fonksiyonun bildiriminin 2. kez yapılmasına "function redeclaration" denir. Bunlar arasında bir çelişki vasrsa sentaks hatası olur.
+
+
+- Function Overloading (işlev Yüklemesi) 
+	- Bazı dillerde bir fonksiyon ismi ile paramedic yapısı farklı olarak tanımlanabiliyor. Ancak C'de öyle değil.
+	
+
+- Header File:
+	 - .c dosyalarına source file , implementation file , do c file denebiliyor.
+	 - Header file'ın içerisinde sadece bildirim dosyaları vardır. Fonksiyon tanımı yoktur.
+	 
+	 - Bir başlık dosyasında neler var?
+	 	- Önişlemci komutları var .
+	 	- Macrolar var.
+	 	- Fonksiyon bildirimleri 
+	 	- Tür bildirimleri (user - defined types)
+	 	- tür eş isim bildirimleri
+	 	 
 
 	     
 	     
