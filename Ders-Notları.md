@@ -2230,12 +2230,89 @@ Derleyici fonksiyonunun çıkış kodlarını da üretiyor. Fonksiyonun geri dö
 	 	- Fonksiyon bildirimleri 
 	 	- Tür bildirimleri (user - defined types)
 	 	- tür eş isim bildirimleri
-	 	 
 
+
+#### Ders 18-15/03/2021
+
+- Preprocessor:
+	- Önişlemcinin , bilgisayarın işlemcisi ya da başka bir donanımsal elemanıyla hiçbir ilgisi yoktur. Önişleci belirli bir işi gören bir yazılım programıdır.
+	- Önişlemci,kaynak dosya üzerinde birtakım düzenlemeler ve değişiklikler yapan bir ön programdır.
+	- Önişlemci programının bir girdisi bir de çıktısı vardır. Önişlemcinin girdisi kaynak dosyanın kendisidir. Önişlemci programın çıktısı ise derleme modülünün girdisini
+oluşturur. Yani kaynak program ilk aşamada önişlemci tarafından ele alınır. Önişlemci modülü, kaynak dosyada çeşitli metinsel düzenlemeler, değişiklikler yapar. Daha sonra
+değiştirilmiş ya da düzenlenmiş olan bu kaynak dosya, derleme modülü tarafından amaç koda dönüştürülür.
+	- Yani önişlemcinin görevi kendi komutlarını yürütmek, Bu komutlara "pp directives" denir.
+		- #(null directive)
+		- #include
+		- #define
+		- #undef
+		- #if 
+		- #else
+		- #elif
+		- #endif
+		- #ifdef
+		- #ifndef
+		- #line
+		- #error
+		- #pragma
+	- Önişlemci komutlarını belirleyen yukarıdaki sözcükler, C dilinin anahtar sözcükleri değildir.
+	- Sıra derleyiciye geldiğinde bunlar, önişlemci tarafından kaynak dosyadan silinmiş olur.
+	- Önişlemci program, amaç kod oluşturmaya yönelik hiçbir iş yapmaz, kaynak kod içinde bazı metinsel düzenlemeler yapar. Kendisine verilen komutları yerine getirdikten sonra, # ile başlayan satırları kaynak dosyadan siler. Derleme modülüne girecek programda # ile başlayan satırlar artık yer almaz.
+	
+	
+	 	 
+	
 	     
+	     
+#İnclude Önişlemci komutu:
+	- #include <---.h> veya #include "----.h" olarak gösterilebilir.
+	- #include komutu ile, ismi verilen dosyanın içeriği, bu komutun yazıldığı yere yapıştırılır. Bu komut ile önişlemci, belirtilen dosyayı diskten okuyarak komutun yazılı olduğu yere yerleştirir. Bu komutla yapılan iş, metin düzenleyici programlardaki "kopyala - yapıştır" (copy – paste) işlemine benzetilebilir.
+	- Dosya ismi eğer açısal ayraç içinde verilmişse, sözkonusu dosya önişlemci tarafından, popüler olarak "default directory" denilen  önceden belirlenmiş bir dizin içinde aranır.
+	- Dosya ismi eğer çift tırnak içinde verilmişse sözkonusu doya önişlemci tarafından kaynak dosyanın bulunduğu dizinde arar, eğer burada bulamazsa sistem tarafından berlirlenen dizinde arar.
+	
+	
+- **Başlık Dosyaları Neden Kullanılır?
+	- Özellikle büyük programlar, modül ismi verilen ayrı ayrı parçalar halinde yazılır. Bu modüllerden bazılarının amacı, diğer modüllere hizmet vermektir. C ve C++ dillerinde, genel hizmet verecek kodlar (server codes), genel olarak iki ayrı dosya halinde yazılır. 
+		- Fonksiyon tanımlamaları, global değişken tanımlamaları uzantısı .c olan dosyada yer alır. 
+			- Bu dosyaya, kodlama dosyası (implementation file-Source file) denir. 
+		- Hizmet alacak kodları (client codes) ilgilendiren bildirimler ise bir başka dosyada tutulur.
+			- Bu dosyaya, başlık dosyası (header file) denir. 
+	- Bir başlık dosyası, bir modülün arayüzüdür (interface). Modül dışarıyla olan ilişkisini arayüzü ile kurar.
 	     
 	     
 	
+	
+# #Define Önişlemci komutu:
+
+- #define önişlemci komutunun işlevi, metin düzenleyici programlardaki "bul - değiştir" (find - replace) özelliğine benzetilebilir. Bu komut kaynak kod içindeki bir yazıyı başka bir yazı ile değiştirmek için kullanılır. 
+		- Object-like macro
+	- Önişlemci komutu herhangi bir blokta da tanımlanabilir. Tanımlandığı yerden sonraki tüm kodlarda geçerlidir.
+	- #define SIZE 100 komutu ile, kaynak kod içerisinde gördüğü her bir SIZE atomu yerine 100 atomunu yerleştirir. Derleme modülüne girecek kaynak programda, SIZE atomu 		artık yer almaz.
+	- Önişlemci komutları kullanılırken parantezler konusunda dikkatli olunmalıdır. Bir örnekle gösterelim.
+```
+#define MAX 100+200
+
+int main()
+{
+	int a=5*MAX;
+	printf("a= %d\n",a);
+}
+```
+#
+Yukarıdaki örnekte parentez kullanılmadığı için MAX yerine direk olarak 200+100 yazılınca oluşan ifade a=5 * 100+200; olur. Bu da istenen sonucu karşılamayabilir.
+
+#
+
+- Önişlemci tanımlamalarında noktalı virgül kullanılmaz. Kullanılırsa önişlemci onu olduğu gibi (copy-paste) yaptığı için dil kuralına göre hatalar oluşturur.
+- Aşağıdaki #define önişlemci komutları geçerli değildir:
+		- #define + -
+		- #define 100 200
+
+- Bir kodda kullanılan isim sabit mi değişken mi sabit mi nasıl ayırt edebiliriz?
+	- C'de değişken isimleri küçük harfli olarak seçilirler.
+	- ALL CAPS= tamamı büyük harfler.
+	- C'de all caps isimler macrolarda kullanılmaktadır.
+	
+
 
 
            
