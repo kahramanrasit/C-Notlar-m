@@ -2232,7 +2232,7 @@ Derleyici fonksiyonunun çıkış kodlarını da üretiyor. Fonksiyonun geri dö
 	 	- tür eş isim bildirimleri
 
 
-#### Ders 18-15/03/2021
+# Ders 18-15/03/2021
 
 - Preprocessor:
 	- Önişlemcinin , bilgisayarın işlemcisi ya da başka bir donanımsal elemanıyla hiçbir ilgisi yoktur. Önişleci belirli bir işi gören bir yazılım programıdır.
