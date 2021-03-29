@@ -2417,6 +2417,7 @@ int main()
            
            
 	Eğer biz hem makro tanımlayıp hem fonksiyo tanımlarsak ve seçimi programcıya bırakırsak;
+		- fonksiyon çağırılmak istenirse (func)(a,b) şeklinde yazılır.
  ``` 
   
   
@@ -2435,7 +2436,229 @@ int main()
 	
 	
 	
+- Önişlemci programın kendi operatörleri vardır.
+	- preeprocessor operator
+		- # operetörü  -----> stringificition operator(straing yapma operatörü )
+		- ## operatörü ------>token-pasting operator (atom yapıştırma operatörü)
+		- defined operatörü
+
+
+- #x -----> derleyiciye "x" bu şekilde görünür. 
+ - örnek olarak:
+ ```
+ 	#define str(a)  #a
 	
+	int main()
+	{
+	printf(str(github));
+	}
+	// Derleyicinin gördüğü printf("github");    olur.
+	
+	
+```
+
+
+- Örnek
+
+
+```
+#define iprint(x)  printf(#x "= %d\n",x)
+
+int main()
+{
+int a=10;
+int b=7;
+int c=11;
+
+iprint(a);
+iprint(a+b);
+iprint(a*a+ b*b+c*c);
+//burada ekran çıktısı 
+a=10
+a+b=17
+a*a+ b*b+c*c=590              olur.
+}
+
+
+```
+
+#
+
+- ## operatörü 
+	- a##b --->ab olur. Bir nevi birleştirme operatörü.
+ örnek:
+
+
+```
+	#define uni(a,b) a##b
+	int main()
+	{
+		int counter =0
+		uni(co,unter)=20;
+		printf("%d",counter);
+	
+		// ekrana 20 yazılır.
+	}
+		
+```	
+```
+
+#
+- Define farklı bir kullanım şekli;
+```
+#define PUBLIC
+
+PUBLIC int g=45;
+PUBLIC int square(int x)
+{
+return x*x;
+}
+//Bu kodda PUBLIC sözcüğü derlendiğine derleyici, PUBLIC sözcüğünü görmez. 
+```
+
+
+# Conditional Compiling (koşullu derleme)
+
+#undef	#elif
+#if 	#endif
+#else 	#ifdef
+#ifndef
+
+
+- Koşullu derlemede bir kural vardır. Eğer makronun tanımı yapılmamışsa makro sıfır olarak işleve alınır.
+
+mesela;
+```
+#if MAX > 10
+	typedef int word;
+#endif--> bu kodda max 0 alınır ve koda girilmez. Ancak koşul ifadesi >-1 olsaydı eğer koşul a direk girilecekti.
+```
+
+# Ders 20 - 19/03/2021
+
+- Önişlemci komutlarında elseif merdiveni;
+
+```
+#define NEC 1
+
+#if NEC==0
+
+#else 
+
+#if NEC ==1
+
+#else
+#endif
+#endif
+#endif------> Bu şekilde kullanılırsa her if için bir endif yazılması gerekir. Ancak aşağıdaki gibi kullanılırsa ;
+
+#if NEC==0
+
+#elif NEC ==1
+
+#elif NEC==2
+
+#endif
+```
+
+
+#
+
+```
+ - #ifdef NEC ----> NEC makrosu define edilmişse önişlemci bu aralığa girecek.
+ 
+ #endif
+ 
+ 
+ 
+ - #ifndef NEC -----> NEC makrosu tanımlanmadıysa bu aralığa girilecek.
+ 
+ #endif
+ 
+ ```
+ 
+ #
+ 
+ - Defined Operatörü 
+ 	- defined NEC
+ 		- Eğer defined komutunun terimi olan isim daha önce tanımlanmış bir simgesel var ise defined operatörü lojik 1 değerini üretir.yok ise lojik 0 değerini üretir.
+
+#ifdef NEC ile #if defined NEC aynı işlevi yaparlar.
+#ifndef NEC ile #if !defined NEC aynı işlevi yaparlar.
+
+- Peki bunlar aynı işlevi yapıyorlarsa hangi noktalarda ihtiyacımız oluyor.
+
+```
+#ifdef EMRAH
+#ifdef FURKAN
+//KODLAR
+#endif
+
+yerine 
+
+#if defined EMRAH && FURKAN 
+//kodlar
+#endif
+
+- Sağladığı kolaylıktan dolayı defined operatörü daha sonradan çıkmıştır.
+```
+
+#
+
+
+- Peki biz bu önişlemci komutlarında koşullu bildirmeleri nereleede kullanıyoruz??
+	- donanıma göre
+	- işletim sistemine göre 
+	- derleyiciye göre
+	- dile göre
+	- versiyon/ sürüm kontrolü
+	- lokasyona göre
+
+
+- Multiple inclusion guard (çoklu dahil etmeye karşı önlem gibi)
+
+	- Önişlemci koşullu derleme koşullarının özel bir kullanım biçimidir. Ki bu komutları kullandığımız zaman bir başlık dosyasında önişlemci programı o başlık dosyasına bir kere girer ikinci kez girmeye zorlarsanız ikinci kez girmez. 
+	- Peki bunu nasıl sağlıyoruz?
+bir başlık dosyasının içine ;
+```
+#ifndef NUTİLİTY_H
+#define NUTİLİTY_H
+//kodlar
+#endif
+---> şeklinde bir koşul ve makro tanımlanırsa ilk girişte koşulda sorgulanan makro tanımlanmadığı için girer ve kodu işler. Eğer ikinci kez tanımladıysa koşuldaki makro, birinci girişindeki tanımladığı koşul geçemez.
+```
+- !Multiple inclusion guard her başlık dosyasında olmalıdır. 
+
+
+
+- #undef önişlemci komutu
+	- #undef NEC
+		- Bu önişlemci komutuyla NEC makro tanımsız kabul edilecektir.
+		- Daha önce tanımlandıysa NEC makrosu, #undef NEC komutundan sonra tanımlanmamış olarak devam edecektir.
+		
+		
+#### UNDEFİNED BEHAVİOUR
+
+```
+- Eğer önişlemci programı bir makronun farklı 2 tanımıyla karşılaşırsa bu durumda tanımsız davranış olur.
+ #define SIZE 100
+ #define SIZE 500
+- Önişlemci programında name look up terimi yoktur. Bu derleyici ile alakalıdır.
+```
+
+- Yani biz bir makroyu kullandıktan sonra tekrar değer vermek istersek önce o makroyu #undef komutu ile içeriğini temizlememiz gerekir.
+
+
+
+- Pre-defined Symbolic Constant(ön tanımlı sabit )
+	- Dil tarafından tanımlı kabul edilen makrolara denir. 
+		
+
+
+
+
+
+
 
   
   
