@@ -2313,19 +2313,130 @@ Yukarıdaki örnekte parentez kullanılmadığı için MAX yerine direk olarak 2
 	- C'de all caps isimler macrolarda kullanılmaktadır.
 	
 
+- Örnek olarak: 
+#
+```
+#define SIZE 100
+
+int main()
+{
+SIZE = 50;
+}
+// Bu kodun okunma şekli 100=50; olacaktır. Ve bu sentaks hatasıdır.
+// Ancak bu kodu şu şekilde kullanırsak ;
+
+#define SIZE a[0]
+
+int main()
+{
+int a[100]
+
+SIZE =4;---> olarak yazdığımızda bı kodda sentaks hatası yoktur.
+}
+``` 
+#
 
 
+# Ders 19 - 17/03/2021
+
+
+- Fonksiyonel Makrolar
+	- functional macro
+	- function-like makro
+
+- #define max2(a,b)   ((a)>(b))?(a):(b))
+	- fonksiyonel makrolar fonksiyonlara bir alternatifdir.
+	- fonksiyonel makrolar kodu küçük(az) fakat sık çağırılan fonksiyonlara bir alternatif 
+
+- Makro tanımında parantez kullanmamızın sebebini anlatan bir örnek;
+```
+#define square(a)   a*a
+int main()
+{
+int x,y;
+printf(" bir tamsayı girin:");
+scanf("%d",&x);
+y=square(x+1); // y=x+1*x+1; derleyici bu şekilde algılayacak.
+}
+
+//doğru olan tanım şekli #define square(a)  (a)*(a) şeklindedir.
+
+```
+#
+
+- ub oluşturulmamasına dikkat edilmelidir.
+```
+#define square(a)   (a)*(a)
+int main()
+{
+int x,y;
+printf(" bir tamsayı girin:");
+scanf("%d",&x);
+y=square(x++); // y=(x++)*(x++); burada yan etki noktasına gelinmeden x iki kez kullanılmış olur ve bu tanımsız davranıştır.
+}
+```
+   
+#
+
+- foo bir fonksiyon olsun.
+```
+#define SQUARE(a) ((a)*(a))
+int main()
+{
+int y=10;
+int z =SQUARE(foo(y)),
+//burada foo fonksiyonu 2 kez çağırılmış oldu. Eğer square bir fonksiyon olsaydı bir kez çağırılıp geri dönüş değeri ile makraoya gidilecekti.
+}
+```
+- bir mülakat sorusu: 
+
+```
+  int square(int x)
+{
+	return x * x;
+}
+
+#define square(a)  ((a)+(a))
+
+
+int main()
+{
+	int ival;
+	printf("bir tam sayı giriniz:");
+	scanf("%d", &ival);
+	int y = square(ival);
+	printf("%d", y);
+
+}
+
+
+- Yukarıdaki fonksiyonda square komutu ile fonksiyon mu çağırılır makro mu??
+
+          - önişlemci komutu derleyiciden önce çalışıyor. Önişlemci programı define komutunu yürütecek onun çıktısı derleyiciye gidecek.
            
+           
+           
+	Eğer biz hem makro tanımlayıp hem fonksiyo tanımlarsak ve seçimi programcıya bırakırsak;
+ ``` 
+  
+  
+  #
+  
+- Fonksiyonel makrolar ile fonksiyonların karşılatırmasını yapınız:
 
-   
-   
-  
-  
-  
-  
-  
-  
-  
+	- Makrolar kaynak kodu büyütme eğilimindedir.
+       		 - Yani derlenmiş kodun boutu üzerinde bir kaygınız var ise makro kullanmamanız daha sağlıklı olacaktır.
+        	- Ancak ne kadar yer kaplasa da sizin için  kapladığı yerden çok hızı önemli ise daha hızlı olması için makrolar daha avantajlı.
+              			- Hızlanmasının sebebi ise fonksiyona giriş ve çıkış kodları üretilmiyor oluşu.
+	- Fonksiyonlar türe bağlı, makrolar türden bağımsızdır.
+	- Makro kullanımı durumunda debugger desteği daha az olabileceği göz önünde bulundurulmalıdır.
+	- Makrolar, fonksiyonlara göre daha etkin kodun oluşturulmasını sağlayabilirler.
+	
+	
+	
+	
+	
+
   
   
   
