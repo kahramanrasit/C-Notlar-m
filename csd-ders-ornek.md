@@ -106,7 +106,7 @@ int isprime(int val)
 	if (val % 5 == 0)
 		return val == 5;
 
-	for (int i = 7; i * i <= val; i++)
+	for (int i = 7; i * i <= val; i+=2)
 	{
 		if (val % i == 0)
 			return 0;
@@ -158,7 +158,7 @@ int isprime(int val)
 	if (val % 5 == 0)
 		return val == 5;
 
-	for (int i = 7; i * i <= val; i++)
+	for (int i = 7; i * i <= val; i+=2)
 	{
 		if (val % i == 0)
 			return 0;
