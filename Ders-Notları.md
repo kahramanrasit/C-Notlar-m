@@ -2143,7 +2143,8 @@ for(int i=0; i<1;--i)
 #
 
 - Nested Loops:
-	 - Armstrong sayısı; bir sayının rakamlarının, basamak sayısı derecesinden kökleri toplamı kendisine eşit ise o sayıa armstrong sayısı denir.
+	 - Armstrong sayısı; bir sayının rakamlarının, basamak sayısı derecesinden kökleri toplamı kendisine eşit ise
+	  o sayıa armstrong sayısı denir.
 	 
 	 
 - Örnek: 3 basamaklı armstrong sayılarını bulan programı yazınız:
@@ -2193,23 +2194,31 @@ int main()
 	- Bir fonksiyon çağrısı yapıldığında o fpnksiyonun tanımı name look up ile bulunur.
 	Derleyici o fonksiyonun tanımını neden bulmalı?
 		- Çağrıda kullanılan argüman sayısı ile parametre sayısının uyumunu kontrol edecektir.
-		- Fonksiyonun parametresi int türden ise ancak bu fonksiyona gönderdiğimiz parametre şnt türden değil ise dil kurallarına göre derleyicinin tür dönüşümü (type 			conversion) yapması gerekiyor.
+		- Fonksiyonun parametresi int türden ise ancak bu fonksiyona gönderdiğimiz parametre şnt türden 
+		değil ise dil kurallarına göre derleyicinin tür dönüşümü (type conversion) yapması gerekiyor.
 		
-- ! Derleyici fonksiyonun kodunu bilmiyor. Fonksiyon çağrısını içeren fonksiyonun koduyla, çağırılan fonksiyonun derlenmiş kodunu birleştiren Linker dediğimiz program ,
-Derleyici fonksiyonunun çıkış kodlarını da üretiyor. Fonksiyonun geri dönüş değerinin yazılacağı adres gibi araya da kendinden sonra birleştirme işlemi yapacak  linker için referans bir isim yazıyor. Böyle referanslara external refereans deniyor.
+- ! Derleyici fonksiyonun kodunu bilmiyor. Fonksiyon çağrısını içeren fonksiyonun koduyla,
+ çağırılan fonksiyonun derlenmiş kodunu birleştiren Linker dediğimiz program ,
+Derleyici fonksiyonunun çıkış kodlarını da üretiyor. Fonksiyonun geri dönüş değerinin yazılacağı 
+adres gibi araya da kendinden sonra birleştirme işlemi yapacak  linker için referans bir isim yazıyor. 
+Böyle referanslara external refereans deniyor.
 
 - Derleyicinin bir fonksiyon çağrısı karşılığı 
 	- Doğru şekilde fonksiyona giriş kodları üretebilmesi için 
 	- Doğru şekilde fonksiyondan çıkış kodlarını üretebilmesi için 
-	- programcının yapmış olabileceği lojik hatalara karşı uyarabilmek için çağrılan fonksiyon ile ilgili bazı bilgilere sahip olması gerekiyor.
+	- programcının yapmış olabileceği lojik hatalara karşı uyarabilmek için çağrılan fonksiyon ile ilgili 
+	bazı bilgilere sahip olması gerekiyor.
 	- Derleyicinin fonksiyon kodunu görmesi zorunlu değil 
 	- Derleyiciye bu bilgileri veren bildirime "function declaration" deniyor.
 	
 
-- void func(); ile void func(void); arasındaki fark; parantezin içerisi boş ise bu tanımlamada fonksiyunun parametreleri hakkında bilgi vermiyorum anlamına geliyor. Parantezin içerisine void yazıldığında ise fonksiyonun geri dönüş değerinin olmadığı bildiriliyor. Bu C diline ait bir kural.
+- void func(); ile void func(void); arasındaki fark; parantezin içerisi boş ise bu tanımlamada 
+fonksiyunun parametreleri hakkında bilgi vermiyorum anlamına geliyor. Parantezin içerisine void yazıldığında ise fonksiyonun 
+geri dönüş değerinin olmadığı bildiriliyor. Bu C diline ait bir kural.
 
 - function prototype scope:
-	- Bir fonksiyonun bazı durumlarda kodunu göremeyiz ve sadece bildirimini görebiliriz. Bu bildirimde gönderilen değişkenin ne olduğunu bildirmek için ve sadece bildirim satırındaki parantezi kapsayan scope'dur.
+	- Bir fonksiyonun bazı durumlarda kodunu göremeyiz ve sadece bildirimini görebiliriz.
+	 Bu bildirimde gönderilen değişkenin ne olduğunu bildirmek için ve sadece bildirim satırındaki parantezi kapsayan scope'dur.
 	
 
 
@@ -2235,10 +2244,13 @@ Derleyici fonksiyonunun çıkış kodlarını da üretiyor. Fonksiyonun geri dö
 # Ders 18-15/03/2021
 
 - Preprocessor:
-	- Önişlemcinin , bilgisayarın işlemcisi ya da başka bir donanımsal elemanıyla hiçbir ilgisi yoktur. Önişleci belirli bir işi gören bir yazılım programıdır.
+	- Önişlemcinin , bilgisayarın işlemcisi ya da başka bir donanımsal elemanıyla hiçbir ilgisi yoktur.
+	 Önişleci belirli bir işi gören bir yazılım programıdır.
 	- Önişlemci,kaynak dosya üzerinde birtakım düzenlemeler ve değişiklikler yapan bir ön programdır.
-	- Önişlemci programının bir girdisi bir de çıktısı vardır. Önişlemcinin girdisi kaynak dosyanın kendisidir. Önişlemci programın çıktısı ise derleme modülünün girdisini
-oluşturur. Yani kaynak program ilk aşamada önişlemci tarafından ele alınır. Önişlemci modülü, kaynak dosyada çeşitli metinsel düzenlemeler, değişiklikler yapar. Daha sonra
+	- Önişlemci programının bir girdisi bir de çıktısı vardır. Önişlemcinin girdisi kaynak dosyanın kendisidir. 
+	Önişlemci programın çıktısı ise derleme modülünün girdisini
+oluşturur. Yani kaynak program ilk aşamada önişlemci tarafından ele alınır.
+Önişlemci modülü, kaynak dosyada çeşitli metinsel düzenlemeler, değişiklikler yapar. Daha sonra
 değiştirilmiş ya da düzenlenmiş olan bu kaynak dosya, derleme modülü tarafından amaç koda dönüştürülür.
 	- Yani önişlemcinin görevi kendi komutlarını yürütmek, Bu komutlara "pp directives" denir.
 		- #(null directive)
@@ -2256,7 +2268,9 @@ değiştirilmiş ya da düzenlenmiş olan bu kaynak dosya, derleme modülü tara
 		- #pragma
 	- Önişlemci komutlarını belirleyen yukarıdaki sözcükler, C dilinin anahtar sözcükleri değildir.
 	- Sıra derleyiciye geldiğinde bunlar, önişlemci tarafından kaynak dosyadan silinmiş olur.
-	- Önişlemci program, amaç kod oluşturmaya yönelik hiçbir iş yapmaz, kaynak kod içinde bazı metinsel düzenlemeler yapar. Kendisine verilen komutları yerine getirdikten sonra, # ile başlayan satırları kaynak dosyadan siler. Derleme modülüne girecek programda # ile başlayan satırlar artık yer almaz.
+	- Önişlemci program, amaç kod oluşturmaya yönelik hiçbir iş yapmaz, kaynak kod içinde bazı metinsel düzenlemeler yapar.
+	 Kendisine verilen komutları yerine getirdikten sonra, # ile başlayan satırları kaynak dosyadan siler.
+	 Derleme modülüne girecek programda # ile başlayan satırlar artık yer almaz.
 	
 	
 	 	 
@@ -2265,13 +2279,18 @@ değiştirilmiş ya da düzenlenmiş olan bu kaynak dosya, derleme modülü tara
 	     
 #İnclude Önişlemci komutu:
 	- #include <---.h> veya #include "----.h" olarak gösterilebilir.
-	- #include komutu ile, ismi verilen dosyanın içeriği, bu komutun yazıldığı yere yapıştırılır. Bu komut ile önişlemci, belirtilen dosyayı diskten okuyarak komutun yazılı olduğu yere yerleştirir. Bu komutla yapılan iş, metin düzenleyici programlardaki "kopyala - yapıştır" (copy – paste) işlemine benzetilebilir.
-	- Dosya ismi eğer açısal ayraç içinde verilmişse, sözkonusu dosya önişlemci tarafından, popüler olarak "default directory" denilen  önceden belirlenmiş bir dizin içinde aranır.
-	- Dosya ismi eğer çift tırnak içinde verilmişse sözkonusu doya önişlemci tarafından kaynak dosyanın bulunduğu dizinde arar, eğer burada bulamazsa sistem tarafından berlirlenen dizinde arar.
+	- #include komutu ile, ismi verilen dosyanın içeriği, bu komutun yazıldığı yere yapıştırılır. Bu komut ile önişlemci, 
+	belirtilen dosyayı diskten okuyarak komutun yazılı olduğu yere yerleştirir. Bu komutla yapılan iş, metin düzenleyici 
+	programlardaki "kopyala - yapıştır" (copy – paste) işlemine benzetilebilir.
+	- Dosya ismi eğer açısal ayraç içinde verilmişse, sözkonusu dosya önişlemci tarafından, popüler olarak 
+	"default directory" denilen  önceden belirlenmiş bir dizin içinde aranır.
+	- Dosya ismi eğer çift tırnak içinde verilmişse sözkonusu doya önişlemci tarafından kaynak dosyanın bulunduğu dizinde arar,
+	 eğer burada bulamazsa sistem tarafından berlirlenen dizinde arar.
 	
 	
 - **Başlık Dosyaları Neden Kullanılır?
-	- Özellikle büyük programlar, modül ismi verilen ayrı ayrı parçalar halinde yazılır. Bu modüllerden bazılarının amacı, diğer modüllere hizmet vermektir. C ve C++ dillerinde, genel hizmet verecek kodlar (server codes), genel olarak iki ayrı dosya halinde yazılır. 
+	- Özellikle büyük programlar, modül ismi verilen ayrı ayrı parçalar halinde yazılır. Bu modüllerden bazılarının amacı,
+	diğer modüllere hizmet vermektir. C ve C++ dillerinde, genel hizmet verecek kodlar (server codes), genel olarak iki ayrı dosya halinde yazılır. 
 		- Fonksiyon tanımlamaları, global değişken tanımlamaları uzantısı .c olan dosyada yer alır. 
 			- Bu dosyaya, kodlama dosyası (implementation file-Source file) denir. 
 		- Hizmet alacak kodları (client codes) ilgilendiren bildirimler ise bir başka dosyada tutulur.
@@ -2283,10 +2302,12 @@ değiştirilmiş ya da düzenlenmiş olan bu kaynak dosya, derleme modülü tara
 	
 # #Define Önişlemci komutu:
 
-- #define önişlemci komutunun işlevi, metin düzenleyici programlardaki "bul - değiştir" (find - replace) özelliğine benzetilebilir. Bu komut kaynak kod içindeki bir yazıyı başka bir yazı ile değiştirmek için kullanılır. 
+- #define önişlemci komutunun işlevi, metin düzenleyici programlardaki "bul - değiştir" (find - replace) özelliğine benzetilebilir. 
+Bu komut kaynak kod içindeki bir yazıyı başka bir yazı ile değiştirmek için kullanılır. 
 		- Object-like macro
 	- Önişlemci komutu herhangi bir blokta da tanımlanabilir. Tanımlandığı yerden sonraki tüm kodlarda geçerlidir.
-	- #define SIZE 100 komutu ile, kaynak kod içerisinde gördüğü her bir SIZE atomu yerine 100 atomunu yerleştirir. Derleme modülüne girecek kaynak programda, SIZE atomu 		artık yer almaz.
+	- #define SIZE 100 komutu ile, kaynak kod içerisinde gördüğü her bir SIZE atomu yerine 100 atomunu yerleştirir.
+	 Derleme modülüne girecek kaynak programda, SIZE atomu artık yer almaz.
 	- Önişlemci komutları kullanılırken parantezler konusunda dikkatli olunmalıdır. Bir örnekle gösterelim.
 ```
 #define MAX 100+200
@@ -2581,7 +2602,8 @@ mesela;
  
  - Defined Operatörü 
  	- defined NEC
- 		- Eğer defined komutunun terimi olan isim daha önce tanımlanmış bir simgesel var ise defined operatörü lojik 1 değerini üretir.yok ise lojik 0 değerini üretir.
+ 		- Eğer defined komutunun terimi olan isim daha önce tanımlanmış bir simgesel var ise
+ 		 defined operatörü lojik 1 değerini üretir.yok ise lojik 0 değerini üretir.
 
 #ifdef NEC ile #if defined NEC aynı işlevi yaparlar.
 #ifndef NEC ile #if !defined NEC aynı işlevi yaparlar.
@@ -2617,7 +2639,8 @@ yerine
 
 - Multiple inclusion guard (çoklu dahil etmeye karşı önlem gibi)
 
-	- Önişlemci koşullu derleme koşullarının özel bir kullanım biçimidir. Ki bu komutları kullandığımız zaman bir başlık dosyasında önişlemci programı o başlık dosyasına bir kere girer ikinci kez girmeye zorlarsanız ikinci kez girmez. 
+	- Önişlemci koşullu derleme koşullarının özel bir kullanım biçimidir. Ki bu komutları kullandığımız zaman bir başlık dosyasında
+	 önişlemci programı o başlık dosyasına bir kere girer ikinci kez girmeye zorlarsanız ikinci kez girmez. 
 	- Peki bunu nasıl sağlıyoruz?
 bir başlık dosyasının içine ;
 ```
@@ -2625,7 +2648,8 @@ bir başlık dosyasının içine ;
 #define NUTİLİTY_H
 //kodlar
 #endif
----> şeklinde bir koşul ve makro tanımlanırsa ilk girişte koşulda sorgulanan makro tanımlanmadığı için girer ve kodu işler. Eğer ikinci kez tanımladıysa koşuldaki makro, birinci girişindeki tanımladığı koşul geçemez.
+---> şeklinde bir koşul ve makro tanımlanırsa ilk girişte koşulda sorgulanan makro tanımlanmadığı için girer ve kodu işler.
+Eğer ikinci kez tanımladıysa koşuldaki makro, birinci girişindeki tanımladığı koşul geçemez.
 ```
 - !Multiple inclusion guard her başlık dosyasında olmalıdır. 
 
