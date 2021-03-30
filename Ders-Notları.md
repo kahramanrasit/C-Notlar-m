@@ -1,5 +1,5 @@
 
-#### Token (Atom)
+# Token (Atom)
 
  - Derleyicinin anlamlandırabildiği en küçük program parçasıdır.
 
@@ -129,7 +129,7 @@ iki işlenen gerektiren işleçlere ikili işleçler denir.
 - Bitsel Operatörler  (Bitwise Operators)
 
 
-===========================================================================
+#
  
  T bir tür olmak üzere :
 
@@ -150,7 +150,7 @@ iki işlenen gerektiren işleçlere ikili işleçler denir.
  
  int y = 5; //Bu bir ilk değer ifadesi. (initialize).
 
- ==========================================================================
+ #
  
  Storage Duration (Ömür)
 
@@ -310,9 +310,9 @@ yapılmalıdır.
  
  }
 ```
- ====================================================================
+ 
 
- #### Look Up(isim arama)
+ # Look Up(isim arama)
 
 ```
   #include <stdio.h>
@@ -409,7 +409,7 @@ yapılmalıdır.
   
   }
   ```
-  ======================================================================
+  #
   
  #### Function (Fonksiyonlar) "method, procedure, yordam, altprogram"
 
@@ -437,7 +437,7 @@ yapılmalıdır.
   Ancak Void kullanılmasının C'de bir avantajı vardır.
   ilerleyen derslerde göreceğiz.
 
-  ======================================================================
+  #
   
   statement
 
@@ -477,7 +477,7 @@ yapılmalıdır.
      - while statement
      - for statement
  
- =======================================================================
+ #
 
  Return statement
  
@@ -578,9 +578,9 @@ Eğer toparlarsak bir fonksiyonun geri dönüş değeri neler olabilir?
 - Ya da hiç olmayabilir(void func)
 
 
-==========================================================================
+#
 
-#### Fonksiyon çağrıları (to call a function)
+# Fonksiyon çağrıları (to call a function)
 
 Parantez operatörü ile sağlanır.
 
@@ -651,7 +651,7 @@ Yani foo(x) ifadesi 99'dur. x gönderilen bir ifade ve foo(x) gelen ifadedir.
 
 
 
-#### Standart Kütüphane (Standard Library)
+# Standart Kütüphane (Standard Library)
 
 -Printf standart bir C fonksiyonudur.
 -Standart kütüphane alt birimlere bölünmüştür (module).
@@ -679,7 +679,7 @@ argüman gönderilmediğinde varsayılan argümanlar kullanılır.
 Mesela abs fonksiyonunu hem int hem double türü için kullanamazsınız.
 
 ```
-#### CONSTANT (SABİTLER)
+# CONSTANT (SABİTLER)
 
 - İnteger Constant (Tam sayı sabitleri)
 - Floating Constant ( Gerçek sayı sabitleri)
@@ -737,7 +737,7 @@ Aşağıdaki değerler double türüne aittir.
    - 2.3e5----> 2.3 x 10^5
    - 0.5e-3 --->0.5 x 10^-3
 
-#### KARAKTER SABİTLERİ (STRİNG LİTERALS)
+# KARAKTER SABİTLERİ (STRİNG LİTERALS)
 
 C'de karakter sabitlerinin türü int'dir.
 
@@ -802,7 +802,7 @@ Escape Sequence (Kaçış Noktası)
  '\?' veya '?' --> question mark
  
  
- #### İNPUT-OUTPUT OPERATİON
+ # İNPUT-OUTPUT OPERATİON
  
  
 - Bir program çalışır haldeyken dış dünya ile veri alış-verişi 
@@ -830,7 +830,7 @@ aşağı sıralarken hizalamaya yarayan kavramdır.
 
 Fill character -> Bu hizalama yapılırken kullanılan karakterdir. Genelde boşluk karakteri kullanılır.
 
-#### PRİNTF FONKSİYONU
+# PRİNTF FONKSİYONU
 
 Printf fonksiyonu stdio kütüphanesinde bildirilen formatlı çıkış fonksiyonudur.
 
@@ -899,7 +899,7 @@ int main()
 // Ekrana yazılan değer A olur. 
 ```
 
-#### SCANF FONKSİYONU
+# SCANF FONKSİYONU
 
 İnt scanf(const char*p,...);
 
@@ -920,7 +920,7 @@ scanf'in geri dönüş değeri başarılı olup olmadığını anlatmaktadır.
 beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullanır.
 
 
- #### OPERATÖRLER(OPERATORS)
+ # OPERATÖRLER(OPERATORS)
 
 - İşleçler
 - İşlemci
@@ -962,7 +962,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
 ürettiği değer , hangi operatörün operantı olacağını belirliyor.
 
 
-#### OPERATÖR ÖNCELİK TABLOSU
+# OPERATÖR ÖNCELİK TABLOSU
 
 ```
 1-)  ( ) [ ] . ->
@@ -1284,7 +1284,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
       
       
       
-  #### Değer Kategorisi (Value Category)
+  # Değer Kategorisi (Value Category)
       
   L Value: Bellekte o ifadenin bir yere karşılık geliyor olması demektir. Sol taraf olan ifadeler nesne gösteren ifadelerdir.
   
@@ -1297,7 +1297,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
    Nasıl anlayabiliriz: Adres operatörünün (&) operantı yapabilirsiz. Eğer oluyorsa L value olmuyorsa R value'dur.
       
       
-  #### Kontrol Deyimleri (Control Statement)
+  # Kontrol Deyimleri (Control Statement)
      
    - İf statement
      - While statement
@@ -1401,7 +1401,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
 	 
 
 
-#### Standart getchar,putchar İşlemleri
+# Standart getchar,putchar İşlemleri
 
 
 - Fonksiyon yapıları
@@ -1595,7 +1595,7 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 	 
 	 
 	 
-#### Ders 14 - Tarih 05.03.2021
+#Ders 14 - Tarih 05.03.2021
 	 
 	 - Modül bir kütüphanenin modüllerine verilen değerler isimdir.
 	 
@@ -1707,7 +1707,7 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 	 
 	 
 	
-     #### Ternary Operator (Koşul Operatörü)
+     # Ternary Operator (Koşul Operatörü)
 	
 	
 	- Conditional Operator
@@ -1746,9 +1746,9 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 	     
 	     ```
 	    
-#### Ders 15- 08/03/2021
+# Ders 15- 08/03/2021
 
- #### Loop Statement 
+ # Loop Statement 
  
  - While 
  - Do while 
@@ -1965,7 +1965,7 @@ while( ---)
 		
 	
 	
-#### Ders 16 Tarih 10/03/2021
+# Ders 16 Tarih 10/03/2021
 
 
 Örnek:
@@ -2183,7 +2183,7 @@ int main()
 
 
 
-#### DERS 17 - 12/03/2021
+# DERS 17 - 12/03/2021
 
 - Eğer iç içe döngülerde içteki bir döngüden tüm döngüleri kırarak çıkmak istiyorsak ideal olarak goto deyimi kullanılmalı.
 
@@ -2652,6 +2652,14 @@ bir başlık dosyasının içine ;
 
 - Pre-defined Symbolic Constant(ön tanımlı sabit )
 	- Dil tarafından tanımlı kabul edilen makrolara denir. 
+		- __FILE__---->bulunduğu dosyanın numarası ile yer değiştiren makro.
+		- __LINE__---->bulunduğu line'ın numarasıyla yer değiştiren makro.
+		- __DATE__---->derlendiği tarih ile yer değiştiren makro.
+		- __TIME__---->derlendiği saat ile yer değiştiren makro.
+		- __STDC__---->standart bir C derleyiciyse bu makro define edilmiş kabul edilir.
+		- __func__---->bulunduğu fonksiyonun ismi ile yer değiştiren makro.
+
+
 		
 
 
