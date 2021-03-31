@@ -269,18 +269,18 @@ Bu sebeple mümkün olan her yerde değişkenlere ilk değer ataması
 yapılmalıdır.
 
 
-=======================================================================
+#
 
 
- declare declaration //Bildirim
+ declare-declaration //Bildirim
  
- define defination // tanımlama
+ define-defination // tanımlama
 
- Bildirim ismin ne olduğunu anlatan cümledir.
+ Bildirim ismin ne türde oldluğunu anlatan cümledir.
  Eğer bildirim sonucunda derleyici bellekte yer alıyorsa bu tanımlamadır.
 
 
- =======================================================================
+ #
  
  Scope (kapsam)
 
@@ -290,9 +290,9 @@ yapılmalıdır.
  File scope: Bir tanımlayıcının dosya kapsamı, dosyanın başlangıcından
  başlar ve dosyanın sonunda sona erer.
 
- Block Scope: Bir tanımlayıcının kapsamı, { bloğun açılmasıyla başlar ve }
+ Block Scope: Bir tanımlayıcının kapsamı, "{" bloğun açılmasıyla başlar ve "}"
  bloğun bitmesiyle sonunda sona erer. Blok kapsamına sahip tanımlayıcılar kendi blokları
- için yereldir.
+ içinde yereldir.
  
 ```
  #include <stdio.h>
@@ -304,24 +304,26 @@ yapılmalıdır.
 
  int x; 
 
- /* Burada bir programda aynı iki isim kullanılmış ancak
- Kapsamları farklıdıfr. Bu durumda program sentaks hatası vermez ancak
- kullanım açısından doğru bir kullanım değildir.*/
+ /*  Burada bir programda aynı iki isim kullanılmış ancak
+ kapsamları farklıdır. Bu durumda program sentaks hatası vermez ancak
+ kullanım açısından doğru bir kullanım değildir. */
  
  }
+ 
 ```
  
 
  # Look Up(isim arama)
 
+
 ```
   #include <stdio.h>
   
-  int x=20;
+  int x = 20;
 
   int main()
   {
-  int x=10;
+  int x = 10;
 
   printf("x=%d\n", x);
   
@@ -382,11 +384,11 @@ yapılmalıdır.
   int printf=0;
   printf ("selam");
 
-  // program printf'i main fonksiyonu içerisinde int olarak tanımlandı.
-  sonra printf fonksiyonunu ilk algıladığında keywords olmadığı için
-  name lookup yaparken kendi kapsamında arama yapar. Bu kapsamda printf 
+  // Program printf'i main fonksiyonu içerisinde int olarak tanımlandı.
+  Sonra printf fonksiyonunu ilk algıladığında keywords olmadığı için
+  name look-up yaparken kendi kapsamında arama yapar. Bu kapsamda printf 
   int olarak tanımlandığı için bu kod hata verir.
-  normalde int olarak tanımlanmasaydı printf'i  ilk okuduğunda isim araması 
+  Normalde int olarak tanımlanmasaydı printf'i  ilk okuduğunda isim araması 
   yaparak standart kütüphaneye ulaşarak printf fonksiyonunu çağıracaktı.
 
   
@@ -411,11 +413,19 @@ yapılmalıdır.
   ```
   #
   
- #### Function (Fonksiyonlar) "method, procedure, yordam, altprogram"
-
-  - to define a function 
+ # Function (Fonksiyonlar) "method, procedure, yordam, altprogram"
+ 
+ #
+ - method
+ - procedure
+ - yordam
+ - altprogram
+#
+ 
+ - to define a function 
   - to call a function
   - to declare a fuction
+
 
   double func (int x , int y);
 
@@ -423,9 +433,9 @@ yapılmalıdır.
   
   //"func", fonksiyon ismi.
   
-  // "Parantezler", parametre parantezi
+  // "Parantezler", parametre parantezi.
   
-  //int x, int y ise formal parameters (parametre değişkenleri)
+  //int x, int y ise parametre değişkenleri (formal parameters) 
 
 
   Örnek olarak;
@@ -441,7 +451,7 @@ yapılmalıdır.
   
   statement
 
-  - expression sstatement (ifade deyimi)
+  - expression statement (ifade deyimi)
   - compound statement (bileşik deyim)
   - null statement (boş deyim)
   - control statement (kontrol deyimi)
@@ -461,7 +471,7 @@ yapılmalıdır.
  ++a;
  x=5;
 
- // if koşulunun içerisindeki deyimlerin bütününe compound (bileşik) 
+ // if koşulu gibi block içerisindeki deyimlerin bütününe compound (bileşik) 
  deyim denir. Bir blok içerisinde olduğu için bu böyledir.
 
  }
@@ -474,16 +484,16 @@ yapılmalıdır.
  anahtar kelime içermelidir.
  - if statement
  - loop statement
-     - while statement
-     - for statement
+ - while statement
+ - for statement
  
  #
 
  Return statement
  
- a-)Bir fonksiyonun kodunun çalışmasını sonlandırmak için
+ a-) Bir fonksiyonun kodunun çalışmasını sonlandırmak için
  
- b-)Fonksiyonun kendisini çağıran koda (iletecek ise) bir değer iletmesini
+ b-) Fonksiyonun kendisini çağıran koda (iletecek ise) bir değer iletmesini
  sağlamak için kullanılır.
 
  return ; // yalın (ifadesiz) return deyimi
@@ -493,33 +503,34 @@ yapılmalıdır.
  **Not:** 
  
   ```
- void func(void) 
- {
- yukarıdaki fonkiyonun adlandırılmasında ilk void fonksiyonun bir geri 
- dönüş değerinin olmadığı anlamına gelir. Parantez içerisindeki void ise
- fonksiyonun parametre değişkeninin olmadığı anlamına gelir.
- }
+	 void func(void) 
+	 {
+	 	yukarıdaki fonkiyonun adlandırılmasında ilk void fonksiyonun bir geri 
+	 	dönüş değerinin olmadığı anlamına gelir. Parantez içerisindeki void ise
+		 fonksiyonun parametre değişkeninin olmadığı anlamına gelir.
+ 	}
 
- void function: A function doesn't have return value. Geri dönüş mekanizması
- ile bir değer gönderilmeyeceği anlamına gelir.
-
-
+	 //void function: A function doesn't have return value. Geri dönüş mekanizması
+ 	   ile bir değer gönderilmeyeceği anlamına gelir.
+	   
   ```
 
  örnek olarak :
-```
-
+ 
+  ```
+  
  void func (void)
  {
  // statement
  //statement
+ 
   if(exp)
-      return;// bu bir yalın return statement dır.
+      return ;// bu bir yalın return statement'dır.
+      
  //statement
- //statement
-
 
  } 
+ 
 ```
  **Not:** yalın return statement'ı asla geri dönüş değeri olan bir fonksiyonun 
  içerisinde kullanamayız. Sadece void fonksiyonu içerisinde kullanılır.
@@ -540,30 +551,29 @@ yapılmalıdır.
 ```
  int func (void)
 {
-Eğer bir fonksiyonun geri dönüş değeri türü var ise fonksiyonun bir geri
-dönüş değeri olması lazım. Eğer yoksa ve geri dönüş değeri kullanılıyorsa
-Undefined behavior (tanımsız davranış) olur.
+	Eğer bir fonksiyonun geri dönüş değeri türü var ise fonksiyonun bir geri
+	dönüş değeri olması lazım. Eğer yoksa ve geri dönüş değeri kullanılıyorsa
+	Undefined behavior (tanımsız davranış) olur.
 }
 ```
 
-**Not:** c programlama dilinde bir fonksiyon içerisinde bir fonksiyon 
+**Not:** C programlama dilinde bir fonksiyon içerisinde bir fonksiyon 
 tanımlanamaz. Tüm fonksiyonlar global isim alanında olmalıdır.
 Yani C'de nested func ve local func yok.
 
--Ayrıca C'de global isim alanında bir fonksiyon çağırılamaz.
+- Ayrıca C'de global isim alanında bir fonksiyon çağırılamaz.
 
 Test function: Return statement test fonksiyonlarında soruya cevap
 vermek amacıyla da kullanılır. Evet/hayır gibi sorular.
-
-query function
+	- query function
 
 - Genellikle C'de _bool yerine int geri dönüş değerleri kullanılır.
-Eğer geri dönüş değeri sıfır dışı bir değer ise (nan-zero value) lojik doğru
+Eğer geri dönüş değeri sıfır dışı bir değer ise (non-zero value) lojik doğru
 anlamına gelmektedir. Eğer sıfır değeri gönderilmişse yanlış olduğu anlamına 
 gelir.
 
 - Fonksiyonu çağıran kodun, çağırılan fonksiyonun bir geri dönüş değeri 
-olmasına karşın bu geri dönüş değerini kullanmamasına "to discard the return
+olmasına karşın bu geri dönüş değerini kullanılmamasına "to discard the return
 value" denir.
 
 - Başarı bilgisi olarak kullanılabilir. Herhangi bir hata durumunda koşul 
@@ -575,8 +585,7 @@ Eğer toparlarsak bir fonksiyonun geri dönüş değeri neler olabilir?
 - Test fonksiyonları
 - Tamamlayıcı bir değer
 - Başarı bilgisi
-- Ya da hiç olmayabilir(void func)
-
+- Ya da hiç olmayabilir (void func)
 
 #
 
@@ -587,7 +596,7 @@ Parantez operatörü ile sağlanır.
 func() -> bu bir ifadedir. 
 
 Eğer çağırılan fonksiyonun parametre 
-değişkeni yoksa bu parantezin içerisine hiçbirşey yazılamaz.
+değişkeni yoksa bu parantezin içerisine bir argüman yazmak sentaks hatasıdır.
 Parametre değişkeni olduğunda ise her bir değişken için kopyalanacak, 
 değeri oluşturacak ifade yazılır.
 
@@ -613,6 +622,7 @@ max (x+30,y-10);
 //Burada max fonksiyonunun argümanı (40,35)'dir.
 
 }
+
 ```
 - Aynı geri dönüş değerini elde edeceğimiz şekilde bir fonksiyonu birden 
 fazla kere çağırmak kötü kod'dur.
@@ -622,10 +632,10 @@ call by value (değerle çağırma)
 call by referance (referansla çağrı)
 
 C dilinde tüm fonksiyon çağrıları call by value (değerle çağırma)'dır.
-fakat bu özellik dilden dile değişir.
+Fakat bu özellik dilden dile değişir.
 
 
-call by value olduğuna dair bir örnek:
+Call by value olduğuna dair bir örnek:
 
 ```
 int foo(int x)
@@ -636,13 +646,10 @@ return x;
 
 int main()
 {
-
-int x=10,y;
-printf("x=%d\n",x);
+int x = 10,y;
+printf(" x = %d\n ",x);
 y = foo(x);
-printf("x=%d\n",x);
-
-
+printf(" x = %d\n ",x);
 }
 ```
 // Yukarıdaki programda ikinci printf değeri ile yazdırılan x değeri 10'dur.
@@ -653,8 +660,8 @@ Yani foo(x) ifadesi 99'dur. x gönderilen bir ifade ve foo(x) gelen ifadedir.
 
 # Standart Kütüphane (Standard Library)
 
--Printf standart bir C fonksiyonudur.
--Standart kütüphane alt birimlere bölünmüştür (module).
+- Printf standart bir C fonksiyonudur.
+- Standart kütüphane alt birimlere bölünmüştür (module).
 
 Variadic Function: Fonksiyon çağırılırken parametre sayısının değişken olduğu fonksiyon türüdür.
 
@@ -681,32 +688,32 @@ Mesela abs fonksiyonunu hem int hem double türü için kullanamazsınız.
 ```
 # CONSTANT (SABİTLER)
 
-- İnteger Constant (Tam sayı sabitleri)
+- İnteger  Constant ( Tam sayı sabitleri)
 - Floating Constant ( Gerçek sayı sabitleri)
 
 
 Sabitlerin türleri olması gerekir.
 - Tam sayı sabitlerinin yazımında 3 farklı sayı sistemi kullanılabilir.
       - Hexadecimal (Onaltılık sayı sistemi)
-      - Decimal (Onluk sayı sistemi)
-      - Octal (Sekizlik sayı sistemi)
+      - Decimal     (Onluk sayı sistemi)
+      - Octal       (Sekizlik sayı sistemi)
 
-x=123;//decimal
+x=123; //decimal
 
-x=0123;//octal
+x=0123; //octal
 
-x=0x13;//hexadecimal
+x=0x13; //hexadecimal
 
-Sabitlerin Türleri:
+**Sabitlerin Türleri:**
 
-- Signed int =>783
-- Unsigned int=>783U
+- Signed int => 783
+- Unsigned int => 783U
 
 - Signed long => 7834L ya da 7834l
-- Unsigned long =>7834UL -ul
+- Unsigned long => 7834UL -ul
 
-- Signed long long =>7833LL
-- Unsigned long long =>7833LLU -ULL
+- Signed long long => 7833LL
+- Unsigned long long => 7833LLU -ULL
 
 - Float
 - Double
@@ -718,6 +725,7 @@ Sabitlerin Türleri:
 ```
 
 İşaretli tamsayı türlerinde yapılan işlemlerde taşma durumu tanımsız davranıştır.
+
 
 ```
 
@@ -753,7 +761,7 @@ Sebebi ise büyük harf ile küçük harf arasındaki sayı farkını 32 yani 2^
 Böylece bitsel işlemlerde büyük-küçük harf değişimi tek bir biti set-reset yapılarak sağlanabilmektedir.
 
 - Karakter kodlamalarında, harf karakterine Alphabetic Character,
-Rakam kodlamalarına ise Numeric/digit Character denilir.
+Rakam kodlamalarına ise Numeric/Digit Character denilir.
 Alpha-Numeric Character ikisini içeren bir kümedir.
 
 - Control Character: Kontrol karakterleri görüntüsü olmayan özel araçlarla kullanılan karakterlerdir.
@@ -762,44 +770,42 @@ Mesela Space, Enter gibi.
 - Printable Character: Görüntüsü olan karakterlerdir.
 
 - Punctation Character: Görüntüsü olan ama Alpha-Numeric olmayan karakterlerdir.
-- 
-Mesela . , ! ' ^ gibi karakterler.
+	- Mesela . , ! ' ^ gibi karakterler.
 
 
-- Escape (Kaçış)
-- 
-Escape Sequence (Kaçış Noktası)
+- Escape (Kaçış) 
+	- Escape Sequence (Kaçış Noktası)
 
- Bir kodlamada eğer bir karakter özel bir anlamda kullanılıyorsa o karaktere escape denir.
+ Bir kodlamada eğer bir karakter özel bir anlamda kullanılıyorsa o karaktere "escape" denir.
  
- \ -> escape olarak kullanıyoruz.
+ \ --> escape olarak kullanıyoruz.
  
  '\'  ---> Yani biz tırnak içerisinde ters bölü yazdığımızda bu ters bölü karakterinin kodu değil
  sadece escape olduğunu ve ayrı bir kurala göre değerlendirilmesi gerektiğini anlıyoruz.
  
- '\a'-->alert(bell)
+- '\a' --> alert(bell)
  
- '\t' -->horizantal tab
+- '\t' --> horizantal tab
  
- '\v' --> vertical tab
+- '\v' --> vertical tab
  
- '\n' --> new line
+- '\n' --> new line
  
- '\r' --> carriage return
+- '\r' --> carriage return
  
- '\f' -->form feed
+- '\f' --> form feed
  
- '\b' -->Back space
+- '\b' --> back space
  
- '\o' -->null character
+- '\o' --> null character
  
- '\'' --> single quote
+- '\'' --> single quote
  
- '"' veya '\"' --> double quote
+- '"' veya '\"' --> double quote
  
- '\' veya '\\' --> backslach
+- '\' veya '\\' --> backslach
  
- '\?' veya '?' --> question mark
+- '\?' veya '?' --> question mark
  
  
  # İNPUT-OUTPUT OPERATİON
@@ -808,7 +814,7 @@ Escape Sequence (Kaçış Noktası)
 - Bir program çalışır haldeyken dış dünya ile veri alış-verişi 
 sağlamasına denir.
     - standard input stream (klavye)
-    - standart output stream (Consol a  bağlı)
+    - sandart output stream (consol a  bağlı)
     - standard error stream
 
 - Bir giriş-çıkış işlemi 2 farklı şekilde yapılabilir.
@@ -838,7 +844,7 @@ Tanımlanma şekli:
 
 int printf(const char*p,...);
 
-- C'de yazılar dizilerde tutuluyor. Dizilerin fonksiyonlara gönderilmesi Call By Referance biçiminde olmak zorundadır.
+- C'de yazılar dizilerde tutuluyor. Dizilerin fonksiyonlara gönderilmesi "Call By Referance" biçiminde olmak zorundadır.
 Bu yüzden bir fonksiyona bir yazıyı göndermenin yolu yazıyı tutan adresi göndermektir.
 
 Printf fonksiyonu tanımlanırken *p gönderilecek olan adresi ifade etmektedir. 
@@ -849,17 +855,17 @@ Yani bir pointer olmasının sebebi bir yazıyı isterken aslında yazının tut
 
 Printf fonksiyonun sayı sistemlerinin formatları:
 
-%d-->decimal--int türden
+%d -->decimal--int türden
 
-%0--> Octal
+%0  --> Octal
 
-%x--> hexadecimal--sign/unsign int türden
+%x  --> hexadecimal--sign/unsign int türden
 
-%Ld-->long türden 10 luk sayı sistemi
+%Ld --> long türden 10 luk sayı sistemi
 
-%u-->unsigned int
+%u  --> unsigned int
 
-%f-->double  ve float türünde
+%f  --> double  ve float türünde
 
 %lf --> long double veya float türünde
 
@@ -878,6 +884,8 @@ int main()
     Printf fonksiyonu yürütüldüğünde ekrana kaç karakter yazdıysa, yazdığı karakter sayısını üretir. Yani ekrana 
     3 basamaklı olduğu için 3 sayısı yazılır. bir kez daha yürütüldüpünde 3 sayısı 1 karakterli lduğu için 
     1 sayısı yazdırılır.*/
+    - Ekran çıktısı: 
+    		98731     olur.
 
 }
 
@@ -889,11 +897,8 @@ int main()
 ```
 int main()
 {
-
 	int x;
-	
 	printf(" %c", 65);
-
 }
 
 // Ekrana yazılan değer A olur. 
@@ -905,22 +910,22 @@ int main()
 
 - Scanf fonksiyonu call by referance olmak zorundadır.
 örnek olarak scanf("%d",&x); &x kullanılmasının sebebi call by referance olmasıdır.
-- Scanf fonksiyonu Line-Buffered (Satır Tamponlu) yapıdadır.
-- 
+- Scanf fonksiyonu Satır Tamponlu (Line-Buffered) yapıdadır.
+
 Yani new-line karakteri gelene kadar devam eder.
 
 - Örnek olarak :
 
-scanf("%d",&x); yazıldığında ekrana giriş olarak 1234abc yazıldığında 
+scanf("%d",&x); Yazıldığında ekrana giriş olarak 1234abc yazıldığında 
 ekrana sadece 1234 yazılır. Çünkü %d formatı onluk sayı sisteminde bir tam sayı girilecek demektir.
 
 scanf'in geri dönüş değeri başarılı olup olmadığını anlatmaktadır.
 
-**Uyarı:** Scanf çağrısı yapıldığında standar inputun buffer'ı boş değil ise giriş için bir karakter girilmesi
+**Uyarı:** Scanf çağrısı yapıldığında standard inputun buffer'ı boş değil ise giriş için bir karakter girilmesi
 beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullanır.
 
 
- # OPERATÖRLER(OPERATORS)
+ # OPERATÖRLER (OPERATORS)
 
 - İşleçler
 - İşlemci
@@ -933,38 +938,38 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
 - binary operator--> çift terimli operator
 - ternery operator--> 3 terimli operator
 
-- a+b---> + operatorü ortada olduğu için bu operator burada infix konumda kullanılmıştır.
-- !x---> burada ! operatörü başta olduğu için prefix konumunda kullanılmıştır.
+- a+b  ----> + operatorü ortada olduğu için bu operator burada infix konumda kullanılmıştır.
+- !x   ----> burada ! operatörü başta olduğu için prefix konumunda kullanılmıştır.
 - y++  ----> burada ++ operatörü sonda kullanıldığı için postfix konumunda kullanılmıştır.
 
-örnek olarak
+Örnek olarak:
 
-- a+b-->binary infix
-- !x-->unary prefix
-- y++ -->unary postfix
+- a+b --> binary infix
+- !x  --> unary prefix
+- y++ --> unary postfix
 
 
 - Her operatörün ürettiği bir değer vardır.(Operators generate value),(generate yerine yield,return kullanılabiliyor.)
-- 
-8*5=40--> Burada 40 değeri çarpma operatörünün ürettiği değerdir.
+8*5=40 --> Burada 40 değeri çarpma operatörünün ürettiği değerdir.
 
 - Constraint = Operatörlerle ilgili uyulması gereken kurallara verilen ad'dır.
 - Constant(sabit)
  
 
-====Operatör Önceliği====
+#### Operatör Önceliği
 
 - precedence
 - priority
 
 - Operatör önceliği hangi işlemin daha önce yapılacağını belirleyen kurallar değildir.
 - Operatör önceliği bir ifade içinde birden fazla operatör yer aldığında hangi operatörün 
-ürettiği değer , hangi operatörün operantı olacağını belirliyor.
+ürettiği değer, hangi operatörün operantı olacağını belirliyor.
 
 
 # OPERATÖR ÖNCELİK TABLOSU
 
 ```
+
 1-)  ( ) [ ] . ->
 2-)  + - ! ~ sizeof  type & *0 ++ -- (Sağdan sola)
 3-)  *   /  %
@@ -980,11 +985,12 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
 13-) ? : (sağdan sola)
 14-)=  +=  -=  *=  /=  %0  &0  |=  ^=  >>=  <<=  (sağdan sola)
 15-) ,
+
 ```
 
 -Bazı operatörlerin C'de iki anlamı vardır.
 
-"+" ---> +x veya a+b ,+x işaret belirtir. a+b 'deki + ise toplama işlemi.
+"+" ---> +x veya a+b , +x işaret belirtir. a+b 'deki + ise toplama işlemi.
 
 "*" ---> *ptr (Pointer), a*b(çarpma)
 
@@ -1001,11 +1007,12 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
    
    
    
-   ==Addition Substraction (+,-)==
+   **Addition Substraction (+,-)
    
    - Binary infix operatörlerdir.
    - Ürettikleri değer toplamı ya da farkı olur.
    - Yan etkileri yoktur.
+   - 
    
    #### UNDEFİNED BEHAVİOR
    ```
@@ -1018,13 +1025,14 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
    İntegral Promotion: Tam sayıya yükseltmek demektir.
    
    
-   ==Multiplicative Operators==
+   **Multiplicative Operators
     
-   "*"  multiplication
+  - "*"  multiplication
    
-  " / " division
+  - " / " division
   
-  " %"  module
+  - " %"  module
+  
    
    - Binary infix operators. (ara ek)
    - Yan etkileri yok.
@@ -1033,14 +1041,16 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
    
    - Eğer ekrana %3.5 yazdırmak istersek % operatörünün escape olduğunu unutmamak lazım.
    
-   double dval=3.5;
+   ```
+   	double dval=3.5;
    
-   printf("%% %f",dval);// ekran çıktısı %3.5
+  	 printf("%% %f",dval);// ekran çıktısı %3.5
+   ```
    
    #### UNDEFİNED BEHAVİOR
    
   ```
-  Bölme ve mod operatörünün sağ operantı 0 olamaz. Olması durumunda tanımsız davranış olur.
+	  Bölme ve mod operatörünün sağ operantı 0 olamaz. Olması durumunda tanımsız davranış olur.
   
   ```
  
@@ -1050,16 +1060,16 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
   - Decrement  (--) minus minus
   
   - Ön ek olarak ve son ek olarak kullanılabilirler.
-  ++x veya x++ şeklinde.
+   	- ++x veya x++ şeklinde.
   
   - Bu operatörün operantı Lvalue olmak zorundadır.
-  -  "++x" ifadesi rvalue'dür.
+  	- "++x" ifadesi rvalue'dür.
    
-  -Yan etkisi vardır.
-     - ++x önce x'i artır sonra x'i kullan demek.
-     - x++ önce x'i kullan yan etki noktasına gelince x'i artır demek.
+  - Yan etkisi vardır.
+   	- ++x önce x'i artır sonra x'i kullan demek.
+   	- x++ önce x'i kullan yan etki noktasına gelince x'i artır demek.
    
-   ===Karşılaştırma Operatörleri===
+  #### Karşılaştırma Operatörleri
    
    - İlişkisel operatörler
    - Relational Operators
@@ -1067,7 +1077,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
     
    <         >          <=           >=
    
-   ===Lojik Karşılaştırma Operatörleri===
+   **Lojik Karşılaştırma Operatörleri
    
    "== "  
    
@@ -1090,7 +1100,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
  Diğer dillerde Bool türünden değer üretilir.
  
  örnek:
- 
+ ```
  x=y==z; // Burada == operatörü = operatöründen daha önceliklidir. Aşağıdaki ifadeyle aynıdır.
  
  if(y==z)
@@ -1105,26 +1115,26 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
   if(x==5) koşulunu daha güvenli kullanmak istersek 
   
   if(5==x) olarak da kullanılabilir.
-  
-  === Logical Operators===
+  ```
+  **Logical Operators
   
   - Önermeler
   
-  - lojik değil işlemi (!)  logical not
-  - lojik ve   (&&)     logical and
-  - lojik veya (||)     logical or
+  - lojik değil işlemi (!) ( logical not)
+  - lojik ve   (&&)        ( logical and )
+  - lojik veya (||)        ( logical or )
   
   
   
   - Short Circuit Behavior (kısa devre davranışı)
   
-  örnek olarak:
+  Kısa devre davranışına örnek olarak:
   
   expr1 && expr2 // eğer expr1 değişkeni 0 ise expr2'ye bakılmaksızın sonuç olarak 0 değeri üretilir.
   expr1 || expr2 // eğer exp1 değişkeni non-zero bir değer  ise expr2'ye bakılmaksızın 1 değeri üretilir.
   
   
- Uyarı: Lojik && ve || operatörlerinde kısa devre davranışı var olmasına karşın
+**Uyarı: Lojik && ve || operatörlerinde kısa devre davranışı var olmasına karşın
  bitsel & ve | operatörlerinde kısa devre davranışı söz konusu değildir.
  
  
@@ -1137,7 +1147,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
    
   
   
-   ==Atama Operatörleri===
+   #### Atama Operatörleri
    
     =      atama operatörü
    
@@ -1153,28 +1163,28 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
    örnek:
    
     
-       ```
+   ```
     int x=10, y=24, t=5, z=7;
     x+=y+=t*=z%=5;
     // Atama operatörlerinde işlem önceliği sağdan sola olduğu için sağdan başlanarak sola doğru işlemler yapılır.
-   
-       ```
+   //Sonuç olarak x=44 , y=34 , z=2 , t=10 değerleri atanmış olur.
+   ```
   
     
-   ===Virgül Operatörü===
+   **Virgül Operatörü
     
   - Öncelik tablosunda en son sırada. 
-    - Binary infix 'dir.
-    - Virgül operatörüyle oluşturulmuş ifadeler C dilinde R value olur.
+  - Binary infix 'dir.
+  - Virgül operatörüyle oluşturulmuş ifadeler C dilinde R value olur.
     
   - Sequence Point (Yan Etki Noktası) 
            - sequencing
-           - 
+           
      Bir ifade ile oluşacak yan etkilerin gerçekleşeceği nokta.
      
     Yan etki noktaları:
     - Deyim sonu yani ilk noktalı virgülün olduğu nokta bir yan etki noktasıdır.
-    - Bazı operatörlerin operandlarının değerlendirilmesinden sonra.(lojik ve, lojik veya, ternary op. , virgül operatörü)
+    - Bazı operatörlerin operandlarının değerlendirilmesinden sonra.(lojik ve (&&), lojik veya(||), ternary op. , virgül operatörü)
     - Kosul operatorlerinde sonra (if, else if,while )
     
     
@@ -1182,7 +1192,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
    
    ```  
   int  y=0;
-    y++ || f(y); // yandaki deyimde lojik veya bir yan etki noktasına sahip olduğu için y 1 artırıldıktan 
+    y++ || f(y); // yandaki deyimde lojik veya bir yan etki noktasına sahip olduğu için y, 1 artırıldıktan 
     sonra f fonksiyonuna y değeri 1 olarak gönderilir.
     
    ```
@@ -1217,7 +1227,6 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
    **Bir Mülakat Sorusu:
      
       ```
-      
      int x=10;
      int y = (x=7) + x;
      /*Burada yine x'e 7 ataması yapılarak bir yan etkisi vardır. Ancak bu yan etkinin oluşması için kod, yan etki noktasına ulaşmalı.
@@ -1267,7 +1276,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
        while(x<5,0)  /*Burada tam sayı yazılırken nokta yerine virgül kullanıldığında, virgül operatörünün 
        sağ operantı değer üreteceği için while,sonsuz döngüde alır.*/
        {
-       //kodlar
+       		//kodlar
        }
        
         ```
@@ -1276,8 +1285,8 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
       
       
        ```
-      func(x,y);// Burada fonksiyona 2 argüman gönderilmiş.
-      func((x,y));// Burada ise fonksiyona 1 argüman gönderilmiş. Paranteziin içerisindeki virgül operatörünün sağ operantı gönderilmiştir.
+      func(x,y); // Burada fonksiyona 2 argüman gönderilmiş.
+      func((x,y)); // Burada ise fonksiyona 1 argüman gönderilmiş. Parantezin içerisindeki virgül operatörünün sağ operantı gönderilmiştir.
       
        ```
       
@@ -1300,22 +1309,22 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
   # Kontrol Deyimleri (Control Statement)
      
    - İf statement
-     - While statement
-     - Do while statement
-     - For statement
-     - Switch statement
-     - Goto statement
-     - Return statement
-     - Break statement
-     - Continue statement
+   - While statement
+   - Do while statement
+   - For statement
+   - Switch statement
+   - Goto statement
+   - Return statement
+   - Break statement
+   - Continue statement
      
      
      
-     ===İf Statement===
+     **İf Statement
      
-     if(expr)// Conditional expression
+     if(expr) // Conditional expression
      
-         Statement; //True Path (body)
+ 		 Statement; //True Path (body)
 	 
       Hatırlatma: Lojik değil ifadesinin bir yan etkisi yoktur.
       
@@ -1328,16 +1337,16 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
       if(x)
           ++b;
 	   
-	   /*Yukarıdaki iki if'in işlevi aynıdır.*/
+	   /* Yukarıdaki iki if'in işlevi aynıdır. */
 	   
 	 if(x == 0)
           ++b;
 	  
 	  
-      if('x)
+      if(x)
           ++b; 
 	  
-	  /* Yukarıdaki iki if'in işlemi de aynıdır.*/
+	  /* Yukarıdaki iki if'in işlemi de aynıdır. */
       
        ```
        
@@ -1346,7 +1355,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
       
        ```
        
-     -->  if (a=func(),a>10)
+     --->  if (a=func(),a>10)
        {       }
        ile
        a=func();
@@ -1362,7 +1371,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
 	 
        ```
        
-       
+       # burada kaldım
        - C dilinde Koşul ifadelerinde yapılan en sık yazım hataları:
        
        
@@ -1373,7 +1382,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
        Lojik eşit yerine atama operatörü kullanıldığında x 'e atanan değer yani 5 üretilir.
        if koşul ifadesi olduğu için sorulan soru 0 veya 0 dışında bir değer olduğu için
        bu durumda sıfır dışında bir değer olarak algılar ve x değeri 5 olsa da olmasa da
-       if'in içine girilir.
+       if'in içine girilir. Bu hatadan kaçınmak için if(5==x) şeklinde kullanım söz konusudur.
        
        -->if(5<x<20)
        Doğru yazımı if(x>5 && x<20) olacaktır.
