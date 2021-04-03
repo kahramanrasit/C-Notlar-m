@@ -2693,14 +2693,194 @@ Eğer ikinci kez tanımladıysa koşuldaki makro, birinci girişindeki tanımlad
 		- __func__---->bulunduğu fonksiyonun ismi ile yer değiştiren makro.
 
 
+
+# Ders 21 - 22/03/2021
+
+- Yorum satırları
+	- Comment out: Belirli bir kod bütününün bir kısmını deneme amaçlı yorum satırı yapmaya denir.
+	- Commit = Kodu repoya yüklemeye denir. Commit edilen kodda kesinlikle comment out bulunmamalı.
+	- Mecbur değilseniz kodu büyük fonksiyonlar yazmaktan kaçının.
+	- Genelde kodu büyük kodlarda yapılan hatalar; kod tekrarı , fonksiyonlara bölünmemiş olması.
+
+
+- Go to deyimi:
+	- Aynı fonksiyon içerisinde yapılan jump olayına "near jump (lokal jump)" denir.
+	- long jump fonksiyonlar arası yapılan jump olayıdır.
+	- goto kontrol deyimi C'de local jump yapar.
+	- label (etiket): Bir deyimin yerini belirleyen özel isimler.
+		- Etiketler function scope kuralına uyar.
+		- Etiket aranırken name look-up gibi yukarı doğru değilde fonksiyonun her yerinde arama gerçekleşir.
+		- Farklı bir fonksiyondaki etikete dallanamaz.
+		- Dikkat: Eğer etiketten sonra herhangi bir deyim olmazsa bu bir sentaks hatasıdır.
+	- iç içe döngülerin içinden tek seferde çıkmak için yaygındır.
+	
+	
+	
+- Switch Statement
+
+	- switch(integer expr) --> parentez içerisindeki ifade tam sayı türünden olmak zorunda.
+	
+ Örnek sentaks: 
+ ```
+switch( int expr)
+case1: statement 
+case2: statement
+.
+.
+.
+default: // Eğer hiçbir case'e giriş yapmaması durumunda bu etikete girer.
+
+```
+
+Örnek:
+
+```
+void print_season(int month)
+{
+	switch(month)
+	{
+		case 12://fallthrough
+		case 1://fallthrough
+		case2:  printf("winter");break;
+		case3://fallthrough
+		case4://fallthrough
+		case5: printf("spring"); break;
+		case6: //fallthrough
+		case7://fallthrough
+		case8: printf("summer");
+		case9: //fallthrough
+		case10://fallthrough
+		case11: printf("autumn");
 		
+	}
+
+}---> Case'lerde boşta kalan yani case'den sonra deyim olmadan switch'den çıkan bir case olmamalıdır.
+
+```
+- Fallthrouh: break komutu kullanmadan 2 case'i birleştirdiğinizde, bu durumu bilerek ve isteyerek yaptığınızı 
+yorum satırıyla case'in yanına eklenmelidir ki kodu okuyan bunu bilinçli bir şekilde yaptığınızı anlasın.
 
 
 
+  
+  # Ders 22- 24/03/2021
+  
+  
+  - Derleyicilerin "kodların bağlanması için " Linker programına hitaben obje kod içine (özel bir notasyon ile) 
+  yazdığı isimlere " external referance" denir.
+  
+  
+  #### Tür Dönüşümleri
+  
+  - ival + dval ---> Bir int türünden değeri bir double türden değerle toplarsanız eğer derleyici arka planda tür dönüşümü yaparak ival'i,
+  double türe dönüştürür. Bu olaya ;
+  	- imlicit type conversion denir.
+  		- implicit = örtülü , gizli , kapalı
+  	- explicit type conversion : Kodu yazan kişinin bu kodda tür dönüşümü olacağını belirtmesine denir.
+  		- type-cast operatörü
+  	
 
+- Nerelerde tür dönüşümü yapılıyor?
+	- Basit aritmetik dönüşümler
+	- Atama tür dönüşümleri
+		- Bu dönüşümler geçici nesne (temprory obj) oluşturularak yapıldığı için aslında değişkenin türü değiştirilmiyor.
+		
+		
+- a+b ---> bu işlemde en kapsamlı tür hangisiyse işlem o türde yapılıyor.
 
+1 - long double
+  - double
+  - float
+  
+2 - unsigned long long
+  - signed long long
+  - unsigned long
+  - signed long 
+  - unsigned int 
+  - signed int
+  
+  
+3 - "integral promotion"
+    - unsigned short 
+    - signed short 
+    - unsigned char
+    - signed char
+    - char
+    - _BOOL
+    
+    
+    
+- Rank : Büyüklük derecesi
+ 	- long double > double > float > long long > long > int
 
+- Aynı türlerin operantlarının rank'ı aynı ise fakat türleri farklı ise, tür dönüşümü her zaman işaretsiz yöne yapılır.
 
+- a+b ---> operantlar farklı ranklerdeyse fakar büyük olan rank işaretli , küçük olan rank işaretsiz ise ,
+ Bu durumda eğer işaretli olan tür işaretsiz olan türün bütün değerlerini tutabiliyorsa 
+ tür dönüşümü işaretli ranki yüksek olan türe yapılacak. Aksi halde bunun işaretsiz türüne yapılacak.
+ 
+ - Ranklar aynı işaretler aynı ise işlem yüksek rankta yapılır.
+ - Ranklar farklı büyük rank işaretsiz ise yine yüksek rankta yapılır.
+ - Rankler farklı büyük ran işaretli ise işlem
+ 		- ya yüksek rankta
+ 		- ya da yüksek rankin işaretsiz olanında yapılır.
+ 
+ 
+```
+//c++ 'da tür öğrenme kodu
+
+#include <iostrem>
+using namespace std;
+
+int main()
+{
+	char c1=10;
+	char c2=20; // işlemin sonucunun türü int olacak 
+	
+	cout << typeid (c1+c2).name()<<"\n";
+}
+--------------
+
+short s1=10;
+short s2=20; // int
+
+--------------
+
+unsigned int uval =5;
+int ival =10// unsigned int 
+
+--------------
+
+long uval =10;
+unsigned int ival = 10;
+
+--------------
+
+long long uval =5; // 8 byte 
+unsigned int ival =10;//4 byte  --> long long
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
