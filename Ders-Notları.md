@@ -2859,16 +2859,75 @@ unsigned int ival = 10;
 long long uval =5; // 8 byte 
 unsigned int ival =10;//4 byte  --> long long
 
+--------------  
+  
+ ``` 
   
   
   
+- Yapılan tipik hatalar :
+
   
-  
-  
-  
-  
-  
-  
+ ```
+ 
+ int main()
+ {
+ 	int x = -1;
+	unsigned int y = 2;
+	
+	if (x >y)
+		printf("evet dogru\n");
+	else
+		printf("hayir yanlıs\n");
+ }
+ ---> Bu kodda işaretli x, bellekte bit olarak tutulurken 1111 1111 1111 
+ olarak yani işaret bitleri de olduğu için x>y algılanır.
+ 
+ 
+ - int x = 10;
+   double d1 = x/3;-->sonuç = 3 olur.
+   double d2 = x/3.;---> sonuç = 3.333 olur.
+   ```
+   
+   
+  - Hatırlatma : Tam sayi türlerinde taşma tanımsız davranıştır.
+  	- İşaretsiz türlerde taşma yoktur.
+  	 	- İşaretsiz türlerde tüm işlemler modüler aritmetiğe göre yapılır.
+  	 	
+Örnek olarak ; 
+	- Sistemdeki int türü 2 byte olsun.
+	
+		int ival=1000;
+		ival*1000u;--> bunun sonucu 1000000 % 65536 olur.
+
+
+- Atama tür dönüşümleri:
+
+		 int x; 
+		 x=expr; --> expr hangi türde olursa olsun, 
+		 tür dönüşümü kendisine atama yapılan nesnenin int türüne yapılacak.
+		
+- Küçük türden büyük türe atama  yapmakta bir sakınca yok.
+- Ancak büyük tam sayı türünden küçük tan sayı türüne dönüşümden kaçınmak gerekir.
+		 (tanımsız davranış değildir-veri kaybı oluşturur)
+		 
+- Gerçek sayı türlerinden tam sayı türlerine otomatik dönüşüm yapılmasına izin verilmemelidir.
+
+Bir mülakat sorusu:
+
+```
+	int x = 10;
+	int y = 20;
+	double dval = (y > 10 ? x : 3.)/3;
+	printf("dval = %f\n ",dval );
+--> Ekran çıktısı 3.3333 olur .
+
+```
+- Koşul operatörünün 2. veya 3. operandları arasında tür dönüşümü uygulanır.
+	- type-cost (tür dönüştürme ) operatörü
+	- -> (tür)expr olarak kullanılır.
+
+
   
   
   
