@@ -162,7 +162,7 @@ iki işlenen gerektiren işleçlere ikili işleçler denir.
 
 
  Automatic storage duration: Bu nesneler, programın akışı programın 
- çalışma zamanında bir Fonksiyona girdiğinde bunlar belleğe yerleşir. Programın
+ çalışma zamanında bir fonksiyona girdiğinde bunlar belleğe yerleşir. Programın
  akışı o koddan çıktığında bellekten boşaltılır.
  örnek olarak bir fonksiyonda tanımlanan int bir değişkene atanan bir değer
  o fonksiyon her çağırıldığında belleğe yerleşir ve o fonksiyondan çıkarken
@@ -180,7 +180,7 @@ iki işlenen gerektiren işleçlere ikili işleçler denir.
  main fonksiyonu çalışmaya başlamadan önce çalışmaya başlarlar.
  Programın sonuna kadar da bellekde hayatları devam eder.
 
- - Statik ömürlü değişkenlerde ilk değer ataması yapılırken sabit ifedesi
+ - Statik ömürlü değişkenlerde ilk değer ataması yapılırken sabit ifadesi
  olması gerekir.
  
  Bir nesne Global Değişken ise statik ömürlüdür. Local değişkenler
@@ -188,10 +188,10 @@ iki işlenen gerektiren işleçlere ikili işleçler denir.
  ömürlü olur. Static ömürlü değişkenler hayata 0 değeri ile başlarlar.
  
  ```
- ->Static ömürlü değişkene ilk değer başlatması yapılırken sabit ifade 
+ -> Static ömürlü değişkene ilk değer başlatması yapılırken sabit ifade 
  kullanılmalıdır.
  int x=10+20;// global alanda yazılan bu kod kabul görür.
- int y=x;// ancak bu kod hatalıdır. çünkü y 'ye değişken ilk değer
+ int y=x;// ancak bu kod hatalıdır çünkü y 'ye değişken ilk değer
  ataması yapılmaya çalışılmıştır. 
 ```
 
@@ -265,8 +265,8 @@ Yazılan kodunda undefined behavior olmaması gerektiği konusunda.
 Olduğu takdirde bu durumu optimize ederken tanımlayamadığı halde 
 çalıştırdığı için çeşitli problemlerle karşılaşabiliyor.
 
-Bu sebeple mümkün olan her yerde değişkenlere ilk değer ataması
-yapılmalıdır.
+Bu sebeple mümkün olan her yerde değişkenlere ilk değer ifadesi verilmelidir.
+
 
 
 #
@@ -415,14 +415,9 @@ yapılmalıdır.
   
  # Function (Fonksiyonlar) "method, procedure, yordam, altprogram"
  
- #
- - method
- - procedure
- - yordam
- - altprogram
-#
+
  
- - to define a function 
+  - to define a function 
   - to call a function
   - to declare a fuction
 
@@ -693,6 +688,7 @@ Mesela abs fonksiyonunu hem int hem double türü için kullanamazsınız.
 
 
 Sabitlerin türleri olması gerekir.
+
 - Tam sayı sabitlerinin yazımında 3 farklı sayı sistemi kullanılabilir.
       - Hexadecimal (Onaltılık sayı sistemi)
       - Decimal     (Onluk sayı sistemi)
@@ -749,7 +745,7 @@ Aşağıdaki değerler double türüne aittir.
 
 C'de karakter sabitlerinin türü int'dir.
 
-"Raşit" --> String Literals
+"Rasit" --> String Literals
 
 - 'A' Bu karakter, sistemde kullanılan karakter kodlamasında (character encoding)
 gerçekleşerek bu karakterin kod numarası tutulur.
@@ -882,8 +878,8 @@ int main()
     /*Bu kodun çalışma şekli ilk olarak en içteki printf fonksiyonu çalışır.
     Yani ekrana 987 yazılır. Bir dıştaki printf fonksiyonu bi önceki fonksiyon çalışırken ürettiği değeri yazar.
     Printf fonksiyonu yürütüldüğünde ekrana kaç karakter yazdıysa, yazdığı karakter sayısını üretir. Yani ekrana 
-    3 basamaklı olduğu için 3 sayısı yazılır. bir kez daha yürütüldüpünde 3 sayısı 1 karakterli lduğu için 
-    1 sayısı yazdırılır.*/
+    3 basamaklı olduğu için 3 sayısı yazılır. Bir kez daha yürütüldüğünde 3 sayısı 1 karakterli olduğu için 
+    1 sayısı yazdırılır. */
     - Ekran çıktısı: 
     		98731     olur.
 
@@ -909,10 +905,10 @@ int main()
 İnt scanf(const char*p,...);
 
 - Scanf fonksiyonu call by referance olmak zorundadır.
-örnek olarak scanf("%d",&x); &x kullanılmasının sebebi call by referance olmasıdır.
-- Scanf fonksiyonu Satır Tamponlu (Line-Buffered) yapıdadır.
+	- örnek olarak scanf("%d",&x); &x kullanılmasının sebebi call by referance olmasıdır.
 
-Yani new-line karakteri gelene kadar devam eder.
+- Scanf fonksiyonu Satır Tamponlu (Line-Buffered) yapıdadır.
+	- Yani new-line karakteri gelene kadar devam eder.
 
 - Örnek olarak :
 
@@ -934,9 +930,9 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
 - Sizeof hem anahtar sözcük hem de operatördür.
 
 - a + b --> burada + bir operatör, a ve b operanttır.
-- unary operator--> tek terimli operatör
-- binary operator--> çift terimli operator
-- ternery operator--> 3 terimli operator
+- unary operator   --> tek terimli operatör
+- binary operator  --> çift terimli operator
+- ternary operator --> 3 terimli operator
 
 - a+b  ----> + operatorü ortada olduğu için bu operator burada infix konumda kullanılmıştır.
 - !x   ----> burada ! operatörü başta olduğu için prefix konumunda kullanılmıştır.
@@ -999,7 +995,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
 
 - Associativity (öncelik yönü)
    - left associative (soldan sağa)
-   - right associativity (sağdan sola)
+   - right associative (sağdan sola)
 
 - Side Effect (Yan etki) 
     - !x burada lojik değil operatörünün yan etkisi yoktur. Yani x değişkeninde herhangi bir değişiklik olmaz.
@@ -1007,12 +1003,12 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
    
    
    
-   **Addition Substraction (+,-)
+   **Addition Subtraction (+,-)
    
    - Binary infix operatörlerdir.
    - Ürettikleri değer toplamı ya da farkı olur.
    - Yan etkileri yoktur.
-   - 
+   
    
    #### UNDEFİNED BEHAVİOR
    ```
@@ -1079,15 +1075,15 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
    
    **Lojik Karşılaştırma Operatörleri
    
-   "== "  
+  " == "  
    
-   "!="
+  " != "
    
-  " >" greater
+  " > " greater
   
-  " <" less
+  " < " less
   
-  " >=" greater than
+  " >= " greater than
   
   " >= "less than
   
@@ -1111,11 +1107,16 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
  
     x=0;
     
+  ```
+  
+  #
   
   if(x==5) koşulunu daha güvenli kullanmak istersek 
   
   if(5==x) olarak da kullanılabilir.
-  ```
+  
+  #
+  
   **Logical Operators
   
   - Önermeler
@@ -1134,7 +1135,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
   expr1 || expr2 // eğer exp1 değişkeni non-zero bir değer  ise expr2'ye bakılmaksızın 1 değeri üretilir.
   
   
-**Uyarı: Lojik && ve || operatörlerinde kısa devre davranışı var olmasına karşın
+**Uyarı: Lojik && ve || operatörlerinde kısa devre davranışı var olmasına karşın,
  bitsel & ve | operatörlerinde kısa devre davranışı söz konusu değildir.
  
  
@@ -1157,7 +1158,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
    
    - C dilinde atama operatörleri de diğer tüm operatörler gibi bir değer üretir.
    - Atama operatörünün ürettiği değer nesneye atanan değerdir.
-   x=y  ifadesinin ürettiği değer y'nin değeridir.
+   x=y  ifadesinin ürettiği değer, x'e atanan değer olan y'nin değeridir.
    
    
    örnek:
@@ -1199,9 +1200,6 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
    
    Örnek olarak :
 
-  
-     
-      
        ```
         int x=10,y;
         x++ , y=x; // Bu deyimde virgül bir yan etki noktası olduğu için x değeri 1 artırılıp 
@@ -1235,7 +1233,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
      
      
   - Her operantın ürettiği değer gibi virgül operatörü de bir değer üretir.
-     Virgül operatörünün ürettiği değer sağ operantın ürettiği değerdir.
+    		- Virgül operatörünün ürettiği değer sağ operantın ürettiği değerdir.
      
   örnek:
      
@@ -1273,7 +1271,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
        ```
        double x=2.5;
        
-       while(x<5,0)  /*Burada tam sayı yazılırken nokta yerine virgül kullanıldığında, virgül operatörünün 
+       while(x < 5,0)  /*Burada tam sayı yazılırken nokta yerine virgül kullanıldığında, virgül operatörünün 
        sağ operantı değer üreteceği için while,sonsuz döngüde alır.*/
        {
        		//kodlar
@@ -1296,12 +1294,10 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
   # Değer Kategorisi (Value Category)
       
   L Value: Bellekte o ifadenin bir yere karşılık geliyor olması demektir. Sol taraf olan ifadeler nesne gösteren ifadelerdir.
-  
-      Bu ifadeler adres operatörünün operantı yapılabiliyor. Yani bu bellekta kalıcı bir verlığa ilişkin yeri temsil ediyor.
+  	 Bu ifadeler adres operatörünün operantı yapılabiliyor. Yani bu bellekta kalıcı bir verlığa ilişkin yeri temsil ediyor.
       
   R Value:  Bir değere sahip olabilmekle birlikte, bellekte bir yere karşılık gelmiyor. Yani bu ifadenin değeri runtime'da hesaplanıyor 
-  
-      olabilir ama o ifade varlık için ayrılmış bellek bloğuna karşılık gelmiyor.
+  	olabilir ama o ifade varlık için ayrılmış bellek bloğuna karşılık gelmiyor.
       
    Nasıl anlayabiliriz: Adres operatörünün (&) operantı yapabilirsiz. Eğer oluyorsa L value olmuyorsa R value'dur.
       
@@ -1339,11 +1335,13 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
 	   
 	   /* Yukarıdaki iki if'in işlevi aynıdır. */
 	   
-	 if(x == 0)
+      
+      
+      if(x == 0)
           ++b;
 	  
 	  
-      if(x)
+      if(!x)
           ++b; 
 	  
 	  /* Yukarıdaki iki if'in işlemi de aynıdır. */
@@ -1357,7 +1355,9 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
        
      --->  if (a=func(),a>10)
        {       }
+       
        ile
+       
        a=func();
        if(a>10)
        {  }
@@ -1371,26 +1371,25 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
 	 
        ```
        
-       # burada kaldım
+       
        - C dilinde Koşul ifadelerinde yapılan en sık yazım hataları:
        
        
        ```
-       
-       
+      
        --> if(x==5) yerine if(x=5) yazmak.
        Lojik eşit yerine atama operatörü kullanıldığında x 'e atanan değer yani 5 üretilir.
        if koşul ifadesi olduğu için sorulan soru 0 veya 0 dışında bir değer olduğu için
        bu durumda sıfır dışında bir değer olarak algılar ve x değeri 5 olsa da olmasa da
        if'in içine girilir. Bu hatadan kaçınmak için if(5==x) şeklinde kullanım söz konusudur.
        
-       -->if(5<x<20)
+       --> if(5<x<20)
        Doğru yazımı if(x>5 && x<20) olacaktır.
        Matematiksel notasyon şeklinde yazıldığında ise derleyicinin algılama şekli operatör öncelik sırasına göre
        (5<x)<20 olacaktır. Bu değer de her zaman doğru olarak algılanacağı için ve sentaks hatası olmadığı için 
        problemli bir durumdur.
        
-       -->if(dval>4,5) // burada yazılmak istenen gerçek sayı nokta ile değil de virgül operatörüyle ayrıldığı için
+       --> if(dval>4,5) // burada yazılmak istenen gerçek sayı nokta ile değil de virgül operatörüyle ayrıldığı için
        ve virgül operatörü sağ operantının değerini üreteceği için 5 değeri de lojik doğru olarak algılandığından dolayı
        bu değer her zaman doğru olarak algılanır.
        
@@ -1399,7 +1398,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
        -->if(x!=5 || x!=13)
          Bu ifade de && operatörü yerine veya operatörü kullanılmış ve her zaman doğru bir ifadedir.
 	 
-       -->if(x==3); Bu koşulda noktalı virgül bir ifade olduğu için if'in altındaki kodlar koşturulurken 
+       -->if(x == 3); Bu koşulda noktalı virgül bir ifade olduğu için if'in altındaki kodlar koşturulurken 
        if'in içerisinden çıkılmış olur.
          derleyici bu koşulu şöyle algılar:
 	 if(x==3) 
@@ -1417,7 +1416,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
       - int getchar(void);
       - int putchar(int);
     
-- Standart giriş akımının tamponundan bir akrakter alır. (extract eder)
+- Standart giriş akımının tamponundan bir karakter alır. (extract eder)
 Ve karakter kodunu döndürür.
 - scanf ve getchar fonksiyonları aynı buffer'ı kullanır. 
 
@@ -1427,8 +1426,8 @@ Ve karakter kodunu döndürür.
 		
 		printf("bir karakter girin:");
 		c = getchar();
-		printf("c(ascii kodu) = %d , c (girilen karakter) = %c ",c,c");
-		//ekrana girilen karakterin ascii kodu ve hangi karakter girildiği yazdırılımıştır.
+		printf("c(ascii kodu) = %d , c (girilen karakter) = %c ",c,c);
+		//ekrana girilen karakterin ascii kodu ve hangi karakter girildiği yazdırılmıştır.
 		
 		```
 	
@@ -1494,7 +1493,7 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 		   						    2   50
 								    
 	Görüldüğü üzere scanf ve getchar fonksiyonları ortak bellek kullanıyorlar. Ayrıca bir şeye daha dikkat 
-	çekmek gerekiyor. 2 ekrana girilen 12 57 değerinde 12'yi scanf yazdırdı ve boşluk(whitespace) atomunu gördüğünde
+	çekmek gerekiyor. 2. ekrana girilen 12 57 değerinde 12'yi scanf yazdırdı ve boşluk(whitespace) atomunu gördüğünde
 	yazdırma işlemini durdurdu ve scanf fonksiyonundan çıktı. Sonrasında getchar fonksiyonu boşluk atomunu da yazdırdı. 
 	boşluk atomu ascii de 32 kodunu aldığı için karşısına 32 yazıldı.
 	Ayrıca bu kodda bir hususa daha dikkat çekmek gerekirse scanf fonksiyonu çağırılırken decimal formatta çağırılıyor 
@@ -1525,7 +1524,7 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 
 		    ```
    Açıklama: Yukarıdaki programda getchar foksiyonu girilen karakterin ascii kodunu girdiği için c'ye atanan değer bir 
-   rakamın ascii kodu olur. Bu kod 0'ın kodu olan 48 den çıkarılırsa tam olarak o rakam elde edilir. Bu yüzde c-'0' olarak kullanılmıştır.
+   rakamın ascii kodu olur. Bu kod 0'ın kodu olan 48 den çıkarılırsa tam olarak o rakam elde edilir. Bu yüzden c - '0' olarak kullanılmıştır.
    
    
    
@@ -1539,7 +1538,7 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
    
    - getchar' a benzer 2 adet standart olmayan <conio.h> kütüphanesinde fonksiyon vardır.
                   - int _getch(void)
-                  - int _getche (void)
+                  - int _getche(void)
                   
 	
 	Hatırlatma: Line-buffered func new line karakterini görene kadar değer almayan fonksiyondur.
@@ -1591,11 +1590,11 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 	 
 	 - int putchar(int);
 	 
-	 - putchar sizden bir sayı alıyor ve bu sayıyı karakter kodlamsına göre ekrana yazdırıyor.
+	 - putchar sizden bir sayı alıyor ve bu sayıyı karakter kodlamasına göre ekrana yazdırıyor.
 	 - getchar, standard bufferdan bir karakter alıp onun karakter sayısını yazdırıyor.
 	 
 	 
-	 		- c1=getchar();//ekrana A yazılırsa 65 sayısını c'ye atar. Giriş Fonksiyonudur.
+	 		- c1=getchar();//ekrana A yazılırsa 65 sayısını c1'e atar. Giriş Fonksiyonudur.
 	 		- c2=putchar(65)// 65 sayısını fonksiyona gönderir ve ekrana A yazdırır. Çıkış fonksiyonudur.
 
 
@@ -1604,7 +1603,7 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 	 
 	 
 	 
-#Ders 14 - Tarih 05.03.2021
+# Ders 14 - Tarih 05.03.2021
 	 
 	 - Modül bir kütüphanenin modüllerine verilen değerler isimdir.
 	 
@@ -1646,7 +1645,7 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 	if(isprime(a) == isprime(b))
         /*if'in içerisindeki koşul böümünü böyle kullanırsak isprime fonksiyonu,
 	test fonksiyonu olduğu için sıfır veya sıfır dışında bir değer gönderecektir.
-	BU değer eğer sıfır dışında bir değer ise  1 olmak zorunda değildir. Bu da koşulu düzgün 
+	Bu değer eğer sıfır dışında bir değer ise  1 olmak zorunda değildir. Bu da koşulu düzgün 
 	kullanmamıza engel olabilir. Bunun yerine aşağıdaki if koşulu şeklinde kullanılabilir.*/
 	
 	if(!!isprime(a) == !!isprime(b))
@@ -1720,7 +1719,7 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 	
 	
 	- Conditional Operator
-	- Bazı programlama dillerinde var her porgramlama dilinde yok.
+	- Bazı programlama dillerinde var her programlama dilinde yok.
 	- 3 operant alan operatör
 	- Bu operatörün 2 tane token'ı var.
 	               - op1 ? op2 : op3
@@ -1730,7 +1729,7 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 	                     - Eğer lojik doğru (non-zero) ise op2 elde edilir.
 	                     - Eğer lojik yanlış ise op3 elde edilir.
 	                      
-	- Birinci operattan sonra yan etki noktası (sequence point) vardır.
+	- Birinci operanttan sonra yan etki noktası (sequence point) vardır.
 	
 	Örnek:
 	
@@ -1745,7 +1744,7 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 	     
 	     
 	     x > 0 ? x : -x
-	     // Mutlakk değer alma
+	     // Mutlak değer alma
 	     
 	     
 	     a++ > b ? a : b
@@ -1769,15 +1768,15 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 	
 - Genellikle yanlış yapılan bir mülakat sorusu:
  
- 		  int i=0;
-                  while (i++<100);
+ 		  int i = 0;
+                  while (i++ < 100);
 		  	printf("%d",i);
 -> Yukarıdaki kodda küme parentezi kullanılmadığı için ilk deyim olarak ; alınmıştır.  Ve i++ olduğu için while'dan çıkıldığında i=101 olur.
 
 
 
 
-- n Klavyeden girilen bir sayı olsun. 
+- n Klavyeden girilen bir pozitif sayı olsun. 
 	- while(n--) ile while(n--<0) arasında bir fark yoktur.
 
 
@@ -1791,7 +1790,7 @@ Burada x++ derleyicinin algılayabileceği en uzun atom olduğu için x++ +y ola
 
 Örnek: 
 ```
-	int power(int base, int exp)
+	int power(int base, int expr)
 	{
 		int result =1;
 		while(expr--)
@@ -1803,7 +1802,7 @@ Burada x++ derleyicinin algılayabileceği en uzun atom olduğu için x++ +y ola
 	int main()
 	{
 		int x,y;
-		printf("iki tam sayı giriniz:);
+		printf("iki tam sayı giriniz:");
 		scanf("%d%d",&x,&y);
 		printf("%d ussu %d =%d\n",x,y,power(x,y));
 		
@@ -1864,10 +1863,10 @@ while(1)
 putchar(ch);
 
 if(ch == 'e')
-	printf("\n ever dediniz.\n");
+	printf("\n evet dediniz.\n");
 	
 else
-	prinf("\n hayir dediniz\n");
+	printf("\n hayir dediniz\n");
 	
 	
 ///Yukarıdaki koda alternatif olarak :
@@ -1917,14 +1916,14 @@ while( ---)
 #
 
 - Break yerine programın herhangi bir yerinde goto deyimi kullanılarak gidilecek etiket belirlenip istenilen noktaya ulaşılabilir.
-	etiket-label
+	- etiket-label
 	
 	
 
 - Continue statement 
 	- Yardımcı bir kontrol deyimi
 	- Continue sadece döngü deyimlerinin gövdelerinde kullanılır. 
-		- break ;(loops/switch)
+		- break; (loops/switch)
 		- continue; (just loops)
 	- Continue deyiminin yürütülmesi döngünün kalan kısmını by-pass ediyor yani kalan kısmı yapılmış gibi diğer tura geçiyor.
 
@@ -1981,16 +1980,16 @@ while( ---)
 
 ```
 
-	int x;
+	int x,a;
 	scanf("%d",&x);
 	
 	if(x>10)
 		a=5;
 	else 
 		a=7;
-	// Burada  a' ya ilk değer ataması ypılmak istenmiş, ancak scope farklılığı sebebiyle doğru bir kullanım olmamıştır.
+	// Burada  a' ya ilk değer ifadesi verilmek istenmiş, ancak scope farklılığı sebebiyle doğru bir kullanım olmamıştır.
 	
-	Bunun yerine  a = x<10 ? 5: 7; daha doğru bir kullanımdır.
+	Bunun yerine  a = x>10 ? 5: 7; daha doğru bir kullanımdır.
  			- Koşul operatörünün ilk değer verme amaçlı kullanımı oldukça yaygındır.
  ```
  
@@ -2073,7 +2072,7 @@ int isprime(int val)
 		return val == 3;
 	if (val % 5 == 5)
 		return val == 5;
-	for (int i = 7; i * i < val; i++)
+	for (int i = 7; i * i <= val; i++)
 	{
 		if (val % i == 0)
 			return 0;
@@ -2114,7 +2113,7 @@ int main()
 ```
 	int factorial (int n)
 	{
-	return n<2?1:n*factorial(n-1);
+	return n < 2 ? 1 : n*factorial(n-1);
 	}
 ```
 
@@ -2136,27 +2135,16 @@ do
 // Bu kodda ekrana 1 yazdırılır. Continue komutunu görünce koşul ifadesi neredeyse program oraya dallanır.
 ```
 
-#
-
-#### UNDEFİNED BEHAVİOUR 
-
-```
-for(int i=0; i<1;--i)
-	;
-	
-//İşaretli int türünde taşma tanımsız davranıştır.
-
-```
 
 
-#
 
 - Nested Loops:
 	 - Armstrong sayısı; bir sayının rakamlarının, basamak sayısı derecesinden kökleri toplamı kendisine eşit ise
-	  o sayıa armstrong sayısı denir.
+	  o sayıya armstrong sayısı denir.
 	 
 	 
 - Örnek: 3 basamaklı armstrong sayılarını bulan programı yazınız:
+- 
 ```
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -2199,23 +2187,23 @@ int main()
 
 
 
-- Fonksiyon Bildirimleri - Function Declaratition
-	- Bir fonksiyon çağrısı yapıldığında o fpnksiyonun tanımı name look up ile bulunur.
+- Fonksiyon Bildirimleri - Function Declaration
+	- Bir fonksiyon çağrısı yapıldığında o fonksiyonun tanımı name look up ile bulunur.
 	Derleyici o fonksiyonun tanımını neden bulmalı?
 		- Çağrıda kullanılan argüman sayısı ile parametre sayısının uyumunu kontrol edecektir.
-		- Fonksiyonun parametresi int türden ise ancak bu fonksiyona gönderdiğimiz parametre şnt türden 
+		- Fonksiyonun parametresi int türden ise ancak bu fonksiyona gönderdiğimiz parametre int türden 
 		değil ise dil kurallarına göre derleyicinin tür dönüşümü (type conversion) yapması gerekiyor.
 		
 - ! Derleyici fonksiyonun kodunu bilmiyor. Fonksiyon çağrısını içeren fonksiyonun koduyla,
  çağırılan fonksiyonun derlenmiş kodunu birleştiren Linker dediğimiz program ,
 Derleyici fonksiyonunun çıkış kodlarını da üretiyor. Fonksiyonun geri dönüş değerinin yazılacağı 
 adres gibi araya da kendinden sonra birleştirme işlemi yapacak  linker için referans bir isim yazıyor. 
-Böyle referanslara external refereans deniyor.
+Böyle referanslara external referans deniyor.
 
 - Derleyicinin bir fonksiyon çağrısı karşılığı 
 	- Doğru şekilde fonksiyona giriş kodları üretebilmesi için 
 	- Doğru şekilde fonksiyondan çıkış kodlarını üretebilmesi için 
-	- programcının yapmış olabileceği lojik hatalara karşı uyarabilmek için çağrılan fonksiyon ile ilgili 
+	- Programcının yapmış olabileceği lojik hatalara karşı uyarabilmek için çağrılan fonksiyon ile ilgili 
 	bazı bilgilere sahip olması gerekiyor.
 	- Derleyicinin fonksiyon kodunu görmesi zorunlu değil 
 	- Derleyiciye bu bilgileri veren bildirime "function declaration" deniyor.
@@ -2225,21 +2213,22 @@ Böyle referanslara external refereans deniyor.
 fonksiyunun parametreleri hakkında bilgi vermiyorum anlamına geliyor. Parantezin içerisine void yazıldığında ise fonksiyonun 
 geri dönüş değerinin olmadığı bildiriliyor. Bu C diline ait bir kural.
 
+
 - function prototype scope:
 	- Bir fonksiyonun bazı durumlarda kodunu göremeyiz ve sadece bildirimini görebiliriz.
 	 Bu bildirimde gönderilen değişkenin ne olduğunu bildirmek için ve sadece bildirim satırındaki parantezi kapsayan scope'dur.
 	
 
 
-- Bir fonksiyonun bildiriminin 2. kez yapılmasına "function redeclaration" denir. Bunlar arasında bir çelişki vasrsa sentaks hatası olur.
+- Bir fonksiyonun bildiriminin 2. kez yapılmasına "function redeclaration" denir. Bunlar arasında bir çelişki varsa sentaks hatası olur.
 
 
 - Function Overloading (işlev Yüklemesi) 
 	- Bazı dillerde bir fonksiyon ismi ile paramedic yapısı farklı olarak tanımlanabiliyor. Ancak C'de öyle değil.
 	
-
-- Header File:
-	 - .c dosyalarına source file , implementation file , do c file denebiliyor.
+- .c dosyalarına source file , implementation file , dot c file denebiliyor.
+ 
+- Header File:	 
 	 - Header file'ın içerisinde sadece bildirim dosyaları vardır. Fonksiyon tanımı yoktur.
 	 
 	 - Bir başlık dosyasında neler var?
@@ -2247,15 +2236,15 @@ geri dönüş değerinin olmadığı bildiriliyor. Bu C diline ait bir kural.
 	 	- Macrolar var.
 	 	- Fonksiyon bildirimleri 
 	 	- Tür bildirimleri (user - defined types)
-	 	- tür eş isim bildirimleri
+	 	- Tür eş isim bildirimleri
 
 
 # Ders 18-15/03/2021
 
 - Preprocessor:
 	- Önişlemcinin , bilgisayarın işlemcisi ya da başka bir donanımsal elemanıyla hiçbir ilgisi yoktur.
-	 Önişleci belirli bir işi gören bir yazılım programıdır.
-	- Önişlemci,kaynak dosya üzerinde birtakım düzenlemeler ve değişiklikler yapan bir ön programdır.
+	 	- ÖnişleMci belirli bir işi gören bir yazılım programıdır.
+	- Önişlemci, kaynak dosya üzerinde birtakım düzenlemeler ve değişiklikler yapan bir ön programdır.
 	- Önişlemci programının bir girdisi bir de çıktısı vardır. Önişlemcinin girdisi kaynak dosyanın kendisidir. 
 	Önişlemci programın çıktısı ise derleme modülünün girdisini
 oluşturur. Yani kaynak program ilk aşamada önişlemci tarafından ele alınır.
@@ -2293,7 +2282,7 @@ değiştirilmiş ya da düzenlenmiş olan bu kaynak dosya, derleme modülü tara
 	programlardaki "kopyala - yapıştır" (copy – paste) işlemine benzetilebilir.
 	- Dosya ismi eğer açısal ayraç içinde verilmişse, sözkonusu dosya önişlemci tarafından, popüler olarak 
 	"default directory" denilen  önceden belirlenmiş bir dizin içinde aranır.
-	- Dosya ismi eğer çift tırnak içinde verilmişse sözkonusu doya önişlemci tarafından kaynak dosyanın bulunduğu dizinde arar,
+	- Dosya ismi; eğer çift tırnak içinde verilmişse sözkonusu dosya, önişlemci tarafından kaynak dosyanın bulunduğu dizinde arar,
 	 eğer burada bulamazsa sistem tarafından berlirlenen dizinde arar.
 	
 	
@@ -2318,6 +2307,7 @@ Bu komut kaynak kod içindeki bir yazıyı başka bir yazı ile değiştirmek i�
 	- #define SIZE 100 komutu ile, kaynak kod içerisinde gördüğü her bir SIZE atomu yerine 100 atomunu yerleştirir.
 	 Derleme modülüne girecek kaynak programda, SIZE atomu artık yer almaz.
 	- Önişlemci komutları kullanılırken parantezler konusunda dikkatli olunmalıdır. Bir örnekle gösterelim.
+	- 
 ```
 #define MAX 100+200
 
@@ -2328,7 +2318,7 @@ int main()
 }
 ```
 #
-Yukarıdaki örnekte parentez kullanılmadığı için MAX yerine direk olarak 200+100 yazılınca oluşan ifade a=5 * 100+200; olur. Bu da istenen sonucu karşılamayabilir.
+Yukarıdaki örnekte parentez kullanılmadığı için MAX yerine direk olarak 200+100 yazılınca oluşan ifade a = 5 * 100+200; olur. Bu da istenen sonucu karşılamayabilir.
 
 #
 
@@ -2337,7 +2327,7 @@ Yukarıdaki örnekte parentez kullanılmadığı için MAX yerine direk olarak 2
 		- #define + -
 		- #define 100 200
 
-- Bir kodda kullanılan isim sabit mi değişken mi sabit mi nasıl ayırt edebiliriz?
+- Bir kodda kullanılan isim sabit mi değişken mi nasıl ayırt edebiliriz?
 	- C'de değişken isimleri küçük harfli olarak seçilirler.
 	- ALL CAPS= tamamı büyük harfler.
 	- C'de all caps isimler macrolarda kullanılmaktadır.
@@ -2375,7 +2365,6 @@ SIZE =4;---> olarak yazdığımızda bı kodda sentaks hatası yoktur.
 	- function-like makro
 
 - #define max2(a,b)   ((a)>(b))?(a):(b))
-	- fonksiyonel makrolar fonksiyonlara bir alternatifdir.
 	- fonksiyonel makrolar kodu küçük(az) fakat sık çağırılan fonksiyonlara bir alternatif 
 
 - Makro tanımında parantez kullanmamızın sebebini anlatan bir örnek;
@@ -2413,9 +2402,9 @@ y=square(x++); // y=(x++)*(x++); burada yan etki noktasına gelinmeden x iki kez
 #define SQUARE(a) ((a)*(a))
 int main()
 {
-int y=10;
-int z =SQUARE(foo(y)),
-//burada foo fonksiyonu 2 kez çağırılmış oldu. Eğer square bir fonksiyon olsaydı bir kez çağırılıp geri dönüş değeri ile makraoya gidilecekti.
+int y = 10;
+int z = SQUARE(foo(y)),
+//burada foo fonksiyonu 2 kez çağırılmış oldu. Eğer square bir fonksiyon olsaydı bir kez çağırılıp geri dönüş değeri ile makraya gidilecekti.
 }
 ```
 - bir mülakat sorusu: 
@@ -2442,23 +2431,23 @@ int main()
 
 - Yukarıdaki fonksiyonda square komutu ile fonksiyon mu çağırılır makro mu??
 
-          - önişlemci komutu derleyiciden önce çalışıyor. Önişlemci programı define komutunu yürütecek onun çıktısı derleyiciye gidecek.
+          - Elbette ki önişlemci komutu çağırılır.önişlemci komutu derleyiciden önce çalışıyor.
+           Önişlemci programı define komutunu yürütecek onun çıktısı derleyiciye gidecek.
+    
            
-           
-           
-	Eğer biz hem makro tanımlayıp hem fonksiyo tanımlarsak ve seçimi programcıya bırakırsak;
+	Eğer biz hem makro tanımlayıp hem fonksiyonu tanımlarsak ve seçimi programcıya bırakırsak;
 		- fonksiyon çağırılmak istenirse (func)(a,b) şeklinde yazılır.
  ``` 
   
   
   #
   
-- Fonksiyonel makrolar ile fonksiyonların karşılatırmasını yapınız:
+- Fonksiyonel makrolar ile fonksiyonların karşılaştırmasını yapınız:
 
 	- Makrolar kaynak kodu büyütme eğilimindedir.
-       		 - Yani derlenmiş kodun boutu üzerinde bir kaygınız var ise makro kullanmamanız daha sağlıklı olacaktır.
+       		 - Yani derlenmiş kodun boyutu üzerinde bir kaygınız var ise makro kullanmamanız daha sağlıklı olacaktır.
         	- Ancak ne kadar yer kaplasa da sizin için  kapladığı yerden çok hızı önemli ise daha hızlı olması için makrolar daha avantajlı.
-              			- Hızlanmasının sebebi ise fonksiyona giriş ve çıkış kodları üretilmiyor oluşu.
+              			- Hızlanmasının sebebi ise fonksiyona giriş ve çıkış kodları üretilmiyor oluşudur.
 	- Fonksiyonlar türe bağlı, makrolar türden bağımsızdır.
 	- Makro kullanımı durumunda debugger desteği daha az olabileceği göz önünde bulundurulmalıdır.
 	- Makrolar, fonksiyonlara göre daha etkin kodun oluşturulmasını sağlayabilirler.
@@ -2467,8 +2456,8 @@ int main()
 	
 	
 - Önişlemci programın kendi operatörleri vardır.
-	- preeprocessor operator
-		- # operetörü  -----> stringificition operator(straing yapma operatörü )
+	- preprocessor operator
+		- # operetörü  -----> stringificition operator(string yapma operatörü )
 		- ## operatörü ------>token-pasting operator (atom yapıştırma operatörü)
 		- defined operatörü
 
@@ -2561,7 +2550,7 @@ mesela;
 ```
 #if MAX > 10
 	typedef int word;
-#endif--> bu kodda max 0 alınır ve koda girilmez. Ancak koşul ifadesi >-1 olsaydı eğer koşul a direk girilecekti.
+#endif--> bu kodda max 0 alınır ve koda girilmez. Ancak koşul ifadesi >-1 olsaydı eğer koşula direk girilecekti.
 ```
 
 # Ders 20 - 19/03/2021
@@ -2578,7 +2567,6 @@ mesela;
 #if NEC ==1
 
 #else
-#endif
 #endif
 #endif------> Bu şekilde kullanılırsa her if için bir endif yazılması gerekir. Ancak aşağıdaki gibi kullanılırsa ;
 
@@ -2637,7 +2625,7 @@ yerine
 #
 
 
-- Peki biz bu önişlemci komutlarında koşullu bildirmeleri nereleede kullanıyoruz??
+- Peki biz bu önişlemci komutlarında koşullu bildirmeleri nerelerede kullanıyoruz??
 	- donanıma göre
 	- işletim sistemine göre 
 	- derleyiciye göre
@@ -2660,7 +2648,7 @@ bir başlık dosyasının içine ;
 ---> şeklinde bir koşul ve makro tanımlanırsa ilk girişte koşulda sorgulanan makro tanımlanmadığı için girer ve kodu işler.
 Eğer ikinci kez tanımladıysa koşuldaki makro, birinci girişindeki tanımladığı koşul geçemez.
 ```
-- !Multiple inclusion guard her başlık dosyasında olmalıdır. 
+- !!!! Multiple inclusion guard her başlık dosyasında olmalıdır. 
 
 
 
@@ -2685,7 +2673,7 @@ Eğer ikinci kez tanımladıysa koşuldaki makro, birinci girişindeki tanımlad
 
 - Pre-defined Symbolic Constant(ön tanımlı sabit )
 	- Dil tarafından tanımlı kabul edilen makrolara denir. 
-		- __FILE__---->bulunduğu dosyanın numarası ile yer değiştiren makro.
+		- __FILE__---->bulunduğu dosyanın ismi  ile yer değiştiren makro.
 		- __LINE__---->bulunduğu line'ın numarasıyla yer değiştiren makro.
 		- __DATE__---->derlendiği tarih ile yer değiştiren makro.
 		- __TIME__---->derlendiği saat ile yer değiştiren makro.
@@ -2712,7 +2700,7 @@ Eğer ikinci kez tanımladıysa koşuldaki makro, birinci girişindeki tanımlad
 		- Etiket aranırken name look-up gibi yukarı doğru değilde fonksiyonun her yerinde arama gerçekleşir.
 		- Farklı bir fonksiyondaki etikete dallanamaz.
 		- Dikkat: Eğer etiketten sonra herhangi bir deyim olmazsa bu bir sentaks hatasıdır.
-	- iç içe döngülerin içinden tek seferde çıkmak için yaygındır.
+	- İç içe döngülerin içinden tek seferde çıkmak için kullanım yaygındır.
 	
 	
 	
@@ -2739,17 +2727,17 @@ void print_season(int month)
 {
 	switch(month)
 	{
-		case 12://fallthrough
-		case 1://fallthrough
+		case 12:  //fallthrough
+		case 1:  //fallthrough
 		case2:  printf("winter");break;
-		case3://fallthrough
-		case4://fallthrough
+		case3:   //fallthrough
+		case4:   //fallthrough
 		case5: printf("spring"); break;
-		case6: //fallthrough
-		case7://fallthrough
+		case6:  //fallthrough
+		case7:  //fallthrough
 		case8: printf("summer");
-		case9: //fallthrough
-		case10://fallthrough
+		case9:   //fallthrough
+		case10: //fallthrough
 		case11: printf("autumn");
 		
 	}
@@ -2758,12 +2746,12 @@ void print_season(int month)
 
 ```
 - Fallthrouh: break komutu kullanmadan 2 case'i birleştirdiğinizde, bu durumu bilerek ve isteyerek yaptığınızı 
-yorum satırıyla case'in yanına eklenmelidir ki kodu okuyan bunu bilinçli bir şekilde yaptığınızı anlasın.
+yorum satırıyla case'in yanına eklenmelidir ki kodu okuyan kişi, kodu yazan kişinin bunu bilinçli bir şekilde yaptığınızı anlasın.
 
 
 
   
-  # Ders 22- 24/03/2021
+  # Ders 22 - 24/03/2021
   
   
   - Derleyicilerin "kodların bağlanması için " Linker programına hitaben obje kod içine (özel bir notasyon ile) 
@@ -2800,7 +2788,7 @@ yorum satırıyla case'in yanına eklenmelidir ki kodu okuyan bunu bilinçli bir
   - signed int
   
   
-3 - "integral promotion"
+3 -   "integral promotion"
     - unsigned short 
     - signed short 
     - unsigned char
@@ -2815,15 +2803,15 @@ yorum satırıyla case'in yanına eklenmelidir ki kodu okuyan bunu bilinçli bir
 
 - Aynı türlerin operantlarının rank'ı aynı ise fakat türleri farklı ise, tür dönüşümü her zaman işaretsiz yöne yapılır.
 
-- a+b ---> operantlar farklı ranklerdeyse fakar büyük olan rank işaretli , küçük olan rank işaretsiz ise ,
+- a+b ---> operantlar farklı rankta fakat büyük olan rank işaretli , küçük olan rank işaretsiz ise ,
  Bu durumda eğer işaretli olan tür işaretsiz olan türün bütün değerlerini tutabiliyorsa 
  tür dönüşümü işaretli ranki yüksek olan türe yapılacak. Aksi halde bunun işaretsiz türüne yapılacak.
  
  - Ranklar aynı işaretler aynı ise işlem yüksek rankta yapılır.
  - Ranklar farklı büyük rank işaretsiz ise yine yüksek rankta yapılır.
- - Rankler farklı büyük ran işaretli ise işlem
+ - Rankler farklı büyük rank işaretli ise işlem
  		- ya yüksek rankta
- 		- ya da yüksek rankin işaretsiz olanında yapılır.
+ 		- ya da yüksek rankın işaretsiz olanında yapılır.
  
  
 ```
@@ -2905,11 +2893,11 @@ unsigned int ival =10;//4 byte  --> long long
 
 		 int x; 
 		 x=expr; --> expr hangi türde olursa olsun, 
-		 tür dönüşümü kendisine atama yapılan nesnenin int türüne yapılacak.
+		 tür dönüşümü kendisine atama yapılan nesnenin türüne yapılacak.
 		
 - Küçük türden büyük türe atama  yapmakta bir sakınca yok.
-- Ancak büyük tam sayı türünden küçük tan sayı türüne dönüşümden kaçınmak gerekir.
-		 (tanımsız davranış değildir-veri kaybı oluşturur)
+- Ancak büyük tam sayı türünden küçük tam sayı türüne dönüşümden kaçınmak gerekir.
+		 (tanımsız davranış değildir - veri kaybı oluşturur)
 		 
 - Gerçek sayı türlerinden tam sayı türlerine otomatik dönüşüm yapılmasına izin verilmemelidir.
 
@@ -2928,22 +2916,181 @@ Bir mülakat sorusu:
 	- -> (tür)expr olarak kullanılır.
 
 
+# Ders 23 - Tarih 26/03/2021
+
+ Type cast 
+ 	- (int) dval  
+ 	
+- Nerelerde kullanıyoruz??
+	- Bu operatörü kullanmazsak işlem bizim istediğimiz türde yapılmayacak. İşlemin istediğimiz türde yapılmasını sağlamak için kullanılır.
+	
+- Bir soru:
+
+```
+	double dval ;
+	printf("[-5 +5] araliginda bir gercek sayi giriniz:");
+	scanf("%lf",&dval);
+	printf("%lf ====> %d \n",dval,???);
+	
+	
+	---> ??? yerine öyle bir ifade yazın ki matematiksel yuvarlama işlemini yapsın.
+	
+	??? ====> (int)(dval >= 0 ? dval + 0.5 : dval - 0.5)
+```
+  
+  # Rastgele Sayı Üretimi 
+  
+  - Çekiliş 
+  - Eşleşme
+  - Şifreleme
+  - Game programming 
+  - Genetic algorithm 
+  - Olasılık hesabı 
+  - İstatistiksel hesaplamalar
+  - Test kodlarındaki test datsı oluşturmak 
+  - Bazı arama/sıralama algoritmaları
+  
+  
+  
+  	- iki kategoriye ayrılır.
+  		- True random generations
+  		- Pseudo random generations
+  		
+  
+  
+  pseudo random generation 
+  	- Seed value ( algoritmayı başlatan değer - tohum değeri)
+  	
+- Endüstride en çok kullanılan random sayı algoritması 
+	- Mersenne twister algorithm
+		- Mersenne twister algoritmasının bu kadar çok kullanılmasının nedeni rastgeleliğin 
+		birçok kriterini tam olarak karşılaması ve çokta yavaş olmaması.
+	
+  
+  - Üniform Distribution : Üretilecek olan tüm olasılıkların ağırlığı aynı olması.
+  
+  - Bulunduğu kütüphane ve fonksiyon tanımları:
+  	<stdlib.h>
+	RAND_MAX
+	int rand (void);
+	void srand (unsigned int);
+	
+	
+rand() --> fonksiyonun kullanıldığı seed (tohum) değeri 1 olduğu için üretilirken aynı sırada rastgele sayı üretilecektir.
+
+
+	for (int i=0;i<5 ; i++)
+	{
+	printf(""%d",rand());
+	}
+-> Bu kodun üreteceği sayıların sırası belirlidir.(Default değer olan 1 değeri gönderilirç)
+	 Ekran çıktısı:
+	 41 19467 6334 26500 19169
+	 	olur. Ve bu sıralama ve değerler tohum değeri(seed) sabit olduğu için her seferinde aynı olur.
+		
+- Farklı tohum değeri gönderilerek farklı sayılar üretilmek istenirse;
+srand(num) fonksiyonuna değer gönderilmelidir. Srand fonksiyonuna gönderilen tohum değeri değiştikçe üretilen rastgele sayılar da değişir.
+
+	
+		for (unsigned int i=1; i<100 ; i++)
+		{ 
+			srand(i);
+			printf("tohum değeri %u için sayı zincirinin ilk 100 sayısı \n",i);
+			
+			for (int k =0 ; k < 100; ++k)
+				printf("%5d ", rand());
+				
+			getchar();  // her döngüde bir tuşa basana kadar beklemesi için
+			system("cls");  // her döngü sonunda ekranı temizliyor.
+		}
+  
+  
+  % --> üniform dağılım için kullanılmamalı ! 
+  		örneklerde kullanacağız ama üretimde kullanılmamalı.
+		
+	
+
+- Rastgele büyük harf üretimi:
+
+		for (;;)
+		{ 
+			putchar(rand() % 26 + 'A');
+			_getch();
+		}
+		
+		
+- Rastgele alfa-numeric karakter yazdırımı:
+	
+		for(;;)
+		{
+			for(;;)
+			{
+				c=rand()%128;
+				if(isalnum(c))
+					break;
+			}
+		}
+  
+  - Yukarıdaki kodu bir C idiyomu ile yazalım:
+  	
+		int c;
+		for(;;)
+		{
+			while(!ispunct(c=rand()%128))
+			;// null statement
+			
+			putchar(c);
+			_getch();
+		}
+		
+- Yukarıdaki kodda fonksiyona argüman olarak gönderilen ifade atama operatörü ile oluşturulmuş
+ Atama operatörünün ürettiği değer nesneye atanan değerdir. İspunct çağrısı punctration karakter olup olmadığını test ediyor. Punct değer olmadığı sürece while döngüsünde dönüyor.
+ 
+ **Randomize idiyomu:
+ 
+ - Calender time (takvim zamanı)
+ 	- Başarılı bir zaman noktasını (time point) orijin olarak alıyoruz.
+ 		- O orijin olarak alınan noktaya(değere) epoche denir.
+
+<time.h> -> standart fonksiyon 
+
+- Unix kökenli sistemlerde alınan bu orijin noktası(epoche) tarih olarak 01.01.1970'dir.
+
+Bu idiyomun kullanım şekli ;
+
+	#include <time.h> 
+	srand((unsigned)time(NULL));
+	for(int i=0; i<10; ++i)
+	{
+		printf("%d ",rand());
+	}
+	// Bu şekilde 10 adet rastgele sayı üretilmiş oldu.
   
   
   
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+        for(;;)
+	{
+		printf("%ld\r",time(NULL));// burada \r aynı satırın başına yazılmasını sağlar. yeni satıra geçilmez.
+	}
+ 	---> Bu kodda ise epoche'den geçen saniye sayısı ekrana yazdırılır.
+	
+	
+- Yazı-Tura sorusu:
+
+	   #define NTOSS 1000000
+	   #define HEADS 0
+	   
+	   int main()
+	   {
+	   	int heads_counter =0;
+		forint i=0 ; i< NTOSS ; ++i)
+			if(rand()%2==HEADS)
+				++heads_counter;
+		
+		printf(" Tura gelme olasılığı : %.12f\n",(double)heads_counter/NTOSS);
+	   }
   
   
   
