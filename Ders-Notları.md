@@ -3094,6 +3094,107 @@ Bu idiyomun kullanım şekli ;
   
   
   
+  - Bir oyun algoritma örneği:
+  	- 2 zar atılıyor.
+  	- eğer bu iki zarın toplamı 
+  	- 7 veya 11 olursa oyun kazanılır.
+  	- 2,3 veya 12 olursa kaybedilir.
+  	- 4,5,6,8,9 veya 10 olursa zar tekrar atılır ve aynı toplam bulunursa kazanılır. Ancak 7 atılırsa oyun kaybedilir.
+  	- Yani örnek vermek gerekirse ;
+  		- 7 atılırsa oyun kazanılır.
+  		- 3 atılırsa kaybedilir.
+  		- 9 atılırsa;
+  			- ya tekrar 9 atılana kadar devam edilir ve 9 atıldığında kazanılır.
+  			- ya da 7 atılana kadar devam edilir 7 atıldığında kaybedilir.
+  		
+- Bu oyunu oynaya oyuncunun kazanma olasılığını hesaplayan programı yazınız.
+
+
+```
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+
+
+
+#define ngames 10'000'000
+
+int roll_dice(void)
+{
+	int dice_x = rand() % 6 + 1;//mod operatörü kullanımı olasılık hesaplarında yanlıştır. algoritme örneği olarak!!
+	int dice_y = rand() % 6 + 1;
+
+	return dice_x + dice_y;
+
+}
+//if game returns 1, player wins
+//if game returns 0, player loses
+
+int game_(int dice)
+{
+	int new_dice;
+	for (;;)
+	{
+		new_dice = roll_dice();
+		if (new_dice == 7)
+			return 0;
+		if (new_dice == dice)
+			return 1;
+	}
+}
+
+int game(void)
+{
+	int dice = roll_dice();
+
+	switch (dice)
+	{
+	case 7:
+	case 11: return 1;
+	case 2:
+	case 3:
+	case 12:return 0;
+	default: return game_(dice);
+	}
+}
+
+int main()
+{
+
+
+	int win_count = 0;
+
+	for (int i = 0; i < ngames; ++i)
+	{
+		win_count += game();
+	}
+	printf("oyuncunun kazanma olasiligi %f \n  ", (double)win_count / ngames);
+}
+
+
+```
+   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
