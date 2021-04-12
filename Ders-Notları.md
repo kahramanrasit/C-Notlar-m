@@ -3174,7 +3174,202 @@ int main()
 
 
 ```
+
+# Ders 24 31/03/2021
+
+- Global değişken tnaımlamaktan çekinmek gibi bir durum var mı? var .
+	 - int g; global değişken kaynak dosyadaki fonksiyonların ortaklaşa kullanıldığı bir değişken.
+	 - Global değişkenler yerel değişkenlerin işimizi gördüğü yerde kullanılmamalıdır.(eğer bir mecburiyet durumu yoksa)
+	 
+
+
+- rand() ---> 0 ile RAND_MAX arasında rastgele değer üreten fonksiyon.
+
+- Bir soru:
+
+	- Birim kare içerisinde yarıçapı 1 olan bir çeyrek daire yerleştirilmiştir. 
+	Çeyrek dairenin alanının karenin alanına oranını bulan programı yazınız.(pi/4)
+	
+```
+#include <stdio.h>
+#include <stdlib.h>
+#define NPOINTS 100000
+
+
+int main()
+{
+	int inside_cnt = 0;
+	for (int i = 0; i < NPOINTS; ++i)
+	{
+		double dx = (double)rand() / RAND_MAX;
+		double dy = (double)rand() / RAND_MAX;
+
+		if (dx * dx + dy * dy <= 1)
+			++inside_cnt;
+
+	}
+	printf("pi = %.12f \n ", 4. * inside_cnt / NPOINTS);
+}
+```
+	
+  
+  - Bir ödev sorusu:
+   	- Bir oyuncu oyuna 100 dolar ile  girebilmektedir ve kasanın 100 doları vardır.
+   	- Her el oyuncu oyuna devam edebilmek için 10 dolar kasaya ödeme yapmaktadır.
+   	- Kasa da yazı-tura atmaktadır. 	
+   		- Eğer 2 kez yazı gelirse kasa , oyuncuya 35 usd verir.
+   		- Eğer 4 kez tura gelirse kasa , oyuncuya 65 usd verir. 
+   	- Oyuncunun parası 10 doların altına düştüğünde veya kasa oyuncunun kazandığı parayı ödeyemeyecek kadar parası kaldığında oyun biter.
    
+  ```
+  #define _CRT_SECURE_NO_WARNINGS
+
+#include <math.h>
+
+#include <conio.h>
+#include <ctype.h>
+#include "nutility.h"
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+
+#define NTOSS 100000
+#define HEADS      0 
+#define TAILS      1
+
+int heads_or_tail(void)
+{
+	
+		if (rand() % 2 == HEADS)
+			return HEADS;
+		return TAILS;
+	
+}
+
+
+
+int main()
+{
+	while (1)
+	{
+		int win = 0, lose = 0;
+		for (int i = 0; i < NTOSS; ++i)
+		{
+			
+			int heads = 0, tail = 0, player = 100, bank = 100;
+
+			while (player > 10)
+			{
+				player -= 10;
+				bank += 10;
+
+				if (heads_or_tail() == HEADS)
+				{
+					tail = 0;
+					++heads;
+					if (heads == 3)
+					{
+
+						bank -= 65;
+						if (bank <= 0)
+						{
+							++win;
+							goto bitis;
+						}
+						player += 65;
+						heads = 0;
+					}
+				}
+				else
+				{
+					heads = 0;
+					++tail;
+					if (tail == 2)
+					{
+						bank -= 35;
+						if (bank <= 0)
+						{
+							++win;
+							goto bitis;
+						}
+						player += 35;
+						tail = 0;
+					}
+				}
+
+
+			}
+			++lose;
+
+		bitis:
+			;
+		}
+
+		printf("Bu oyunu kazanma olasiliginiz: %.12lf\n ", (double)win / NTOSS);
+		_getch();
+	}
+} 
+
+
+  ```
+  
+  # Diziler
+  
+  - Data structure: işleme sokulacak verilerin işleme sokulabilmesi için bellekte nasıl konumlandırılacağına ilişkin düzenek.
+
+- C'nin standart kütüphanesinde dinamik dizi yoktur. Sadece fixed array mevcuttur.
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
