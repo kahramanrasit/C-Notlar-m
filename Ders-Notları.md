@@ -3303,7 +3303,7 @@ int main()
 			++lose;
 
 		bitis:
-			;
+			;// null statement
 		}
 
 		printf("Bu oyunu kazanma olasiliginiz: %.12lf\n ", (double)win / NTOSS);
@@ -3320,32 +3320,417 @@ int main()
 
 - C'nin standart kütüphanesinde dinamik dizi yoktur. Sadece fixed array mevcuttur.
   
+  - Time Complexity: Bir algoritmanın çalışması için gerekli olan süredir.
+   Ancak buradaki süre saniyelerin hesaplanmasıyla değil, kaç tane işlem gerçekleştirdiğine göre yapılmaktadır.
+   
+   - Big O terimleri ve Senaryoları:
+   	- O(1) -> Constant
+	- O(N) -> Linear
+	- O(N^ 2) → Quadratic
+	- O(log N) → Logarithmic
+	- O(N log N) → Linearithmic
+	- O(c^N)→ Exponential
+	- O(N!) → Factorial
+
+- int a[100]; --> ilk değer verilmezse çöp değer ile hayata başlar.
+
+- void func(void)
+  {
+ 	 int ax[5];---> çöp değer ile 
+  	 static int sa[40]; ---> 0 değeri ile hayata başlar.
+  }
+  
+  
+  - C dilinde bir fonksiyonun parametresi bir dizi olamaz. 
+  Diziler fonksiyonlardan fonksiyonlara call by value olarak aktarılmıyor.
+  - C dilinde bir fonksiyonun geri dönüş değeri türü dizi olamaz.
+ 
+    
+    	void func(int a[5])
+	{	}---> Dikkat : parametre bir dizi gibi görünse de bir pointer değişkendir.7
+	İlerleyen konularda ayrıntılı değineceğiz.
+	
+	[] ---> index/ subscript
+	
+#### Undefined Behaviour
+#
+Dizinin boyutu dışında veya negaitif bir terimine atama yapmak tanımsız davranıştır.
+#
+
+
+- a[5] ---> l vale expression.
+	- a[5]++
+	- ++a[5]
+	- &a[5]
+	
+	
+- Bir dizi ismi bir ifade içinde kullanıldığında (birkaç istisnai durum hariç) 
+her zaman dizinin ilk elemanının adresine dönüştürülür.
+	- Yani a bir ifade içinde kullanıldığında &a[0] gibi düşünülebilir.
   
   
   
   
+# Ders 25 02.04.2021
+
+- Array Decay 
+	- Array to pointer conversion 
+
+	- int a[10]
+	- a ===> &a[0]
+	
+- Bir dizi tanımlandıktan sonra dizinin ismini bir ifade içerisinde kullanıyorsunuz ve derleyici 
+dizi ismini dizinin ilk elemanının adresine dönüştürüyor. İşte buna array decay deniyor.
+
+
+
+- Bir mülakat sorusu:
+
+- Aşağıdaki programda 10 adet rastgele şifre üretilmek istenmiştir. 
+Ancak şifrelerin hepsi aynı olmaktadır. Hata nerede yapılmıştır???
+
+```
+int random_char(void)
+{
+	int c;
+	while(!isalnum(c = rand() % 128)
+		; // null statement
+		
+	return c;
+}
+
+void printf_random_password(void)
+{
+	srand(time(NULL));
+	int len = rand() % 5 + 6;
+	for (int i=0; i < len; ++i)
+	{
+		putchar(randam_char());
+	}
+	putchar('\n');
+}
+int main()
+{
+	for (int i = 0; i < 10; ++i)
+	{
+		printf_random_password();
+	}
+}
+```
+  
+- Cevap: Main fonksiyonundaki for döngüsü çok hızlı döndüğü için srand fonksiyonuyla
+tohum değeri verme işlemi bir döngünün içerisinde olmamasına dikkat edilmelidir. En uygun yeri 
+main fonksiyonun başıdır.
+
+
+- Dizilere ilk değer verilmesi:
+	- int a[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+	- int [3] = {1, 2, 3, 4} // geçersiz (boyut aşımı)
+	- Dizinin boyutundan daha az ilk değer diğer değerler default olarak 0 ilk değeri alır.
+	- int a[5]; ---> çöp değer ile başlar.
+	- int a[3] = {1, 2, 3,} --> trailing comma
+	- int a[]; --> sentaks hatası
+	- int a[] = {1, 2, 3, 4,5} --> sentaks hatası yok. Dizinin boyutu otomatik olarak 3 algılanır.
+
+- Dizinin boyutunu belirten ifade sabit ifadesi olmalıdır.
+
+		 int x = 5; 
+		 int a[x]; --> geçerli değildir.
+		 
+		 
+		 
+- int a[] = {[5] = 67, [3] = 45, [1] = 11};// designated initializer
+	- 6 elemanlı olarak tanımlamış olur ve değer verilmeyen elemanlar 0 olarak varsayılır.
+
+
+- Bir döngü içerisinde a[i] ve i[a], ikiside a dizisinin i. elemanı anlamına gelir.
+
+
+  - Rastgele sayılarala bir dizi oluşturup elemanları toplamını bulan program:
+
+
+  ```
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <time.h>
+  
+  #define SIZE 20
+  #define asize(x)  (sizeof(x) /sizeof(x[0]))
+  void set_array_random(int* p, int size)
+  {
+	while (size--)
+		*p++ = rand() % 1000;
+  }
+  void print_array(const int* p, int size)
+  {
+	for (int i = 0; i < size; ++i)
+	{
+		if (i != 0 && i % 20 == 0)
+			printf("\n");
+		printf("%3d ", p[i]);
+	}
+	printf("\n----------------------------------------------\n");
+  }
+  
+  int main()
+  {
+  	int a[SIZE]
+ 	 int sum = 0;
+ 	 randomize();
+ 	 set_array_random(a,SIZE);
+	 print_array(a,SIZE);
+	 for(int i = 0; i < SIZE; ++i)
+	 {
+	 	sum += a[i];
+	 }
+  	printf("sum = %d\n ",sum);
+  }
+  
+  ```
+  
+  - Rastgele oluşturulan bir dizide tek elemanların aritmetik ortalamasını bulunuz.
+  
+  ```
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <time.h>
+  
+  #define SIZE 20
+  #define asize(x)  (sizeof(x) /sizeof(x[0]))
+  void set_array_random(int* p, int size)
+  {
+	while (size--)
+		*p++ = rand() % 1000;
+  }
+  void print_array(const int* p, int size)
+  {
+	for (int i = 0; i < size; ++i)
+	{
+		if (i != 0 && i % 20 == 0)
+			printf("\n");
+		printf("%3d ", p[i]);
+	}
+	printf("\n----------------------------------------------\n");
+  }
+  
+  int main ()
+  {
+  	int a[SIZE];
+	int add_sum = 0;
+	int add_cnt = 0;
+	
+	randomize();
+	set_array_random(a,SIZE);
+	print_array(a,SIZE);
+	
+	for(int i = 0; i < SIZE; ++i)
+	{
+		if(a[i] % 2 != 0)
+		{
+			odd_sum += a[i];
+			++odd_cnt;
+		}
+	}
+	if(odd_cnt)----> paydanın 0 olma ihtimali her zaman göz önünde bulundurulmalıdır.
+		printf("teklerin ortalamasi = %f\n",(double)odd_sum/odd_cnt);
+	else
+		printf(" dizide tek sayi yok.");
+  }
+  ```
   
   
+  - Fundamental Algorithms
+  	- Linear search (Doğrusal Arama);
+  - 3 farklı Algoritmada ekrana girilen değeri dizinin içinde bulan 
+  ve hangi indiste olduğunu gösteren program aşağıdadır.
   
   
+  ```
+    #include <stdio.h>
+  #include <stdlib.h>
+  #include <time.h>
   
+  #define SIZE 20
+  #define asize(x)  (sizeof(x) /sizeof(x[0]))
+  void set_array_random(int* p, int size)
+  {
+	while (size--)
+		*p++ = rand() % 1000;
+  }
+  void print_array(const int* p, int size)
+  {
+	for (int i = 0; i < size; ++i)
+	{
+		if (i != 0 && i % 20 == 0)
+			printf("\n");
+		printf("%3d ", p[i]);
+	}
+	printf("\n----------------------------------------------\n");
+  }
   
+  int main()
+  {
+  	int a[SIZE];
+	randomize();
+	set_array_random(a,SIZE);
+	print_array(a,SIZE);
+	int sval;
+	printf("Aranacak degeri giriniz:");
+	scanf("%d",&sval);
+	
+	// ilk algoritma
+	int i ;
+	int fount = 0;
+	for(i = 0; i < SIZE; ++i)
+	{
+		if(a[i] == sval)
+		{
+			found = 1;
+			break;
+		}
+	}
+	if(found)
+	{
+		printf("bulundu dizinin %d elemani",i);
+	}
+	else 
+		printf("bulunamadi\n"
+		
+	
+	//ikinci algoritma
+	int i; 
+	for (i = 0; i<SIZE; ++i)
+	{
+		if(a[i] == sval)
+			break;
+	}
+	if(i < SIZE)
+		printf("bulundu dizinin %d elemani.\n",i);
+	else
+		printf("bulunamadi\n");
+	
+	
+	//Üçüncü algoritma
+	
+	int i;
+	for(i = 0; i<SIZE && a[i] != sval; ++i)
+		; // null statement
+	
+	if(i < SIZE)
+		 printf("bulundu dizinin %d elemani",i);
+	else 	
+		printf("bulunamadi");
+		
+  }
+  ```
   
+   
+  #### Sizeof Operatörü
   
+  - Anahtar sözcükte operatör olan tek anahtar sözcük.
+  - Compile-time operator
+  	- Diğer operatörlerden farklı olarak bu operatörün ürettiği değer derleme zamanında derleyici 
+  	tarafından bir sabit olarak elde edilecek.
+	
+- sizeof operatörü bir türün storage ihtiyanının kaç byte olduğunu gösterir.
+- sizeof operatörünün ürettiği değer derleyiciye bağlı olan işaretsiz tam sayı türünde bir değerdir.
+
+- Kullanım şekli:
+
+		sizeof(int)
+		printf("sizeof(int) = %zu\n",sizeof(int));
+		
+		
+
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+- Sabit değer ürettiğine dair;
+
+		int x = 10;
+		int a[x];---> sentaks hatası
+		int a[sizeof(double)] ---> sentaks hatası değil
+	
+- sizeof operatörünün operantı herhangi bir ifade olabilir. Bu durumda derleyici operant 
+olan ifadenin türüne bakar ve o türün storage değerini elde eder.
+	- Bu kullanımda ifadenin parentez içerisinde olması gerekmiyor.
+
+- Örnek olarak : 
+
+		int x = 9;
+		printf("%zu\n", sizeof x + 5);--> ekran 9 değeri yazdırılır.
+		printf("%zu\n",sizeof (x + 5));---> ekrana 4 değeri yazdırılır.
+		
+		char c;
+		printf("%zu\n",sizeof c);---> ekrana 1 yazdırılır.
+		printf("%zu\n",sizeof +c);---> ekrana 4 değeri yazdırılır.
+		
+		
+- Unevaulated Context 
+	- Bazı ifadedeki işlemler için derleyici işlem kodu üretmiyor.
+- Dilin kuralları diyor ki, sizeof operatörünün operandı olan ifade için derleyici işlem kodu üretmez.
+
+		int x = 10;
+		printf("%zu\n ",sizeof(x++));
+		printf("%d\n",x);--> burada x değeri sizeof operatörünün
+		içerisindeki ++ operatörünün etkisine maruz kalmadığı için 
+		x değeri ekrana 10 olarak yazdırılır.
+
+- Mesela ;
+
+		int foo(void)
+		{
+			printf("foo fonksiyonu çağırıldı.");
+			return 1;
+		}
+		
+		int main()
+		{
+			unsigned int x  = sizeof(foo());
+		}--> foo fonksiyonu çağırılmaz. foo fonksiyonunun geri dönüş türünün byt'ı yazdırılır.
+		
+		
+		
+
+- Array decay de nadir istisnalardan :
+
+		int a[10]; 
+		sizeof(a);---> array decay uygulanmaz.
+- Örnek olarak:
+
+		char buf[200];
+		int a[50];
+		double da[20];
+		
+		printf("sizeof(buf) = %zu \n",sizeof(buf));-->200*1byte =200
+		printf("sizeof(a) = %zu\n",sizeof(a));---> 50*4byte= 200
+		printf("sizeof(da) = %zu\n",sizeof(da);---> 20*8 = 160
+		
+		
+- sizeof(a[0]) = dizinin bir teriminin byte'ını verir.
+- sizeof(a) --> dizinin kaç byte yer kapladığını verir.
+- sizeof(a) / sizeof(a[0]); --> dizinin eleman sayısını verir.
+
+- Örnek kullanım:
+
+		int a[] = { 2, 5, 7, 9, 11, 13,}
+		for (int i = 0;i < sizeof(a) / sizeof(a[0]); ++i);
+			printf("%d ",a[i]);
+			
+			
+			
+- Mülakat Sorusu:
+
+		int a[5] = {0, 1, 2, 3, 4};
+		for ( int i =-2; i < sizeof(a) / sizeof(a[0]); ++i)
+			printf("%d ", a[i+2]);
+			
+- Yukarıdaki kodun ekran çıktısı ne olur??
+	- Ekrana hiçbirşey yazılmaz. Sebebi ise sizeof operatörü işaretsiz tam sayı türündendir. 
+	İşaretli -2 sayısı işaretsiz tam sayı türüne dönüştürüldüğünde çok yüksek bir sayı olarak
+	dönüşür. Ve bu yüksek sayı ile dizinin boyutu olan ifade kıyaslandığında for döngüsüne 
+	girilmeden program biter.
+	
+
+		
   
   
   
