@@ -3733,9 +3733,207 @@ olan ifadenin türüne bakar ve o türün storage değerini elde eder.
 		
   
   
+  # Ders 26 - 05.04.2021
+  
+  		int x = 10;
+		printf("%zu\n",sizeof(x > 5 ? 1: 2.4)); 
+		---> Burada koşul operatörünün ikinci operatörü olan 1 sayısı üretilir ancak double olarak üretileceği için 
+		sizeof operatörünün ürettiği değer 8 olacaktır. Yani koşul operatöründe otomatik tür dönüşümü sadece 
+		üretilecek değere göre değil de 2. ve 3. operanttan uygun olana yapılır.
+  
+  
+  - Rastgele sayi üreten bir dizi tanımlansın. Dizinin içerisinde sadece 
+  1 adet olan aynı sayıda başla olmayan elemanlar ekrana yazdırılsın.
+  	- Print all unique elements of an array.
+  	
+``` 
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+
+#define SIZE		10
+#define randomize()  srand((unsigned)time(NULL))
+
+
+
+int main()
+{
+	
+	int str[SIZE];
+	randomize();
+	
+	for (int i = 0; i < SIZE; ++i) {
+		str[i] = rand() % 20;
+		printf("%3d ", str[i]);
+	}
+	printf("\n\n");
+
+	/***1. Çözüm***
+	* O(n) karmaşıklığında
+	
+	for (int i = 0; i < SIZE; ++i) {
+		int cnt = 0;
+		for (int k = 0; k < SIZE; ++k) {
+			if (str[i] == str[k] && i != k)
+				++cnt;
+		}
+		if (!cnt)
+			printf("%3d ",str[i]);
+	}*/
+
+	/***1. Çözüm break statement ile***
+	* O(n) karmaşıklığında (complexity)
+	
+	int i, j;
+	for (i = 0; i < SIZE; ++i) {
+		
+		for (j = 0; j < SIZE; ++j) {
+			if (i != j && str[i] == str[j])
+				break;
+		}
+		if (j == SIZE)
+			printf("%3d ", str[i]);
+	}*/
+	 
+	/***2. Çözüm*** --> Bu çözüm logaritma karmaşıklığı yönünden avantajlı 
+	lakin bellek kullanımı bakımından da dezavantajlı olduğu göz önünde bulundurulmalıdır.
+	* O(2n) karmaşıklığı (complexity) ile
+	
+	int cnt[20] = { 0 };
+	for (int i = 0; i < SIZE; ++i)
+		++cnt[str[i]];
+
+	for (int i = 0; i < 20; ++i) {
+		if (cnt[i] == 1)
+			printf("%3d ", i);
+	}*/
+
+
+
+}
+```
   
   
   
+  - Max Subsequence Algorithm
+  	- Subsequence: Bir dizinin içerisinde ardışık n tane elememan. Yani bir tür alt dizi.
+  	- Max Subsequence: Öyle bir alt dizi bulunacak ki bu alt dizinin elemnaları 
+  	toplamı bu dizide bulunabilecek en büyük toplam olacak.  
+		- Bu kuralın uygulanabilmesi için dizinin elemanlarından en az biri negatif olmalıdır.
+  
+```
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "nutility.h"
+
+
+#define SIZE	10
+
+int main()
+{				
+	int a[9] = { 2, -5, -8, 4, -3, 6, -5, 7, -1 };
+
+	print_array(a, 9);
+	
+	int max_so_far = a[0];
+	int max_ending_here = 0;
+	int start = 0, end = 0, s = 0;
+
+	for (int i = 0; i < 9; ++i) {
+		max_ending_here += a[i];
+		if (max_so_far < max_ending_here) {
+			max_so_far = max_ending_here;
+			end = i;
+			start = s;
+		}
+		if (max_ending_here < 0) {
+			max_ending_here = 0;
+			s = i + 1;
+		}
+	}
+	printf("Maksimum contiguous sum is %d \n", max_so_far);
+	printf("Start index is %d\n", start);
+	printf("End index is %d\n", end);
+}
+	
+```
+  
+  
+- Sıralama	
+	- Sorting Algorithm
+  
+ - Sorting, belirli bir kurala göre dizinin verilerini konumlandırmak.
+ 	- Sorting Criteria --> Sıralama Kriteri
+
+
+- Bubble Sort Algorithm:
+
+        
+        int a[SIZE];
+        randomize();
+        set_array_random(a, SIZE); 
+        print_array(a, SIZE);
+
+        for (int i = 0; i < SIZE - 1; ++i) {
+		for (int k = 0; k < SIZE - i - 1; ++k) {
+			if (a[k] > a[k + 1]) {
+				int temp = a[k];
+				a[k] = a[k + 1];
+				a[k + 1] = temp;
+			}
+		}
+        }
+        print_array(a, SIZE);
+	
+ 
+ - Tek sayıların sol tarafta sıralı olduğu çiftlerin ise sağ tarafta sıralı olduğu program:
+ 
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "nutility.h"
+
+
+#define SIZE	20
+
+int main()
+{
+	int a[SIZE];
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	for (int i = 0; i < SIZE - 1; ++i) {
+		for (int k = 0; k < SIZE - i - 1; ++k) {
+			if ((a[k] > a[k + 1] && a[k] % 2 == a[k + 1] % 2) || (a[k] % 2 == 0 && a[k + 1] % 2 != 0)) {
+				int temp = a[k];
+				a[k] = a[k + 1];
+				a[k + 1] = temp;
+			}
+		}
+	}
+	print_array(a, SIZE);
+}
+-----------------------------------------------------------------------------------------------------
+if ((a[k] > a[k + 1] && a[k] % 2 == a[k + 1] % 2) || (a[k] % 2 == 0 && a[k + 1] % 2 != 0))
+- Yukarıdaki koşul ifadesini yakından incelediğimizde eğer -yan yana olan iki indexten;
+	- İkiside tek veya ikiside çift ise ve sol index sağdakinden büyükse yer değiştirilir.
+	- Ya da soldaki çift ve sağdaki tek ise yer değiştirilir.
+```
+ 
+  
+  - Merge Algoritması
+  	- İki diziyi sıralı bir şekilde birleştirme.
+  	
+	
   
   
   
