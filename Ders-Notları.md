@@ -3933,30 +3933,380 @@ if ((a[k] > a[k + 1] && a[k] % 2 == a[k + 1] % 2) || (a[k] % 2 == 0 && a[k + 1] 
   - Merge Algoritması
   	- İki diziyi sıralı bir şekilde birleştirme.
   	
+```	
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "nutility.h"
+
+
+#define SIZE	20
+
+
+
+int main()
+{
+	int a[SIZE];
+	int b[SIZE];
+	int c[SIZE * 2];
+
+	set_array_random(a, SIZE);
+	sort_array(a, SIZE);
+	print_array(a, SIZE);
+
+	set_array_random(b, SIZE);
+	sort_array(b, SIZE);
+	print_array(b, SIZE);
+
+	int idx_a = 0;
+	int idx_b = 0;
+
+
+	for (int i = 0; i < SIZE * 2; ++i) {
+		if (idx_a == SIZE)
+			c[i] = b[idx_b];
+		else if (idx_b == SIZE)
+			c[i] = a[idx_a];
+		else if (a[idx_a] < b[idx_b])
+			c[i] = a[idx_a++];
+		else
+			c[i] = b[idx_b++];
+	}
+	print_array(c, SIZE * 2);
+
+} 	
 	
+```  
+ 
+  - Binary Search 
+   	- Sıralı bir veri yapısında bir değer aramaya yönelik bir örnek.
+   		- O(log n) karmaşıklığında.
+   		
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "nutility.h"
+
+
+#define SIZE	10
+
+
+
+int main()
+{
+	int a[SIZE];
+	int num;
+	
+	randomize();
+	set_array_random(a, SIZE);
+	sort_array(a, SIZE);
+	print_array(a, SIZE);
+    
+	printf("Bir sayi giriniz: \n");
+	scanf("%d", &num);
+
+	int idx_first = 0;
+	int idx_last = SIZE - 1;
+	int idx_mid;
+
+	while (idx_first <= idx_last) {
+		idx_mid = (idx_first + idx_last) / 2;
+		if (num == a[idx_mid])
+			break;
+		if (a[idx_mid] > num)
+			idx_last = idx_mid - 1;
+		else
+			idx_first = idx_mid + 1;
+		
+	}
+		
+	if (idx_first > idx_last)
+		printf("Aranan sayi bulunamadi \n ");
+	else
+		printf("Aranan sayi %d indiste bulundu\n", idx_mid);
+}
+```
+
+# Ders 27 - 07.04.2021
+  
+  - Partition Algorithm
+  	- Bir dizi tanımlayın. Tekler başta, çiftler sonra olacak şekilde sıralayın. 
+  	Partisyen noktasının indeksini yazdırın.
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "nutility.h"
+
+
+#define SIZE	10
+
+
+
+int main()
+{
+	int a[SIZE];
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	for (int i = 0; i < SIZE; ++i) {
+		for (int k = 0; k < SIZE - i - 1; ++k) {
+			if ((a[k] > a[k + 1] && a[k] % 2 == a[k + 1] % 2) || (a[k] % 2 == 0 && a[k + 1] % 2 != 0)) {
+				int temp = a[k];
+				a[k] = a[k + 1];
+				a[k + 1] = temp;
+			}
+		}
+	}
+	print_array(a, SIZE);
+	int i;
+	for (i = 0; i < SIZE; ++i) {
+		if (a[i] % 2 == 0)
+			break;
+	}
+	if (i == SIZE)
+		printf("Cift sayi yoktur.\n");
+	else
+		printf("partisyen noktasi %d. sayidir.", i + 1);
+
+}
+
+```
+  
+  
+# String Literals (Yazılar)
+
+- char str[100];
+- '\0' ---> null character
+- '0'  ---> sıfırn kod numarası [48 ASCII]
+  
+  - Yazının son karakterinden sonra artık yazının başka bir karakteri olmadığı için
+  dizinin o elemanına özel bir değer atanıyor. Bu null karakterdir.
+  
+  - char[100];
+  	- Bu yazının alabileceği en uzun yazı uzunluğu 99'dur. En az 0 uzunluğunda olur. Sebebine gelecek olursak, 
+  	100 karakterlik bir dizi ve sonunda null karakter olacağı için 99 karakter alabilir.
+	
+Örnek: 
+```
+	int main()
+	{
+		char str[100];// Eğer burada dizi global isim 
+		//alanında tanımlanırsa dizinin diğer elemanlarına 0 değeri atandığı için ub olmaz.
+		
+		str[0] = 'C';
+		str[1] = 'A';
+		str[2] = 'N';
+		
+		for (int i = 0; str[i] != '\0'; ++i) 
+			putchar(str[i]);
+		
+	}// Undefined Behavior olur. Çünkü dizi for döngüsü içerisinde çöp değerleri de kullanıldı.
+	// Eğer str[3] = '\0'; eklenirse undefined behavior olmaz.
+```
+  - String diziler için for döngüsü idiyomları:
+  	- for (int i = 0; str[i] != 0; ++i);
+  	- for (int i = 0; str[i], ++i);
+  	
+- C'de yazının uzunluğunu bir fonksiyon çağırmadan ya da bir döngü oluşturmadan bulma şansımız yok.
+!!!Yazının boyutu ile dizinin boyutunu karıştırmamak lazım.!!!
+
+- İnitialization
+	- char str[100] = { 'R', 'A', 'S', 'I', 'T' };
+		- Burada neden UB yok?
+			- Bir dizinin ilk değer almasında verilen değerlerin sayısı dizinin boyutundan
+			daha az ise geriye kalan bütün elemanlar sıfırlanır. 
+			
+	- char str[] = { 'R', 'A' };
+		- Bu şekilde döngüde kullanılırsa UB olur. Çünkü dizinin boyutu belirtilmediği için
+		dizinin boyutu 2 elemanlı alındı. Bu yüzden de dizinin son elemanı 'A' oldu. Yani null statement olmadığı
+		için UB oldu.
+  
+  - char str[] = { 'R', 'A', 'S', '\0' };
+  - printf("%zu", sizeof(str));--> Ekrana 4 yazdırılır. 4x1.
+  - Yazının uzunluğu ise 3'tür.
+
+
+
+- char str[3] = { 'a', 'b', 'c' };	
+  for (int i = 0; str[i] != '\0'; ++i)
+  	putchar(str[i]);
+	- UB olur. Döngü diziyi taşıracaktır.
+  
+  
+  
+  - char str[] = "furkan";
+    printf("sizeof(str) = %zu\n",sizeof(str));---> ekrana 7 yazdırılır.
+    
+    
+    
+    
+   - char str[SIZE];
+     printf("Bir yazı giriniz:\n ");
+     scanf("%s", str);
+     	- scanf fonksiyonuna str dizisi array decay olarak adres gönderilmiş.
+     	- &str[0] olarak da gönderilebilirdi.
+	- Ancak &str olarak gönderilemez. Bu şekilde gönderimin farklı bir anlamı vardır.
+     for (int i = 0; str[i] != '\0'; ++i)
+     	putchar(str[i]);
+		- Bu şekilde içinde boşluk olmayan yazılar alınıp ekrana yazdırılır ancak boşluktan sonrası yazdırılmaz.
+		
+    
+    - str[0] = "ali"; --> Bu c'de bir sentaks hatası değil ama yanlıştır.
+     Bir tam sayı değişkene bir adres atamış oluyorsunuz.
+     
+     
+     
+     - char[SIZE] = "erdinc kaya";
+       printf("isim : %s\n",str);
+       		- Tüm ismi yazar.
+       		
+
+     
+     - **puts fonksiyonu:
+     	- Variadic bir fonksiyon değildir.
+     
+      		char name[100] = "ali";
+		char surname[100] = "ertolga";
+		
+		puts(name); --> ali'yi ekrana yazdırır ve '\n' karakterini kendisi verir.
+		
+	
+
+  void sgets (char*p)
+  {
+  	int c;
+	while ((c = getchar()) != '\n')
+		*p++ = (char)c;
+	*p = '\0';
+  }
+	
+  int main()
+  {
+  	char str[SIZE];
+	printf("Bir yazi giriniz: ");
+	sgets(str);
+	printf("yazi : [%s] \n", str);
+  }--> Bu kodda boşluk karakteri olsa dahi tüm satırı diziye alabilecektir.
   
   
   
   
+  - Yazının uzunluğunu bulan program:
   
+  		char str[SIZE];
+		printf("Bir yazi girin: ");
+		sgets(str);
+		
+		int len = 0;
+		for (int i = 0; str[i] != 0; ++i)
+			++len;
+		printf("dizinin uzunlugu : %d", len);
+		
+		// ya da
+		int i;
+		for (i = 0; str[i] != '\0'; ++i)
+			; // null statement
+			
+		printf("Uzunluk : %d\n", i);
+	  
+
+- İki kelime toplayan kod:
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "nutility.h"
+
+
+#define SIZE	100
+
+
+
+int main()
+{
+	char s1[SIZE];
+	char s2[SIZE];
+	char s3[SIZE];
+
+	printf("iki kelime giriniz:");
+	scanf("%s%s", s1, s2);
+
+	int i;
+	for (i = 0; s1[i] != '\0'; ++i) {
+		s3[i] = s1[i];
+	}
+	int k;
+	for (k = 0; s2[k] != '\0'; ++k)
+		s3[i + k] = s2[k];
+	s3[i + k] = '\0';
+
+	printf("[%s] +[%s] = [%s] ", s1, s2, s3);
+}
+	
+	
+```
+
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+- Ekrana bir yazı girilsin. Girilen yazıda ekrana girilen karakter aratılıp kaç tane olduğu ekrana yazılsın.
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "nutility.h"
+
+
+#define SIZE	100
+
+
+
+int main()
+{
+	char str[SIZE];
+
+	printf("Bir yazi giriniz:\n");
+	sgets(str);
+
+	printf("Ekrana bir karakter giriniz: ");
+	int c = getchar();
+	
+	int cnt = 0;
+
+	for (int i = 0; str[i] != '\0'; ++i) {
+		if (c == str[i])
+			++cnt;
+	}
+	printf("%d tane \n", cnt);
+
+
+}
+---> Eğer büyük-küçük harf duyarlılığı olmasın dersek
+
+	if(toupper(s[i] == toupper(c))
+     olarak if ' i güncelleyebiliriz.
+```
+
+
+
+ 
+- Ekrana bir yazı girilecek. Yazıda her harften kaç tane olduğunu ekrana yazdıran program.
+
+```
+
+```
   
   
   
