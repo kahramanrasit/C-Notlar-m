@@ -4217,7 +4217,54 @@ int main()
 			; // null statement
 			
 		printf("Uzunluk : %d\n", i);
-	  
+
+- Bir yazı girilsin. Girilen yazı ilk olarak girildiği gibi ekrana yazdırılsın.
+Sonra sonuna ! konularak yazdırılsın.
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "nutility.h"
+
+
+#define SIZE	100
+
+
+
+int main()
+{
+
+	char str[SIZE];
+	printf("Bir yazi giriniz: ");
+	sgets(str);
+
+	/*** 1. Çözüm***
+	int i;
+	for (i = 0; str[i] != '\0'; ++i)
+		putchar(str[i]);
+	printf("\n");
+	str[i++] = '!';
+	str[i] = '\0';
+
+	for (i = 0; str[i] != '\0'; ++i)
+		putchar(str[i]);*/
+
+	/*** 2. Çözüm***
+	int i;
+	for (i = 0; str[i] != '\0'; ++i)
+		; // null statement
+	printf("[%s] \n",str);
+	
+	str[i++] = '!';
+	str[i] = '\0';
+	printf("[%s] \n",str);*/
+
+}
+
+```
 
 - İki kelime toplayan kod:
 
@@ -4305,21 +4352,266 @@ int main()
 - Ekrana bir yazı girilecek. Yazıda her harften kaç tane olduğunu ekrana yazdıran program.
 
 ```
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "nutility.h"
 
+
+#define SIZE	100
+
+
+
+int main()
+{
+	char str[SIZE];
+	int cnt[26] = { 0 };
+
+	printf("Ekrana bir yazi giriniz: \n");
+	sgets(str);
+
+	int i;
+	for (i = 0; str[i] != '\0'; ++i) {
+		if (isalpha(str[i])) {
+			
+			++cnt[toupper(str[i]) - 'A'];
+		}
+	}
+
+	for (int k = 0; k < 26; k++) {
+		if(cnt[k] != 0)
+			printf("[%c]  [%d]\n", 'A' + k, cnt[k]);
+	}
+}
 ```
   
   
+  - İlave bir dizi kullanmadan girilen 2 kelimenin yerlerini değiştir.
+  ```
+  #define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "nutility.h"
+
+
+#define SIZE	100
+
+
+
+int main()
+{
+	char str[SIZE];
+	printf("Aralarinda tek bir bosluk karakteri olan iki isim giriniz: \n");
+	sgets(str);
+	printf("[%s] \n", str);
+
+	
+
+	int i;
+	int idx_first1, idx_first2, idx_last1, idx_last2;
+	idx_first1 = 0;
+	for (i = 0; str[i] != ' '; ++i)
+		; // null statement
+	idx_last1 = --i;
+	idx_first2 = i + 2;
+	for (; str[i] != '\0'; ++i)
+		;
+	idx_last2 = --i;
+	printf("[%d  %d] [%d   %d] \n", idx_first1, idx_last1, idx_first2, idx_last2);
+
+	//[ahmet necati]
+	//[necati ahmet]
+	//[nahmet ecati]
+	//[neahmet cati]
+	//[necahmet ati]
+	//[necaahmet ti]
+	//[necatahmet i]
+	//[necatiahmet ]
+
+
+	for (int j = 0; idx_first2 != idx_last2 + 1; ++j) {
+		for (int k = idx_first2++ - 1; k >= j; k--) {
+			printf("%d\n", k);
+			char temp = str[k];
+			str[k] = str[k + 1];
+			str[k + 1] = temp;
+		}
+			++idx_first1;
+			++idx_last1;
+	printf("[%d  %d] [%d   %d] \n", idx_first1, idx_last1, idx_first2, idx_last2);
+	printf("[%s] \n", str);
+	}
+	//[6  10] [12   11]
+	//[necatiahmet ]
+	for (int j = idx_last1; j > idx_first1 - 1; --j) {
+		char temp = str[j];
+		str[j] = str[j + 1];
+		str[j + 1] = temp;
+	}
+	printf("[%d  %d] [%d   %d] \n", idx_first1, idx_last1, idx_first2, idx_last2);
+	printf("[%s] \n", str);
+	
+	pline();
+	printf("[%d  %d] [%d   %d] \n", idx_first1, idx_last1, idx_first2, idx_last2);
+	printf("[%s] \n", str);
+	
+
+}
+	
+  ```
+  
+ - Ekrana bir yazı girilecek bir de karakter girilecek .
+  Girilen karakter girilen yazıdan çıkarılacak ve yazının girilen karaktersiz hali ekrana yazdırılacak.
+  
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "nutility.h"
+
+
+#define SIZE	100
+
+
+
+int main()
+{
+	char source[SIZE];
+	char dest[SIZE];
+	printf("Ekrana bir yazi giriniz: \n");
+	sgets(source);
+	printf("[%s]\n", source);
+
+	printf("Ekrandaki yazidan hangi karakterin cikmasini istersiniz? \n");
+	int c = getchar();
+	int idx_write = 0;
+	for (int i = 0; source[i] != '\0'; ++i) 
+		if (source[i] != c) 
+			dest[idx_write++] = source[i];
+	dest[idx_write] = '\0';
+	printf("[%s] \n", dest);
+
+	
+}
+```
+ - Yukarıdaki programı bir de ek bir dizi kullanmadan yapalım.
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "nutility.h"
+
+
+#define SIZE	100
+
+
+int main()
+{
+	char str[SIZE];
+	printf("Bir yazi giriniz: \n");
+	sgets(str);
+	printf("Bir karakter giriniz: \n");
+	int c = getchar();
+
+	int idx_write = 0;
+	for (int i = 0; str[i] != '\0'; ++i)
+		if (str[i] != c)
+			str[idx_write++] = str[i];
+	str[idx_write] = '\0';
+	printf("[%s] ", str);
+
+}
+```
+
+ - Reverse Algorithm
+ 	- Bir veri yapısındaki öğeleri ters çeviren algoritma
+ ```
+ #define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "nutility.h"
+#include <time.h>
+
+#define SIZE	100
+
+
+int main()
+{
+	char str[SIZE];
+	
+	printf("Bir yazi giriniz:\n");
+	sgets(str);
+	
+	int len = 0;
+	for (int i = 0; str[i] != '\0'; ++i) {
+		++len;
+	}
+
+	printf("[%s] \nboyut : %d\n", str, len);
+
+	for (int i = 0; i < len / 2; ++i) {
+		char temp = str[i] ;
+		str[i] = str[len - i - 1];
+		str[len - i - 1] = temp;
+	}
+	
+	printf("[%s] \n", str);
+
+
+
+}
+ ```
+	
+  - Ya da
   
   
+  ```
+  #define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "nutility.h"
+#include <time.h>
+
+#define SIZE	100
+
+
+int main()
+{
+
+	int a[SIZE];
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	for (int i = 0; i < SIZE / 2; ++i) {
+		int temp = a[i];
+		a[i] = a[SIZE - i - 1];
+		a[SIZE - i - 1] = temp;
+	}
+
+	print_array(a, SIZE);
+
+}
   
+  ```
   
-  
-  
-  
-  
-  
-  
-  
+- Örnek mülakat sorusu:
+	- Bir yazının tersten ve düzden okunuşu aynı ise polindrom sayıdır.
+	
+- Para hazır, ama Rıza harap.
+
+
   
   
   
