@@ -4611,10 +4611,87 @@ int main()
 	
 - Para hazır, ama Rıza harap.
 
+```
+#define _CRT_SECURE_NO_WARNINGS
 
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "nutility.h"
+#include <time.h>
+
+#define SIZE	100
+
+
+int main()
+{
+	
+		char str[SIZE];
+		char temp[SIZE];
+
+		printf("bir yazi giriniz: \n");
+		sgets(str);
+		printf("[%s]\n", str);
+
+		int len = 0;
+		for (int i = 0; str[i] != '\0'; ++i)
+			if (isalpha(str[i]))
+				temp[len++] = toupper(str[i]);
+
+		int i;
+		for (i = 0; i < len / 2; ++i) {
+			if (temp[i] != temp[len - 1 - i])
+				break;
+		}
+
+		if (i == len / 2)
+			printf("palindrom yazidir.");
+		else
+			printf("palindrom degildir.");
+	
+}
+```
   
+ - Ekrana bir yazı girelim ve kaç kelimeden oluştuğunu ekrana yazdıralım.
+ 
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include "nutility.h"
+#include <time.h>
+
+#define SIZE	  100
+#define OUTWORD		0
+#define INWORD	    1
+
+
+int main()
+{
+		char str[SIZE];
+
+		printf("bir yazi giriniz: \n");
+		sgets(str);
+		printf("[%s]\n", str);
+		
+		int word_flag = OUTWORD;
+		int word_cnt = 0;
+
+		for (int i = 0; str[i] != '\0'; ++i) {
+			if (isspace(str[i]))
+				word_flag = OUTWORD;
+			else if (word_flag == OUTWORD) {
+				word_flag = INWORD;
+				++word_cnt;
+			}
+		}
+		printf("%d kelime var.", word_cnt);	
+}
+``` 
   
-  
+   
   
   
   
