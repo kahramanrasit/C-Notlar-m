@@ -4691,7 +4691,505 @@ int main()
 }
 ``` 
   
+# Ders 28   09.04.2021
+  
+  
+ - İki yazının eşitliğini sınamak.
+ 
+  
+  ```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define SIZE	100
+
+
+
+int main()
+{
+	char s1[SIZE];
+	char s2[SIZE];
+
+	printf("Iki adet yazi giriniz:\n");
+	scanf("%s%s", s1, s2);
+
+	int flag = 0;
+	int i = 0;
+
+	while (s1[i] == s2[i]) {
+		if (s1[i] == '\n') {
+			flag = 1;
+			break;
+		}
+		++i;
+	}
+
+	if (flag)
+		printf("İki yazi birbirine esit degildir.\n");
+	else
+		printf("iki yazi birbirine esittir.\n");
+}
+  ```
+  
+  
+  - Bir mülakat sorusu:
+ 	- İki değişkeni ara bir değişken tanımlamadan yer değiştiriniz.
+ 	
+		int x, y;
+		printf("Iki tam sayi giriniz: \n");
+		scanf("%d%d", &x, &y);
+		x ^= y; y ^= x, x ^= y;
+		
+		printf("x = %d , y = %d \n", x, y);
+
+
+- Unique rand 
+ 	- #define URAND_MAX   10   , makrosu tanımlıyken fonksiyonun işlevi 0 dahil 9 dahil rastgele bir tamsayı üretmeli.
+ 	- Her üretilen sayı unique olmalıdır. 
+ 	- İşlev tüm rastgele sayıları ürettikten sonra geri dönüş değeri olarak -1 değeri döndürmelidir.
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include "nutility.h"
+#include <time.h>
+
+#define URAND_MAX	10
+
+int urand(void)
+{
+	static int flags[URAND_MAX];
+	static int cnt = 0;
+
+	if (cnt == URAND_MAX)
+		return -1;
+	
+	int num = 0;
+
+	while (flags[num = rand() % URAND_MAX])
+		;
+	cnt++;
+	flags[num] = 1;
+
+	return num;
+}
+
+int main()
+{
+	randomize();
+	for (int i = 0; i < URAND_MAX; ++i)
+		printf("%d ",urand());
+
+	printf("\n");
+	printf("hata degeri %d", urand());
+
+}
+
+``` 
+
+- Reverse Copy Algorithm
+	- Ekrana girilen sayıyı tersden ekrana yazdıran program:
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include "nutility.h"
+#include <time.h>
+
+#define SIZE	100
+
+
+
+int main()
+{
+	
+	char source[SIZE];
+	char dest[SIZE];
+
+	printf("Bir yazi giriniz:\n");
+	sgets(source);
+
+	printf("[%s] \n", source);
+
+	int len = 0;
+	for (int i = 0; source[i] != '\0'; ++i)
+		++len;
+
+	printf("%d\n", len);
+
+	int x = 0;
+
+	while (len != 0)
+		dest[x++] = source[--len];
+
+	dest[x] = '\0';
+
+	printf("[%s]", dest);
+
+}
+```
+
+- Yazıdan sayıya dönüşüm yapmak:
+
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include "nutility.h"
+#include <time.h>
+#include <ctype.h>
+#define SIZE	100
+
+
+
+int main()
+{
+	
+	char str[SIZE];
+
+	printf("Bir yazi giriniz: \n");
+	scanf("%s", str);
+	printf("[%s]\n", str);
+
+	int num = 0;
+
+	for (int i = 0; str[i] != '\0'; ++i) 
+		num = 10 * num + str[i] - '0';
+		
+	
+	/***8lik sayi sisteminde***
+	for (int i = 0; str[i] != '\0'; ++i)
+		num = 8 * num + str[i] - '0';*/
+
+	/***2lik sayi sisteminde***
+	for (int i = 0; str[i] != '\0'; ++i)
+		num = 2 * num + str[i] - '0';*/
    
+
+
+	/***16lik sayi sisteminde***
+	for (int i = 0; str[i] != '\0'; ++i) {
+		if (isdigit(str[i]))
+			num = 16 * num + str[i] - '0';
+		else if (isxdigit(str[i]))
+			num = num * 16 + 10 + toupper(str[i]) - 'A';
+			
+	}*/
+
+	printf("sayi = %d", num);
+
+
+}
+```
+
+  
+  
+  
+- İnline Expansion
+	- Bir fonksiyon çağrısında, derleyici çağrılan fonksiyonun tanımını görüyor ise ve eğer uygun bulduğu taktirde 
+	fonksiyona giriş çıkış kodunu üretip linker a referans ismi yazmak yerine doğrudan linker ı bypass ediyor.
+	Ve bu fonksiyonun derlenmiş koduna yerleştiriyor.
+		- Bu işlem fonksiyon makrolarındaki gibi gerçekleşmez.
+	
+		int square (int x, int y)
+		{
+			return x * x + y * y;
+		}
+  		int main()
+		{
+			int a = 10;
+			int b = 20;
+			int x = square(x, y);
+		}
+  
+ - Yukarıdaki kodda derlenirken fonksiyon satırı az olduğundan optimize edilip fonksiyon kaldırılıp o kodu 
+  fonksiyonsuz kullanılmasına denir. 
+	  	- Fonksiyonel makrolardan çok dah güvenlidir.
+	  		
+- Derleyicinin inline expansion yapması için;
+	- Dereyici fonksiyon tanımını mutlaka görmeli.
+	- Derleyicinin yaptığı analizle bu açılımdan bir fayda sağlamayacağı sonucunu çıkarmış olmalı.
+	- Optimizasyon switchleri
+	- Fonksiyondaki kod çok komleks olmamalı.
+
+- İnline anahtar sözcüğü ;
+	
+		inline int square(int x, int y)
+		{
+			return x * x + y * y;
+		}
+  - Bir fonksiyon yukarıdaki gibi tanımlandığında, derleyiciden eğer uygunsa bu fonkiyonu bulunduğu yerde açmasını istiyoruz.
+  - İnline fonksiyon başlık dosyalarında tanımlanmalıdır.
+  - Normal bir fonksiyon başlık dosyalarında tanımlanmamalı.(linker hatası).
+  
+  
+  # Pointers (İşaretçiler, Göstericiler)
+  
+  - Pointer adres anlamında kullanılan bir sözcük.
+  - Öyle ifadeler olacak ki bu ifadeler bir değişkenin adresi anlamına gelen ifadeler.
+  	
+		int x = 10;
+		&x --> x'in adresi
+		
+		
+ - T x;
+ 	- Eğer bir ifade T türünden bir nesnenin adresi anlamına geliyorsa o ifadenin türü T* olarak kabul ediliyor.
+ 	- İnt türden nesne adresi anlamına gelen ifadenin adres türü int* 'dir.
+ 		 - double*
+ 		 - char*
+	- Farklı türden nesnelerin adresleri farklı türdendir.
+	
+	
+	int x; ---> türü int olan bir değişken
+	int* ptr ---> ptr, int türden bir nesnenin adresini (deger olarak) tutacak degisken.
+		- ptr is a pointer to int
+	
+	
+	
+	
+# Ders 29 12/04/2021
+
+  
+ #include <stdio.h>
+ 
+ int *gp; --> int türden bir nesnenin adresine tanımlamak amaçlı kullanılmış global pointer değişken
+ 
+ void func(int *ptr)
+ {
+ 	char *p; --> Otomatik ömürlü yerel pointer değişken.
+	static double *dp ---> double türken bir nesnenin adresini tutması için tanımlanmış static bir yerel değişken.
+ }
+  
+  - Otomatik ömürlü pointer değişken ilk değer verilmezse çöp değerler hayata başlarlar.
+  - Global ömürlü pointer değişkene ve static ömürlü yerel değişkene ilk değer verilmezse ilerde ayrıntılı 
+  inceleyeceğimiz özel bir adres sabitiyle hayata başlatılıyor.
+  	- Null pointer
+  
+  
+  - Sistemde nesne adresleri hangi türden nesnenin adresi olursa olsun aynı miktarda yer kaplıyor.
+
+	32 bitlik sistem ---> 4 byte
+	64 bitlik sistem ---> 8 byte 
+	bazı sistemler -----> 2 byte
+	
+
+	
+  
+  		printf("sizeof(char) = %zu \n", sizeof(char));//1
+		printf("sizeof(char) = %zu \n", sizeof(char));//4
+
+		printf("sizeof(short) = %zu \n", sizeof(short));//2
+		printf("sizeof(short) = %zu \n", sizeof(short));//4
+
+		printf("sizeof(int) = %zu \n", sizeof(int));//4
+		printf("sizeof(int) = %zu \n", sizeof(int));//4
+
+		printf("sizeof(double) = %zu \n", sizeof(double));//8
+		printf("sizeof(double) = %zu \n", sizeof(double));//4
+  
+  
+  
+  
+ - int *p1, p2;---> burada iki değişkende pointer değişken değildir.
+   p1 --> int* türden
+   p2 --> int türden
+   
+  
+ - Her iki değişkenin de pointer olması için
+
+		int *p1, *p2; //olmalı.
+		
+	
+
+- Bir pointer değişkene adres olmayan ifade atanmaz.
+
+		int x = 10;
+		int* p;
+		p = x;
+		
+		
+- int a[10]; // buradaki köşeli parantez declaratördür.
+  a[5];// Buradaki köşeli parantez operatördür.
+  
+  
+  Pointer Operators:
+  
+  öncelik seviye tablosu
+  
+  1-->   []    ->
+  2-->   &      *
+  
+  + [] --> subscript/index operator
+  + -> --> member selection op./arrow op
+  + &  --> address of op. /adres of
+  + *  --> dereferencing / indirection (içerik op)
+
+
+**Adress of Operator (&)
+
+- 2. öncelik seviyesinde ve sağdan sola öncelik seviyesine sahip.
+- Unary prefix
+
+- Adres operatörünün operantının L value expression olması gerekiyor.
+- Adres operatörü ile oluşturulan ifadeler R value olmak zorunda.
+
+		int x = 10;
+		&x = 15; ---> yanlış kullanımdır. (sentaks hatası) &x R value olduğu için değer ataması yapamayız.
+	
+
+  
+  
+ - int * ptr = &x; ---> Bir pointera ilk değer verilmesi.
+  	- Ptr'nin değeri x'in adresi.
+
+
+- int x = 10;
+  int y = 20;
+  int * ptr = &x; ---> initialize edildi.
+  ptr = &y; ----> ptr'ye y'nin adresi atandı.
+  
+  - Eğer ptr, bir pointer değişken ise ve ptr'nin değeri x isimli değişkenin adresi ise 
+  	- ptr'nin değeri x'in adresi
+  	  ptr, x'i gösteriyor demek aynı anlamda.
+	  ptr, x'e işaret ediyor.
+	  ptr points to x
+	  
+	  
+
+- int x = 10;
+  int y = 20;
+  
+  int* p1 = &x;
+  int* p2 = &y;
+  
+  p1 = p2; // Bu kod sonrasında p1 y'yi gösteriyorken p2 de y'yi gösteriyordur.
+  
+ 
+ 
+ 
+ - Pointer değişken söz konusu olduğunda iki ayrı adresten bahsedilebilir.
+
+		int x = 10;
+		int* ptr = &x;
+		
+		//ptr x'in adresini gösterir.
+		//&ptr ise ptr'nin adresini gösterir.
+		
+- int x = 10;
+  int *ptr = &x; --> ptr, x'in adresini tutuyor.
+  int * p = ptr; --> p, ptr de tutulan  x'in adresini tutuyor.
+  
+
+- double x;
+  int* p = &x;// Yanlış kullanımdır.(sentaks hatası değildir)
+  
+  
+  - C'de yanlış olmakla beraber farklı adres türleri arasında tür dönüşümü vardır.
+
+ 
+  - int a[10] = { 0 };
+    a ---> &a[0] array decay
+    
+    int *p = a; // Burada a dizisini p pointer değişkenine atamıyoruz. a dizisinin ilk değerinin adresini atıyoruz.
+    
+    
+  - array decay'in iki istisnası vardı. Pointerlarla ilgili olanu hatırlayalım.
+  sizeof operatöründe array decay uygulanmaz.
+  	
+		int a[5] = { 0 };
+		printf("%zu\n", sizeof(a));---> dizinin boyutunu gösterir: 5x4 byte = 20
+  		printf("%zu\n", sizeof(&a[0]));----> pointer türü boyutu: 4 byte
+		
+
+   - printf işlevi ile bir adresi formatlı olarak std. çıkış akımına yazdırabilirsiniz.
+		- Kullanılan format: conversion specifier %p
+		
+			int x = 10;
+			int* ptr = &x;
+			printf("&x = %p\n " , &x); --> x'in adresi
+			printf("ptr = %p\n" , ptr); --> x'in adresi
+			printf("&ptr = %p\n", &ptr); --> ptr'nin adresi
+			
+
+
+ - &x = ptr ; --> Burada x'in adresi değiştirilmeye çalışılmış ancak C'de böyle birşey pek söz konusu değil.
+
+- int a[5] = { 0 };
+  int b[5] = { 0 };
+  a = b; --> derleyici bunu şu şekilde algılar : &a[0] = &b[0]
+   	Ve hata verir. &a[0] L value değildir.
+	
+**Deferencing / indirection Operatörü ( İçerik Operatörü)
+
+- 2. Öncelik seviyesine sahip
+- unary prefiks op.
+
+- İçerik operatörünün operantı adres olmak zorundadır.
+
+
+- int x = 10;
+  int* ptr = &x;
+  int a[10] = { 0 };
+  *x --> hata verir. x adres değil.
+  *&x --> sağdan sola öncelik yönü olduğu için (&x) adres olduğu için hata vermez.
+  *a  --> &a[0] array decayden dolayı hata vermez.
+  		- Yani sonuç olarak;
+  		  *(op) --> burada op adres olmak zorunda.
+		  
+
+- İçerik operatörü, operantı olan nesneye erişimi sağlıyor.
+
+- int x = 10;
+  *&x = 45; // buradaki kod ile x = 45 yazılması aynı anlama gelir ikiside x'e 45 atamasını yapar.
+  	- Ancak tabiki piyasada böyle bir kullanım söz konusu değildir. 
+  		- Sadece obfuscation (kodun okunmasını zorlaştırmak amaçlı) kullanılabilir.
+
+
+- int [] = { 10, 20, 30 };
+   *a =22; --> a[0] = 20 oldu.
+   
+   
+- int x = 33;
+  int *p = &x;
+  *p =77; // x, 77 yapıldı.
+   
+  
+  - İçerik operatörüyle oluşturulan ifade her zaman L value expressiondur.
+  - 
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
