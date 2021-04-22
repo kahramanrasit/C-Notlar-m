@@ -5160,15 +5160,123 @@ int main()
    
   
   - İçerik operatörüyle oluşturulan ifade her zaman L value expressiondur.
-  - 
   
+  
+  - a[++x] --> x + 1 inci eleman
+    ++*a --> ++a[0] 
+    
+  
+  - Pointer (gösteren)
+    Pointee (gösterilen)
+    
+    
+    
+- int a = 5;
+  int b = 8;
+  int c = 11;
+  
+  int *ptr;
+  ptr = &y;
+  *ptr *= 2;
+  ptr = &b;
+  *ptr *= 2;
+  ptr = &c;
+  *ptr *= 2;
+   	- Yukarıdaki kod parçacığında a, b, c değerleri iki katına çıkartılmış.
+  
+  
+  - Call by reference
 
+		void func(int* ptr)
+		{
+			*ptr = 677;
+		}
+  		int main()
+		{
+			int x = 10;
+			func(&x); --> x değeri 677 olur.
+		}
+		
+
+- scanf("%d", &x);
+  	- scanf'e x'in adresini gönderecek olmamızın sebebi, x'i değiştirecek olması. İşte bu sebeple bu çağrı call by reference olmak zorunda.
+
+
+- swap fonksiyonu (call by reference)
+
+		void swap(int* a, int* b)
+		{
+			int temp = *a;
+			*a = *b;
+			*b = temp;
+		}
+		int main()
+		{
+			int x,y;
+			printf("iki tamsayi giriniz: ");
+			scanf("%d%d ", &x, &y);
+			swap(&x, &y);
+			
+		}--> swap fonksiyonuna x ve y'nin adresleri gönderildi çünkü x ve y'nin değeri fonksiyonun içerisinde değiştirilmek isteniyor.
+		Bu yüzden call by reference olmalı.
+		
+
+- swap fonksiyonuna farklı bir argüman gönderim şekli örneği:
+	
+		void swap(int* a, int* b)
+		{
+			int temp = *a;
+			*a = *b;
+			*b = temp;
+		}
+		int main()
+		{
+			int x = 35, *p1 = &x;
+			int y = 45, *p2 = &y;
+			
+			swap(p1, p2);
+			
+		}
   
+  - Bir örnek:
   
-  
-  
-  
-  
+  		void foo(int* a, int*b)
+		{
+			*a *= *b;
+		}
+		void func(int* p, int*q)
+		{
+			*p += *q;
+			foo(p, q);
+		}
+		int main()
+		{
+			int x = 5, y = 9;
+			func(&x, &y);
+			printf("x = %d\n, x);
+			printf("y = %d\n, y);
+			
+		}
+	
+- Eğer bir fonksiyonun sahip olduğu değişkenin çağrılan bir fonksiyon tarafından değiştirilmesi söz konusu ise "call by reference" şarttır.
+
+
+  		void iscan(int* ptr)
+		{
+			int c;
+			*ptr = 0;
+			while ((c = getchar()) != '\n') {
+				*ptr = *ptr * 10 + c - '0';
+			}
+		}
+
+		int main()
+		{
+			int x;
+			printf("bir sayi giriniz:");
+			iscan(&x);
+			printf("x = %d", x);
+		}
   
   
   
