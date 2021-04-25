@@ -5279,14 +5279,238 @@ int main()
 		}
   
   
+  # Ders 30 - 14.04.2021
+  
+  - call by reference 
+    pass by reference --- same meaning
+    
+   
+
+- Neden bir fonksiyonun parametre değişkeni pointer olabilir?
+	- Bazı fonksiyonlar kendilerini çağıran koda bir değer iletmek istiyorlar.
+	  Şimdiye kadar değer iletmenin tek bir yolunu gördük. Geri dönüş değeri.
+	  Oysa şimdi bir fonksiyonun başka bir fonksiyona değer iletmesi için ikinci bir mekanizma daha var.
+	  Fonksiyona adres gönderilir ve fonksiyonda gönderilen adresten nesneye ulaşılarak nesneye veriler yazılır.
+	  
+	 
+- Örnek olarak iki farklı fonksiyonda dairenin alanı:
+
+1. alternatif:
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include "nutility.h"
+
+#define SIZE	10
+
+double get_circle_area(double radius)
+{
+	return 3.1415926 * radius * radius;
+}
+
+  
+int main()
+{
+	double r, area;
+	printf("Yaricap giriniz: ");
+	scanf("%lf", &r);
+	area = get_circle_area(r);
+	printf("dairenin alani = %lf ", area);
+
+}
+```
+2. alternatif  (pointer ile oluşturma)
+```
+
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include "nutility.h"
+
+#define SIZE	10
+
+void get_circle_area(double radius, double* parea)
+{
+	*parea = 3.1415926 * (radius) * (radius);
+}
+
+  
+int main()
+{
+	double r, area;
+	printf("Yaricap giriniz: ");
+	scanf("%lf", &r);
+	get_circle_area(r, &area);
+	printf("dairenin alani = %lf ", area);
+
+}
+```
+  
+- Bir fonksiyonun varlık nedeni bir değer hesaplaması ise;
+   iki ayrı yapı söz konusu olabilir.
+  		- Alt fonksiyonda hesaplanan değeri geri dönüş değeri mekanizması yazılan ana fonksiyona iletmesi.
+  		- Alt fonksiyonun hesapladığı değeri ana fonksiyondan gönderilen adresteki nesneye yazması. (Pointer kullanarak)
+
+
+- Hem okunurluk açısından hem de ekstra bir değişken kullanılmamak isteniyorsa geri dönüş mekanizması ile fonksiyon oluşturmak seçilebilir.
+
+- Peki hangi durumlarda pointer kullanarak fonksiyon oluşturuyoruz ?
+  
+- Return statement ile bir geri dönüş değeri gönderdiğimizde aslında derleyici şöyle bir kod üretiyor. Derleyici fonksiyonun geri dönüş değerinin 
+yazılacağı bir bellek alanı ayırıyor. Yani bir geçici nesne oluşturuyor.
+	
+		geçici_nesne = return statement;
+		double area = geçici_nesne;
+		
+Derleyici özel bir optimizasyon yapmaz ise iki kez blok kopyalaması söz konudur.
+
+- Şimdi eğer iletilecek değer 4 byte , 8 byte gibi büyük olmayan değer ise fonksiyonun geri dönüş değeri mekanizması oluşturmak herhangi bir dezavantaj 
+oluşturmuyor. Ancak ilerleyen süreçte karşımıza öyle değerler çıkacak ki bunlar 4 byte , 8 byte gibi değil de 50, 100, 500 byte gibi değerler olacak.
+Bu tür değerleri geri dönüş mekanizması ile iletirsek tipik bir fonksiyon çağrısı ve geri dönüş değerini bir değişkende saklama kodunda sizin programın çalışma
+zamanında maliyetiniz 2 kat artacak.
+
+- Peki pointerlarla nasıl yapıldığını incelersek;  biz fonksiyona sadece adres gönderdiğimiz için adresde derleyiciye göre değişmekle birlikte 
+4 byte yani nesne bellekte ne kadar büyük yer kaplasa da siz adresi gönderdiğiniz için ara kopyalama işlemi yapılmıyor.
+
+- Bu yüzden C'de tipik olarak hesaplanan değer tekse ve bu değer int, double gibi türlerse her zaman tercihimiz return statement olur. Fakat
+ne zaman ki hesaplanacak değerin bellekte kapladığı yer çok büyük oluyor.  
+işte o zaman gereksiz maliyetten kaçınmak için fonksiyonun parametre değişkeni pointer yapılıyor.
+
+- Özetlersek; Neden fonksiyonun parametresi pointer olur?
+	- Geri dönüş mekanizmasını kullanmayıp gönderilen adresteki nesneye yazmak.
+	- Kullanılacak nesnenin storage ihtiyacı fazla ise
+	- Bir fonksiyon çağırılan koda birden fazla değer iletecekse. Call by value ile return statement
+	  sadece bir değer döndürebiliyorken call by reference ile istenilen kadar geri dönüş değeri üretilebilir.
+	  
+	  
+- C dilinde bir fonksiyon başka bir fonksiyona bir dizi gönderecek ise call by reference zorunludur.
+- Diziler farklı fonksiyonlarda sadece adres aktarımı ile kullanılabilir.
+
+
+**Const anahtar sözcüğü ve Const semantiği:
+
+- const int x = 45; --> yazıldığında derleyiciye x'in 45 değeri ile hayata başladığını ve bu değerin x'in ömrünün sonuna kadar değişmeyeceği bilgisi 
+veriliyor.
+
+- Neden const değişkenler kullanırız?
+	- Yazan programcının kendisine yardımcı olabilmesi için. Mesela ilk yüz asal sayıyı tutan bir sabit dizi düşünelim.
+	progra akışında bu diziden kaçıncı asal sayı istenirse olde edilmek amacıyla tanımlanmış olsun. Program akışında herhangi bir sebeple dizinin herhangi
+	bir elemanı değiştirilmeye çalışılırsa bu dizinin kullanım amacı bozulacaktır.
+	- Okuyana yardımcı olmak.
+	- Derleyiciye yardımcı olmak. Derleyiciler bir değişkenin veya bir dizinin hayatı boyunca değişmeyeceğini bilirlerse eğer 
+	daha iyi bir kod optimizasyonu yapacaktır.
+
+- const anahtar sözcüğü ile bir değişkene ilk değer verilmeden tanımlanırsa bu yanlıştır. Yani siz x'in çöp değerinin 
+ömrü boyunca değişmeyeceği bilgisini veriyorsunuz.
+
+- C dilinde const anahtar sözcüğü ile tanımlanan değişkenler, sabit ifadesi gereken yerlerde kullanılamazlar.
+
+		const int size = 299;
+		int a[size] = { 0 };//Geçerli değil.
+		
+- const x = 10;
+  int*P = *&x;
+  *p = 35; -- Bu UB dir. Sentaks hatası aşılmış ancak sonucun nasıl olacağı belirsizdir.
   
   
+  **Pointer Değişkenler ve Const
   
+  - İki kullanım mevcuttur.
+  	- int *const ptr = &x;
+  	- int const *ptr = &x;
+  	
+1- int *const ptr = &x; şeklinde kullanım:
+	- const pointer
+	
+		int x = 10;
+		int* cont ptr = &x;
+ - Yukarıda ptr hayata x'in adresiyle gelecek ve hep x'in adresini tutacak.
+	- Ptr hayatu boyunca x'i gösterecek.
+
+- Eğer pointera başka bir adres atamayı denerseniz sentaks hatası.
+
+		ptr = &y;// hata
+		*ptr = 98;// x'e 98 atanmış ptr de herhangi bir değişiklik yapılmadığı için kesinlikle karıştırılmamalı.
+		
+2- int const *ptr = &x; veya const int *ptr = &x;
+	- pointer to const int
+
+Bu pointerın gösterdiği nesneye bu pointer yoluyla eriştiğinizde (*ptr), bu nesneye karşılık gelen nesneye bir atama yapamazsınız.
+Yani ptr adeta diyor ki benim vasıtamla benim gösterdiğim nesneye salt okuma(access) amaçlı erişebilirsiniz.
+
+		*ptr =  45; --> hata
+		int b = *ptr; --> geçerli
+		ptr = &y; --> geçerli
+		
+		
+- Yani const ne'den önce gelirse const olan o dur.
+	
+		int *const p = &x; // p'ye atama yapamazsın.
+		const int *p = &x; // *p'ye atama yapamazsın.
+		
+
+- const int * const ptr = &x; // Bu durumda iki anlamda birleşiyor.
+	- const pointer to const int
+
+		ptr = &x; // hata
+		*ptr = &x; // hata
+		
+
+- T bir tür olmak üzere
+	- void func(T *p)
+		- mutator
+		- setter
+		- set function
+		- Yukarıdaki fonksiyon sizden adresinin aldığı değişkeni değiştireceğini anlatıyor.
+
+	- void func(const T* p)
+		- getter
+		- accessor
+		- Bu fonksiyon sizden aldığı adresteki nesnede herhangi bir değişiklik yapılmayacağını sadece okuma amaçlı alındığını anlatıyor.
+
+
+**Pointer Aritmetiği:
+
+- C dilinde;
+	-  bir adresle bir tamsayı toplanabilir.
+	-  bir adresle bir tamsayı çıkartılabilir.
+- Tüm bu işlemler geçerlidir.
+
+		ptr + i;//legal
+		ptr - i;//legal
+		i - ptr;//illegal-geçersiz
+		Bu ifadelerin sonucu da adrestir.
+		
+- C dilinde bir adresle 1 toplandığında bir sonraki (aynı türden) nesnenin adresini elde ederiz.
+
+		int a[0] = { 0 };
+		printf("&a[0]  = %p\n", &a[0]); // a[0] 'ın adresi
+		printf("&a[0] + 1  = %p\n", &a[0] + 1);// a[1]'in adresi
+
+
+- a + 5 ile &a[5] aynıdır. a + 5 ile kasıt &a[0] adresindeki nesneden 5 nesne sonrasındaki nesne kastedilmiştir.
+- &a[5] ise 5. indisteki elemanın adresi kastedilmiştir.
+
+- a[5] ile *(a + 5) aynıdır.
+
+
+		int a[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		int *ptr = a;
+		
+		for (int i = 0; i < 10; ++i) {
+			printf("%d %d %d %d \n", a[i], *(a + i), *(i + a), *ptr);
+			++ptr;
+		}--> yukarıdaki printf'in içerisindeki tüm formatlar aynı nesneyi gösterir.
+		
   
-  
-  
-  
-  
+  # Ders 31 - 16.04.2021 
   
   
   
