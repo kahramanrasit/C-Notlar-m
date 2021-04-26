@@ -5512,6 +5512,440 @@ Yani ptr adeta diyor ki benim vasıtamla benim gösterdiğim nesneye salt okuma(
   
   # Ders 31 - 16.04.2021 
   
+  **İndex/subscript Operatörü ( [ ] )
+  
+  - 1. öncelik seviyesine sahip ve soldan sağa öncelikli (left associative)
+  
+  		a[b] ----> *(a + b) //derleyici bu halde algılar.
+		
+- Aşağıdaki kod sadece operatör özelliğini anlamak için yazılyor üretimde böyle bir kullanım söz konusu değildir.
+
+		int x = 10;
+		(&x)[0] = 23; // *(&x +0) = 23 olarak algılandı ve x'e 23 ataması yapılmış oldu.
+		
+- Bir dizi tanımlansın.
+
+		int a[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		int *ptr = a + 5;
+		
+		printf("%d\n", *ptr); // ekrana 5 yazdırılır.
+		printf("%d\n", ptr[0]);//ekrana 5 yazdırılır.
+		printf("%d\n", ptr[3]);//ekrana 8 yazdırılır.
+		printf("%d\n", *(ptr - 3)); //ekrana 2 yazdırılır.
+  
+  - Yani; 
+
+		ptr[n]   --------   *(ptr + n) //aynı
+		&ptr[n]  --------   ptr + n //aynı
+		ptr[0]   --------   *ptr //aynı
+		
+- C dilinde iki adresin toplanması sentaks hatasıdır.
+
+- Adreslerin birbirinden çıkartılması:
+  	
+		&a[5] - &a[2] // a[3] olur
+		(a + 5) - (a + 2) // a[3] yani (a + 3)
+		
+- C dilinde 2 adresin farkı işaretli türden tam sayıdır.
+
+- Bir dizinin daha büyük indeksli bir elemanını adresinden daha küçük indeksli bir elemanının adresini çıkartırsak
+  pozitif bir tam sayı elde ederiz.
+- Küçük indeksten büyük indeks çıkarılırsa negatif tam sayı elde ederiz.
+
+		int [10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		
+		int *p1 = a + 5;
+		int *p2 = a + 3;
+		
+		printf("%d\n", p1 - p2); // 2 olur
+		printf("%d\n", p2 - p1); // -2 olur
+		
+- ptr, a isimli bir dizinin bir elemanını göstermektedir. ptr'nin gösterdiği dizi elemanı indisi nedir? 
+
+		ptr - a
+		
+- ptr, a dizisinin n indisli elemanını göstermektedir. Ptr'nin gösterdiği nesnenin adresi nedir?
+
+		a + n
+	
+- Yani  C'de bir dizinin indeksini bilmek ile adresini bilmek arasında hiçbir fark yoktur.
+
+- Yani a dizisinin;
+
+		n indeksli elemaının adresi ---> a + n
+		ptr de dizi elemanının adresi varsa index öğrenilmek isteniyorsa ----> ptr - a
+  
+  
+- iki adres farkının kullanılabilir olması için bir dizinin içerisindeki adresler olması gerekir.
+  Aynı dizi içerisinde olmayan adresler kullanılması sentaks hatası değildir fakat hiçbir anlamı yoktur.
+  
+		int x = 10, y = 5;
+		&y - &x --> anlamsızdır.
+		
+**Dizilerin Fonksiyonlara Gönderilmesi
+		
+		void afunc(int* ptr, int size)
+
+- Eğer fonksiyona salt okuma amaçlı gönderilmişse ;
+
+		void afunc(const int* ptr, int size)
+  
+  
+  
+- Bir diziyi ekrana yazdıran fonksiyon:
+
+		void printArray(const int *ptr, int size)
+		{
+			for (int i = 0; i < size; ++i) {
+				printf("%d", p[i]);
+			}
+		}
+		int main()
+		{
+			int a[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+			printArray(a, 10);
+		}
+		
+  
+- Yukarıdaki fonksiyonun sık C'de sık kullanılan bir idiyomatik biçimi
+
+		void printArray(const int *ptr, int size)
+		{
+		
+			while(size--) {
+				printf("%d ", *ptr);
+				++ptr;
+			}
+		}
+  
+  
+  - Yukarıdaki fonksiyona çağrı yapılırken istenilen aralığı nasıl yazdırabiliriz ona bakalım:
+
+		printArray(a , SIZE); // SIZE bir makro, a dizisinin tamamı yazdırılır.
+		printArray(a, 5); // a dizisinin ilk 5 elemanı yazdırılır.
+		printArray(a + 5, 4); // a dizisinin 6. elemanından başlayıp 4 elemanı yazdırılır.
+		printArray(a + SIZE - 5, 5);// a dizisinin son beş elemanı yazdırılır.
+  
+  
+  
+  - Bir dizinin elemanlarını toplayan fonksiyon:
+
+		int sumArray(const int *ptr, int size)
+		{
+			int sum = 0;
+			
+			while (size--) 
+				sum += *ptr++;
+			
+			return sum;
+		}
+		int main()
+		{
+			int a[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+			printf("Toplam = %d", sumArray(a, 10));
+		}
+  
+  - Bir dizide max sayıyı bulan fonksiyon:
+
+		int get_max_val(const int* arr, int size)
+		{
+			int max = *arr;
+	
+			while (size--) {
+				if (max < *arr)
+					max = *arr;
+				++arr;
+			}
+			return max;
+		}
+
+  
+		int main()
+		{
+			int a[5] = { 0, 1, 2, 3, 4 };
+			printf("%d",get_max_val(a, 5));
+
+		}
+  
+  
+  
+ - Bir dizinin fonksiyon içerisinde hem max hem min elemanını bulan fonksiyon:
+
+
+```
+void get_min_max_val(const int* arr, int size, int* max, int* min)
+{
+	*max = *min = *arr;
+	for (int i = 0; i < size; ++i) {
+		if (*max < arr[i])
+			*max = arr[i];
+		if (*min > arr[i])
+			*min = arr[i];
+	}
+}
+
+  
+int main()
+{
+	int a[SIZE];
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	int max, min;
+	get_min_max_val(a, SIZE, &max, &min);
+
+	printf("max = %d , min = %d ", max, min);
+
+
+}  
+```
+
+- Bir diziyi bir diziye kopyalayan fonksiyon:
+
+```
+void copy_arr(int * pdest, const int* psource, int n)
+{
+	
+	while (n--)
+		*pdest++ = *psource++;
+
+}
+
+
+  
+int main()
+{
+	int a[SIZE];
+	int b[SIZE];
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	copy_arr(b, a, SIZE);
+
+	print_array(b, SIZE);
+
+}
+
+```
+ 
+ - Bir tamsayı dizisini ters çevirecek (reverse array) fonksiyonu yazalım:
+
+```
+void reverse_arr(int* arr, int size)
+{
+	for (int i = 0; i < size / 2; ++i) {
+		int t = arr[i];
+		arr[i] = arr[size - 1 - i];
+		arr[size - 1 - i] = t;
+	}
+}
+
+
+int main()
+{
+	int a[SIZE];
+	
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	reverse_arr(a, SIZE);
+
+	print_array(a, SIZE);
+}
+```
+
+  
+- Bubble sort algoritmasını bir fonksiyon içerisinde yazarsak:
+
+```
+void bsort(int* arr, int size)
+{
+	for (int i = 0; i < size - 1; ++i) {
+		for (int j = 0; j < size - 1 - i; ++j) {
+			if (arr[j] > arr[j + 1]) {
+				int t = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = t;
+			}
+		}
+	}
+}
+
+
+int main()
+{
+	int a[SIZE];
+	
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	bsort(a, SIZE);
+
+	print_array(a, SIZE);
+}
+``` 
+
+
+
+- Bir fonksiyonun parametresini pointer yapmak iki yolla mümkün:
+	- void func(int *p, int size);
+	- void func(int p[], int size);
+		- [] ifadesinin kullanılmış olması kesinlikle fonksiyon parametresine bir dizinin yazıldığı anlamına gelmiiyor.
+		  zaten C'de bir fonksiyon parametresi bir dizi olamaz.
+		  
+		  
+**Geçerli ve Geçersiz Pointerlar (valid&invalid pointers, kullanılabilir & kullanılamaz pointerlar)
+
+- Çöp değer pointer geçersizdir. (indetermined value)
+
+
+- Bir pointer 3 durumda geçerlidir.
+	- pointer değişken hayattaki bir nesnenin adresini tutuyorsa.
+	- pointer değişkenin bir dizinin bittiği yerin adresini tutması
+			
+			int a[5] = {0, 1, 2, 3, 4 };
+			int *p = a + 5;
+		
+	- Yukarıdaki kod satırında dizinin bittiği adres ile pointer ilk değerini almıştır.
+	Ancak bu pointer dereferencable'dır. Yani siz bu pointer'ı içerik operatörünün operantı olarak
+	kullanırsanız UB olur. Çünkü a[5] 'de herhangi bir dizi elemanı yoktur. 
+	
+		*p // tanımsız davranış
+		
+**Pointerlar (adresler) ve Karşılaştırma Operatörleri
+
+< <=  >  >= == !=
+
+- Pointerlar karşılaştırma operatörlerinin operantları olabiliyorlar.
+
+- İki pointerın eşitliğinin doğru sonuçlanması için ;
+	+ her iki pointerın da aynı nesnenin adresi olması gerekmektedir.
+	+ her iki pointer da aynı dizinin bittiği yerin adresi olmalı.
+
+		int a[5] = { 0, 1, 2, 3, 4 };
+		int* pend = a + 5;
+		int* p = a;
+		
+		while (p != pend) {
+			printf("%d ", *p);
+			++p;
+		} ---> dizideki tüm elemanları yazar.
+  
+  
+  - Bir fonksiyonun parametreleriyle dizinin ekrana yazdırılacak olan değerlerini pointer yoluyla fonksiyona bildiren program:
+  	- range parameter
+
+
+```
+void printArray(const int* p, const int* pend)
+{
+	while (p != pend) {
+		printf("%3d ", *p);
+		++p;
+	}
+	printf("\n");
+}
+
+
+int main()
+{
+	int a[SIZE];
+	
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	printArray(a, a + SIZE); // tüm diziyi yazdırır
+	printArray(a + 2, a + 5);// 2. indis ile 5. indis dahil arasındaki sayıları yazdırır.
+}
+
+```
+
+
+- < <= > >= operatörlerinin doğru ve anlamlı bir şekilde kullanılabilmesi için iki pointerın da aynı dizinin elemanlarını göstermesi gerekiyor.
+
+		a + 2 ile a + 5 'in kıyaslanması gibi
+		&a[5] > &a[2]
+
+  	
+  
+  - reverse algoritmasını adres karşılaştırarak yapalım:
+  - 
+```
+  void reverse_arr(int *p , int size)
+{
+	int* pe = p + SIZE;
+
+	while (p < pe) {
+		swap(p++, --pe);
+	}
+}
+
+
+int main()
+{
+	int a[SIZE];
+	
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	reverse_arr(a, SIZE);
+
+	print_array(a, SIZE);
+}
+```
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
