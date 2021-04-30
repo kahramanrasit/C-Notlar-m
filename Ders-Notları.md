@@ -5899,16 +5899,188 @@ int main()
 	print_array(a, SIZE);
 }
 ```
+
+# Ders 32 - 19.04.2021
   
   
   
   
+  **Pointer İdiyomları
+  
+Hatırlatma : 
+- &(op) --> Adres operatörünün operantı L value olmalıdır. Oluşturduğu değer R value'dur.
+- *(op) --> Operantı adres olmalıdır.
+- ++(op) , (op)++ --> operantları L value olmalıdır. R value oluştururlar.
+
+		&x++ --> Bu bir sentaks hatasıdır. Derleyici bu kodu &(x++) olarak algılar ve  & operatörünün operantı L value olmalıdır. Ancak 
+		x++ ifadesinin ürettiği değer R value'dur. 
+		
+		
+  		++&x; --> Sentaks hatasıdır. Bu operatörlerin öncelik sırası sağdan sola olduğu için ilk olarak &x işlemi yapılır ve ürettiği 
+		değer R value olur. Ancak ++ operatörünün operantı L value olmalıdır.
+ 
+ 
+#
+
+		int a[5] = { 0, 1, 2, 3, 4 };
+		int* ptr = a;
+		*ptr++ = 99; // Derleyici bunu *(ptr++) olarak algılar. Ve böyle bir kullanım
+		senktaks hatası olmamakla birlikte sık sık kullanılır.
+		*++ptr; Aynı şekilde geçerlidir.
+		
+#
+
+		a  bir dizi olmak üzere;
+		*a++ --> sentaks hatasıdır. Sebebi ise bir dizi ismi ++ operatörünün operantı olamaz. Çünkü
+		dizi ismi L value değildir. ++ operatörünün operantı L value olmalıdır.
+		
+# 
+	
+- reverse array fonksiyonun daha idiyomatik bir şekli:
+
+		void reverse_array( int *pdest, const int* psource , int n)
+		{
+			psource += n;
+			while (n--)
+				*pdest++ = *--psource;
+		}
+	
+
+
+- *a++; --> ifadesinin geçersiz olmasına dair;
+	- &x ifadesi bir adrestir. R value üretir.
+	- ptr ifadesi bir adres ifadesidir ve L value'dır.
+	- a ifadesi (array decay) bir adrestir. a = &a[0] olduğundan a ifadesi R value expression olur.
+	 Yani ++ operatörünün operantı L value olmalıdır. 
+	 - ++a ---> a bir dizi ismi ise sentaks hatasıdır.
+
+- Eğer bir fonksiyon 2 adres alıyor ise ve bir adresten okuma yapacak, diğer adrese değer yazacak ise 
+C standart kütüphanede böyle fonksiyonlar yazılacak olan parametreyi birinci parametre olarak tanımlamıştır. 
+Biz de fonksiyon oluştururken C standart kütüphanesini taklit etmemizde fayda vardır.
+  
+ - Bir örnek:
+
+		int a[5] = { 0, 1, 2, 3, 4 };
+		int *ptr = a;
+		print_array(a, 5);
+		++*ptr; ---> dizinin ilk elemanı olan 0 değeri 1 artırılmış oldu. Ancak ptrde herhangi bir değişiklik olmadı.
+		print_array(a, 5);
+		
+		
+- Bir mülakat sorusu:
+```
+
+void foo(int* ptr, int n)
+{
+	while (n--)
+		++* ptr++;
+}
+
+int main()
+{
+	int a[5] = { 0, 1, 2, 3, 4 }; 
+	print_array(a, 5);
+	foo(a, 5);---> dizinin birinci indisinde olan 1 değerini 1 artırdı.
+	print_array(a, 5);
+
+}
+```
+
+# Tür (Eş) İsim Bildirimleri -1-
+
+typedef int word;
+- Derleyicinin artık word ismini gördüğünde int ismini algılamasını istiyoruz.
+
+		typedef int* IPTR;
+		IPTR p1, p2;
+		//açılımı: 
+		int* p1, int* p2; olur.
+		int* p1, p2; gibi olmaz. Dikkat etmek lazım.
+		
+
+1- Hangi türe eş isim verilecekse o türden bir değişken tanımlayın.
+2- Tanımlamanın başına typedef yazın.
+3- Değişkenin yerine tür eş ismini koyun.
+
+		typedef int INTA10[10]; int[10]  türünün eş ismi.
+		INTA10 a, b, c; 
+		//açılımı:
+		int a[10], b[10], c[10]; olur.
+		
+- Amaç: int, double, char gibi türlerin daha dar, özelleştirilmiş bir konteks kullanılması ve bu kontekse ilişkin 
+bu türlere bir eş isim verilmesi. Okunabilirliği artırmak.
+
+- Örnek olarak biz bir programda int olarak birçok int türden counter tanımlayalım. Sonrasında biz bu programı yazarken int tür 
+sınırlarının yetmediğini fark edip counter değişkenilerinin türünü long long int yapmak istersek hepsini tek tek bulup değiştirmemiz
+gerekir. Ancak biz ilk başta typedef olarak counter değişkenleri için eş isim kullanırsak işimiz çok daha kolaylaşmış olacaktır.
+
+
+**Standart Kütüphane ve typedef bildirimleri
+
+size_t standart typedef ismi:
+- size_t'nin türü sizeof operatörünün ürettiği değerin türüdür.
+- size(x) ---> Bu ifadenin türü size_t ancak size_t derleyiciye göre değişken olduğu için unsigned int,
+ unsigned long belki unsigned long long türlerinden birinin eş ismi olabilir. 
+  
+- Standart kütüphane size_t türünü nerelerde kullanıyor.
+	- Fonksiyonların sizeof değeri isteyen parametre türü olarak
+	- Eğer bir fonksiyon dizi boyutu türü istiyorsa
+	- Yazı uzunluğu türü istenen fonksiyonda
+	- Tane-adet türü istenen fonksiyonlarda
+
+		size_t  x = 10;
+		printf("%zu", x); --> %zu size_t için format.
+		
+
+- #include <stdint.h>
+  int x = 0;--> Burada int türü derleyiciden derleyiciye değiştiği için taşınılabilirliği netleştirmek için;
+  int32_t x = 0; --> Bu şekilde kullanılırsa bu kullanım standart bir typedef ismidir. Derleyici stdint başlık 
+  dosyasında int32_t'yi 4 byte'lık işaretli bir tamsayı türünün eş ismi olarak tanımlamak zorundadır. 
+  Yani siz bu kodu hangi derleyicide derlerseniz derleyin artık x değişkeni işaretli 4 byte'lık bir tamsayı türünden olur.
+  
+  Uint32_t --> işaretsiz 4 byte gerçek sayı türünden
+  Uint16_t --> işaretsiz 2 byte'lık gerçek sayı türü
   
   
-  
-  
-  
-  
+  		int a[100] = { 0 };
+		int* p1 = a + 5;
+		int* p2 = a + 65;
+		p2 - p1; ---> ptrdiff_t türündendir.
+		- Yani iki adres birbirinden çıkarılırsa ptrdiff_t türünden bir tamsayı elde edilir. Yine derleyiciye bağlı bir türdür.
+
+- Bir eş isim bir eş isim içerisinde kullanılabilir.
+
+		typedef int word;
+		typedef word* wptr;
+
+
+- Çelişkili bir örnek:
+
+
+		typedef int* IPTR;
+		int main() 
+		{
+			int x = 10;
+			int y = 45;
+			const IPTR ptr = &x;
+			//int *const ptr = &x;
+			ptr = &y; --> sentaks hatası
+			*ptr = 40; --> geçerli 
+			
+		}
+		
+- - Eğer ptr'yi const yapmak istersek;
+
+			typedef const int* CPTR; --> olarak kullanılmalıdır.
+			int main()
+			{
+				int x = 10;
+				int y = 20;
+				CPTR p = &x;
+				p = &y; // geçerli
+				*p = 83; // geçersiz
+			}
+			
   
   
   
