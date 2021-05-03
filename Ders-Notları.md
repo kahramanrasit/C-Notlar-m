@@ -6081,9 +6081,135 @@ size_t standart typedef ismi:
 				*p = 83; // geçersiz
 			}
 			
+  # Ders 33 - 21.04.2021
+  
+  **Adres Döndüren Fonksiyonlar
+  
+ ```
+ #include <stdio.h>
+  
+ int g = 10; // g nesnesi global isim alanında ilk değeri verildi.
+
+int* foo(void)
+{
+	return &g; //g global nesnesinin adresi, fonksiyonun geri dönüş değeri olarak gönderildi.
+}
+
+int main()
+{
+	int* ptr = foo();  // fonksiyonun geri dönüş değeri olan, g nesnesinin adresi ptr pointerına ilk değer olarak verildi.
+	printf("*ptr = %d\n", *ptr);  
+
+	*ptr = 767; // ptr pointerının sakladığı g nesnesinin adresinden g nesnesine içerik operatörü ile ulaşılarak g nesnesine atama yapıldı.
+	printf("*ptr = %d\n", *ptr); 
+
+	*foo() = 98;  // içerik operatörünün operantı, foo fonksiyonun geri dönüş değeridir. foo fonksiyonunun geri dönüş değeri de g nesnesinin adresi olduğu için 
+	// yine g global nesnesinin değeri değiştirilmiş oldu.
+	
+	printf("*ptr = %d\n", *ptr);
+
+}
+ ``` 
+ 
+ 
+#
+
+```
+ #include <stdio.h>
+ 
+int g[5] = { 0, 1, 2, 3, 4 };
+
+
+int* foo(void)
+{
+	return g;
+}
+
+int main()
+{
+	print_array(g, 5);
+	++foo()[2]; // foo()[2] = foo() + 2 = g + 2 = &g[0] + 2 = dizinin 2. indisindeki eleman
+	print_array(g, 5);
+}
+
+```
+ #
+ 
+ ```
+  #include <stdio.h>
   
   
-  
+ int* get_int(void)
+{
+	int x; // x otomatik ömürlü olarak bildirildi.
+	printf("bir tam sayi giriniz: \n");
+	scanf("%d", &x);
+	
+	return &x; /* x'in adresi geri dönüş değeri olarak gönderildi 
+			   lakin x otomatik ömürlü bir değişken olduğu için x'in scope'u bu fonksiyonla sınırlı.
+			   Yani gönderilen adreste artık x nesnesi yok. 
+			   */
+}
+
+int main()
+{
+	int* ptr;
+	ptr = get_int(); /*              ptr pointerına ilk değer olarak fonksiyonun geri dönüş değeri verildi. 
+					 Ancak fonksiyonda bahsettiğimiz gibi burada programcı
+					 her ne kadar x'in adresini geri dönüş değeri olarak kullanmak istese de 
+					 x'in scope'u çağrılan fonksiyonla sınırlı olduğu için x artık bu adreste yer almamaktadır. 
+					 Ve bu adres kullanıldığında tanımsız davranışa yol açmaktadır.*/ 
+	printf("girilen sayi: &d\n", *ptr);
+
+}
+
+ ```
+ #
+ **Uyarı :
+ 		Adres döndüren fonksiyonlar asla otomatik ömürlü bir nesne adresi döndürmemelidir. 
+		Eğer geri dönüş değeri otomatik ömürlü bir nesne olması durumunda tanımsız davranışa yol açmaktadır.
+ #
+ 
+ - Peki fonksiyonlar hangi adresleri döndürebilir?,
+ 	- Statik Ömürlü nesnelerin adresleri:
+ 		- global değişkenler
+ 		- static yerel değişkenler 
+ 		- string literalleri (henüz değinmedik)
+
+	- Çağrılan koddan aldığı adresi geri döndürebilir.
+		
+		
+ 
+ 
+ - T bir tür olmak üzere 
+ 
+ 		T* türü
+		const T* türü = T const* türü --> aynılar
+		
+- Const int* türüne int* türü ilk değer verilmesinde herhangi bir problem yoktur.
+
+		int x = 10;
+		const int* p = &x;
+		// const int* türüne, int* türü ilk değeri verilmiş
+		
+- Ancak const int* türünün, int* türüne dönüştürülmesi ciddi bir yanlışlıktır.
+
+		const int x = 10;
+		int* p = &x;//  sentaks hatası yoktur. Ama ciddi bir semantik hata vardır.
+			    //'initializing': different 'const' qualifiers --> bu uyarıyı alırsınız ama sentaks hatası almazsınız.
+		
+		*p = 14; // Ve siz const x'e yanlış bir tür dönüştürmesin yapdıktan sonra, 
+			 //nesnenin adresini yandaki gibi kullanırsanız tanımsız davranışa yol açmış olursunuz.
+			 
+			 
+- Biz yukarıdaki durumu fonksiyonda geri dönüş adresi yoluyla kullanmak istersek bu dönüşümü bilinçli olarak yapabiliriz.
+	 
+	 	(int*) dönüştürme operatörünü kullanarak.
+		
+
+- Buna örnek olarak; bir dizinin adresi bir fonksiyona gönderilsin. Bu fonksiyon bu dizinin en büyük elamanını bulsun ve
+		 en büyük elemanının adresini geri dönüş değeri olarak göndersin.		
+ 
   
   
   
