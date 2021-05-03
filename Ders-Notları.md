@@ -6202,7 +6202,7 @@ int main()
 			 //nesnenin adresini yandaki gibi kullanırsanız tanımsız davranışa yol açmış olursunuz.
 			 
 			 
-- Biz yukarıdaki durumu fonksiyonda geri dönüş adresi yoluyla kullanmak istersek bu dönüşümü bilinçli olarak yapabiliriz.
+- Biz yukarıdaki durumu fonksiyonda geri dönüş adresi yoluyla kullanmak istersek bu dönüşümü bilinçli olarak yapabiliriz. (const cast)
 	 
 	 	(int*) dönüştürme operatörünü kullanarak.
 		
