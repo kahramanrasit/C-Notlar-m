@@ -6212,20 +6212,286 @@ int main()
  
   
   
+```
+  
+  #include <stdio.h>
+  
+  int* get_array_max(const int* pa, size_t size)
+  {
+	int* pmax = (int*)pa; //const cast --> dizinin ilk değerinin adresi pmax pointerına atandı.
+	for (size_t i = 1; i < size; ++i) {
+		if (pa[i] > *pmax) { //pa dizinin i. elemanın içeriği ile pmax dizisinde adresi olan nesnenin içeriği karşılaştırıldı.
+			pmax = (int*)(pa + i); // ya da pmax = (int*) &pa[i]; yazılabilir.
+		}
+	}
+	return pmax;  /* Dikkat!! Biz burada otomatik ömürlü bir pointer nesnenin değeri olan adres gönderiyoruz. 
+			 Otamatik ömürlü bir nesnenin adresini göndermiyoruz. Geri dönüş değeri içeriğinin adres olması ile
+			 geri dönüş değerinin kendisinin adres olması farklı şeylerdir. Geri dönüş değeri otomatik ömürlü bir nesnesin adresini gösteriyorsa eğer
+			 fonksiyondan çıkıldığında o adreste herhangi bir nesne olmuyor. Lakin siz otomatik ömürlü bir pointer ile adres gönderdiğinizde 
+			 o adresteki nesnenin ömrü bulunduğunuz fonksiyonla sınırlı değil. 
+			 */
+  }
+
+
+int main()
+{
+	int a[SIZE];
+	int* pmax;
+
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+	
+	pmax = get_array_max(a, SIZE);
+	printf("max = %d ve dizinin %d indisli elemani\n", *pmax, pmax - a);
+
+	*pmax = -1;
+	print_array(a, SIZE);
+	
+	// Eğer siz dizinin ilk elemanından başlayıp max elemanına kadar ekrana yazdırmak isterseni eğer :
+	
+	print_array(a, pmax - pa + 1);
+	
+	//Eğer max elemandan başlanıp dizinin sonuna kadar yazılması istenirse :
+	
+	print_array(pmax, SIZE - (pmax - a));
+
+}
+
+ ```
+  
+  
+ # 
+ 
+
+ 
+		 void func(int*);
+  		 int* foo(void);
+		 
+		 int main()
+		 {
+		 	//Benim amacım foo işlevine yapılan çağrıdan elde edilen adresi func işlevine argüman olarak göndermek ise;
+			func(foo()); // sık bir kullanım şeklidir.
+		 }
+
+  
+  - max fonksiyonunda dizinin max değerinin indisinin adresi bulunsun. min fonksiyonunda da dizinin min değerinin adresi döndürülsün.
+  		- min değer max değerden önceyse min-max arası ekrana yazdırılsın.
+  		- max değeri min değerinden önceyse max-min arası ekrana yazdırılsın.
+
+
+
+```
+
+int* get_array_max(const int* pa, size_t size)
+{
+	int* pmax = (int*)pa; // const cast
+	for (size_t i = 1; i < size; ++i)
+	{
+		if (pa[i] > *pmax) {
+			pmax = (int*)(pa + i);
+		}
+	}
+	return pmax;
+}
+int* get_array_min(const int* pa, size_t size)
+{
+	int* pmin = (int*)pa; // const cast
+	for (size_t i = 1; i < size; ++i)
+	{
+		if (pa[i] < *pmin) {
+			pmin = (int*)(pa + i);
+		}
+	}
+	return pmin;
+}
+
+int main()
+{
+	int a[SIZE];
+	int* pmax;
+	int* pmin;
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	pmax = get_array_max(a, SIZE);
+	pmin = get_array_min(a, SIZE);
+
+	if (pmin > pmax) 
+		print_array(pmax, pmin - pmax + 1);
+	
+	else
+		print_array(pmin, pmax - pmin + 1);
+		
+	//if - else merdiveni yerine --> print_array(pmin > pmax ? pmax : pmin, abs(pmin - pmax) + 1); yazılabilir.
+	
+	// print_array fonksiyonuna alternatif olarak da;
+	
+	if (pmin < pmax)
+		while (pmin <= pmax)
+			printf("%3d ", *pmin++);
+	else
+		while (pmax <= pmin)
+			printf("%3d ", *pmax++);
+}
+```
+  
+  
+  - O(n^2) karmaşıklığında bir sıralama algoritması:
+  	- selection sort (seçme-sıralama algoritması)
+  	
+```
+
+
+
+
+int* get_array_min(const int* pa, size_t size)
+{
+	int* pmin = (int*)pa; //const cast
+	for (size_t i = 1; i < size; ++i) {
+		if (pa[i] < *pmin)
+			pmin = (int*)(pa + i); // pmin = (int*)&pa[i]
+	}
+	return pmin;
+}
+
+void selection_sort(const int* pa, size_t size)
+{
+	for (size_t i = 0; i < size; ++i)
+		swap(get_array_min(pa + i, size - i), pa + i);
+}
+
+
+
+
+int main()
+{
+	int a[SIZE];
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+	selection_sort(a, SIZE);
+	print_array(a, SIZE);
+}
+```
   
   
   
   
+- Dikkat: Eğer bir fonksiyon statik ömürlü bir nesne adresi döndürüyorsa bu fonksiyon hep aynı nesnenin adresini döndürüyor demektir.
+  Bu durumda fonksiyona yapılan çağrıdan sonra ilk çağrıdan elde ettiğimiz adresteki değeri kullanmadan tekrar çağırmamalıyız.
   
   
+```
+  char* get_name(void)
+{
+	static char str[100];
+	scanf("%s", str);
+	return str;
+}
+
+
+
+
+int main()
+{
+	printf("3 farkli yazi giriniz:");
+	char* p1 = get_name();
+	char* p2 = get_name();
+	char* p3 = get_name();
+
+	printf("girdiginiz uc isim : %s %s %s", p1, p2, p3);
+	/* Programı çalıştırdığımızda ekrana en son girilen değeri 3 kez yazdırıldığı görülecektir. 
+	   Ancak beklenen her değerin ayrı ayrı yazdırılmasıdır. Yani bunu düzeltmenin yolu geri dönüş değerini bir değişkene 
+	   atamak olabilir.
+	*/
+}
+```
+
+
+**NULL Pointer
+
+- NULL bir makrodur. (bir sembolik sabittir)
+Bir keyword, identifier değildir.
+
+- NULL makrosu C'nin bazı başlık dosyalarında tanımlanmıştır.
+- <stdio.h>, <stdlib.h> vs.
+- NULL bir adres sabitidir. (NULL pointer diye okuyunuz.) (NULL gösterici)
+- Bu adres sabiti pointer değişkenlere ilk değer olarak verilebilir ya da atanabilir.
+- NULL pointer değerini asla pointer olmayan bir değişkene atamayın.
+- NULL pointer, herhangi türden bir pointer değişkene atanabilir. 
+
+		int* p = NULL;
+		double* = NULL;
+		
+- Bir pointer değişkenin değeri NULL pointer ise bu pointer geçerli (valid) pointer'dır.
+- Değeri NULL pointer olan bir değişken (semantik olarak) hiçbir nesneyi göstermeyen bir değişkendir.
+
+
+		#include <stdio.h> 
+		
+		int main()
+		{
+			int x = 10; 
+			int a[5];
+			int* p; ---> semantik açıdan geçersiz (çöp değerde)
+			int* q = NULL; ---> semantik açıdan geçerli.
+			int* ptr = a + 5; --> geçerli / dizinin bir elemanının adresini gösteriyor.
+			int* px = &x; ---> x'in adresini gösteriyor ve geçerli.
+		}
+		
+
+- Değeri NULL pointer olan bir pointer değişkeni, dereferance etmek yani *ptr, ptr[i] gibi kullanmak tanımsız davranıştır.
+  Çünkü değeri NULL pointer'sa herhangi bir nesneyi göstermiyor. Ancak içerik(*) operatörünün veya köşeli parantez 
+  operatörünün operantı olması için bir adres göstermesi gerekiyor. 
+  	
+		Yukarda anlatılan durum bir sentaks hatası değildir. Tanımsız davranıştır.
+		
+- Aynı şekilde değeri NULL pointer olan bir değişkeni toplama, çıkarma, ++, -- veya pointerlar arası çıkarma 
+  işlemine sokarsanız tanımsız davranıştır.
   
-  
-  
-  
-  
-  
-  
-  
+- Bir pointer değişkenin NULL pointer olup olmadığını sınayabiliriz.
+
+		int x = 10; 
+		int* ptr = &x;
+		if (ptr == NULL)
+			printf("ptr null pointer'dır\n");
+		
+- Eğer iki pointer değişkenin ikisinin de değeri NULL pointer ise bu iki ptr değişken değerce eşittir.
+
+- İlk değer verilmemiş global ve statik pointer değişkenler hayata NULL pointer ile başlatılır.
+
+
+		//global alan
+		int* p; --> hayata NULL pointer ile başladı.
+		int x; --> ilk değeri 0 olarak hayata başladı.
+		
+
+- C'de lojik ifade beklenen yerlerde bir adres ifadesi kullanılabilir.
+	- Bir adres lojik yorumlamaya tabi tutulduğunda NULL olup olmadığı değerlendirilir.
+
+			if (ptr) --> if (ptr != NULL)
+			if (!ptr) --> if (ptr == NULL)
+			
+- Normal olarak bir pointeir değişkene bir adres atanmalıdır. Bir pointer değişkene bir tam sayı atanması C dilinde yanlıştır.
+ Ancak bu durumun bir istisnası vardır.
+ 	- Eğer bir pointer değişkene 0 tam sayı sabiti atanırsa derleyici o tam sayı sabitini
+ 	  (implicitly) olarak NULL pointer değerine dönüştürür.
+	  
+		int * p = NULL ile int* p = 0 aynı işlemi gören ifadelerdir.
+		
+- Her ne kadar dilin kuralları bu kullanıma izin verse de programcılar özel durumların dışında dikkat çekmesi için daha çok
+  NULL makrosu kullanma eğilimindedirler.
+  	- Aradaki tek fark şudur;
+  	- Eğer 
+  	
+  			int* ptr = NULL; 
+	- Kullanırsanız NULL makrosunu içeren başlık dosyalarından birini include etmeni gerekirken
+	
+			int *ptr = 0; 
+	- Kullanımında herhangi bir başlık dosyası include etmenize gerek yoktur.
+  		
   
   
   
