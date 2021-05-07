@@ -152,7 +152,7 @@ iki işlenen gerektiren işleçlere ikili işleçler denir.
 
  #
  
- Storage Duration (Ömür)
+# Storage Duration (Ömür)
 
  - Automatic storage class
  
