@@ -282,7 +282,7 @@ Bu sebeple mümkün olan her yerde değişkenlere ilk değer ifadesi verilmelidi
 
  #
  
- Scope (kapsam)
+ # Scope (kapsam)
 
  Bir tanımlayıcının kapsamı, tanımlayıcının (Identifiers) doğrudan 
  erişebildiği programın bir parçasıdır. C'de tüm tanımlayıcılar kapsamlıdır.
