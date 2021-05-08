@@ -373,6 +373,9 @@ Bu sebeple mümkün olan her yerde değişkenlere ilk değer ifadesi verilmelidi
   [4]=10
 ```
 
+- Peki yukarıdaki kod parçasında biz statik alanda iken global alanda olan x e ulaşmak istersek bunun bir çözümü var mı? (değişken gölgeleme)
+	- C'de bunun bir çözümü yoktur. Buna değişken gölgelenmesi olarak adlandırabiliriz. Ancak C++ da vardır. 
+
 
  #### Örnek:
   ```
