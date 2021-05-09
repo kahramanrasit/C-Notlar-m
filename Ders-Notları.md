@@ -6413,7 +6413,7 @@ int main()
 ```
 
 
-**NULL Pointer
+ **NULL Pointer
 
 - NULL bir makrodur. (bir sembolik sabittir)
 Bir keyword, identifier değildir.
@@ -6495,17 +6495,362 @@ Bir keyword, identifier değildir.
 			int *ptr = 0; 
 	- Kullanımında herhangi bir başlık dosyası include etmenize gerek yoktur.
   		
+  # Ders - 34 - 23.04.2021
   
   
+  - Null karakterle karıştırılmamalıdır.
+  - NULL pointer conversion
   
+  - Bir pointer dizisinde ilk değer verilirken dizide değer verilmeyen elemanlar hayata NULL pointer değeri ile başlarlar.
+
+		 int* func(void); // geri dönüş değeri adres olan bir fonksiyon
+		 
+- Adres döndüren fonksiyonların bir kısmı başarısızlık bilgisini NULL pointer ile döndürerek çağırana aktarıyorlar.
+- Yani en çok kullanıldığı senaryo başarısızlık (işini yapamama) durumunda NULL pointer döndürülüyor.
+	- Yalnız bütün adres döndüren fonksiyonlar için böyledir diye düşünmüyoruz asla.
+	- Bu farkı biz bilmek zorundayız. Eğer standart C fonksiyonuysa zaten bilmek zorundasınız. 
+	Eğer değilse mutlaka dökümantasyonuna bakılmalıdır.
+		- Ek olarak adres döndüren bir fonksiyon gördüğümüzde fonksiyonun geri dönüş değerinin 
+		  başarısızlık durumunda NULL değerinin geri dönüş değeri olarak döndürülüp döndürülmediği kontrol edilmelidir.
+		  
+- Bazı fonksiyonlar veri yapılarında arama yapıyorlar. Böyle fonksiyonlara arama(search) fonksiyonu denildiğine değinmiştik
+Genellikle C'de arama fonksiyonları adres döndürüyorlar. Aranan değer bulunursa o değere sahip nesnenin adresini, 
+bulamaz ise NULL pointer döndürüyor.
+
+
+- Bir başarısızlık (işini yapamama) durumunda geri dönüş değeri olarak NULL pointer döndüren bir fonksiyon yazalım.
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "nutility.h"
+
+#define SIZE	10
+
+
+int* search(const int* p, size_t size, int val)
+{
+	while (size--) {
+		if (*p == val)
+			return (int*)p; //const cast
+		++p;
+	}
+	return NULL;
+}
+int* alternatifsearch(const int* p, size_t size, int val)
+{
+	for (size_t i = 0; i < size; ++i) {
+		if (p[i] == val)
+			return (int*)(p + i); //const cast
+	}
+	return NULL;
+}
+
+int main()
+{
+	int a[SIZE];
+	int ival;
+	int* p;
+
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	printf("yukaridaki dizide aranacak sayiyi giriniz: ");
+	scanf("%d", &ival);
+	p = search(a, SIZE, ival);
+	if (p != NULL) { //if (p) olarak da kullanılabilir!
+		printf("%d indisli elemanda bulundu...\n", p - a);
+	
+	}
+
+		
+}
+
+```
   
+- Uyarı: int* search(const int* p, ...); yandaki fonksiyon tanımında geri dönüş değeri adres olduğunu görünce ve bize 
+verilen dizinin de okuma amaçlı olduğunu const u görüp anladığımızda aklımıza bu fonksiyonda const cast yapılacağı canlanmalıdır.
+
+
+- Bir fonksiyonun parametresinin bir pointer olması durumunda, böyle bir fonksiyona bir nesne adresi gönderilmesi gerekiyor.
+ Null pointer gönderilirse UB olur.
+ 	- Ancak bazı fonksiyonları çağıran kodların NULL pointer göndermelerini bir seçenek, opsiyon olarak sunabiliyor. 
+ 	  Böyle bir seçenek mevcutsa mutlaka dökümante edilmiştir.
+ 		- Yani fonksiyon bize opsiyonel olarak ya bir nesne adresi ya da NULL pointer isteyebilir. Böyle durumda UB yaşanmaz.
+
+
+- Konuyu toplarsak 2 uyarımız mevcut. 
+	- Adres func()---> adres döndüren fonksiyonların geri dönüş değeri türünün ne anlama geldiğini mutlaka okumalıyız.
+	  NULL pointer döndürme durumu var ise (başarısızlık durumunda) ona göre çağrı yapılarak önlem alınmalıdır.
+	- void func(int* p) ---> Parametresi pointer olan bir fonksiyonda da mutlaka acaba bu fonksiyona NULL pointer göndermem
+	  bana verilmiş bir opsiyon mu değil mi diyerek dökümantasyon incelenmeli ve teyit edilmelidir.
+	  
+- Bir pointer değişkene NULL makrosu ilk değer verilerek bayrak değişken olarak kullanılabilir.
+
+		int* ptr = NULL;
+		if (ptr)
+			ptr = &(variable);
+		if (!ptr) // ptr değişkeninin hala NULL olup olmadığı kontrol edildi.
+			//something
   
+  - Null pointerının kullanıldığı bir durum daha var. Ancak bu daha çok dinamik bellek yönetiminde karşımıza çıkmakta. 
+  	- Pointer değişkenimiz hayatında devam ederken onun göstermekte olduğu nesnenin hayatı sona eriyor.
+  		- (pointer invalidation)
+
+		int* p;
+		if (p) {
+			int x = 10;
+			p = &x;
+		}
+- Yukarıda p pointerına otomatik ömürlü x nesneinin adresi atandı. Ancak block'dan çıkıldığında x nesnesinin ömrü sona erdi
+ ve p pointerı çöp değer halin, aldı. İşte tam da burada NULL makrsou p pointerına atanarak hem p'nin hiçbir nesneyi göstermediği belirtilmek 
+ hemde p'yi çöp değerden çıkarıp geçerli bir pointer haline getirmek için kullanılır. Yalnız bu P'yi dereference(*) edebileceğiniz anlamına asla gelmemektedir.
+ 
+ 
+ 
+ - NULL Pointer 					NULL Character
+  - NULL 						- '\0'
+  - yani bir makro önişlemci tarafından			- bildiğimiz tam sayı sabiti.
+   bir yer değiştirme işlemine sokuluyor.
+   - Bir adres sabitidir.				- bir tamsayı sabiti.
+   - pointer değişkene atanır.				- char dizinin elemanına atanır. Ya da 
+   							  bir int değişkene atanır.
+							  
+							  
+# Yazılar Üzerinde İşlem Yapan Fonksiyonlar
+
+**<string.h> Kütüphanesi
   
+- Hatırlatma olarak bir yazı dizisini ekrana yazdıran puts fonksiyonunu bir de biz yazalım.
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "nutility.h"
+
+#define SIZE	100
+
+void myputs(const char* p)
+{
+	while (*p != '\0')
+		putchar(*p++);
+
+	putchar('\n');
+}
+
+void myputs2(const char* p)
+{
+	for (int i = 0; p[i] != '\0'; ++i)
+		putchar(p[i]);
+
+	putchar('\n');
+}
+
+
+
+int main()
+{
+	char str[SIZE] = "something about";
+
+	puts(str);
+	myputs(str);
+	myputs2(str + 9); // about ekrana yazılır.
+
+
+}
+``` 
+
+- sgets() fonksiyonunu yazalım.
+```
+void mysgets(char* p)
+{
+	int ch;
+	while ((ch = getchar()) != '\n') // getchar fonksiyonun geri 
+		*p = (char)ch;		    //dönüş değeri int olduğu için ch int tanımlanıp sonrasında type cast yapıldı.
+
+	*p = '\0';
+		
+}
+```
   
-  
-  
-  
-  
+- Dikkat: Eğer siz standart bir C fonksiyonu çağırıyorsanız ve boyut göndermiyorsanız taşma olmaması 
+için çok dikkatli olmalısınız.
+
+- <string.h>
+- Dikkat!! Öğrenmek amaçlı yazılması haricinde standart C fonksiyonu ile aynı işi yapan bir fonksiyon tanımlamayınız.
+
+	+ strlen    + strcpy
+	+ strchr    + strcat
+	+ strrchr   + strcmp
+	+ strstr    + strncpy
+	+ strpbrk   + strncmpt
+	+ strspn    + strncmpt
+	+ strtcpn   + strcat
+	+ strtok
+	
+- Yazının uzunluğunu ölçen bir örnek:
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "nutility.h"
+
+#define SIZE	100
+
+
+
+int main()
+{
+	char str[SIZE];
+
+	printf("bir yazi giriniz: ");
+	sgets(str);
+	size_t len = strlen(str); //strlen fonksiyonun geri dönüş türüne göre len fonksiyonun türü belirlendi.
+	printf("uzunluk = %zu", len); //%zu size_t formatı
+
+}
+
+```
+
+#
+- Bir yazıyı ters çevirip ekrana yazdıran fonksiyon:
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "nutility.h"
+
+#define SIZE	100
+
+void rputs(const char* str)
+{
+	for (int i = (int)strlen(str) - 1; i >= 0; --i)
+		putchar(str[i]);
+
+	putchar('\n');
+
+}
+
+
+int main()
+{
+	char str[SIZE];
+
+	printf("bir yazi giriniz: ");
+	sgets(str);
+	rputs(str);
+}
+
+```
+# 
+
+- strlen fonksiyonunu biz yazarsak eğer :
+
+```
+size_t mystrlen(const char* str)
+{
+	size_t len = 0;
+
+	while (*str++ != '\0')
+		++len;
+
+	return len;
+}
+alternatif olarak
+size_t mystrlen(const char* p)
+{
+	const char* ps = p;
+	
+	while(*p)
+		++p;
+	return p - ps;
+}
+```
+
+#
+- char* strchr(const char *p, int c)
+- Yukardaki fonksiyon tanımından, fonksiyonun ikinci parametresinin bir karakter numarası olduğunu görüyoruz. 
+  geri dönüş değerinin adres olduğunu görüyoruz.
+ - Bu fonksiyona bir dizi adres ve karakter gönderdiğimizde bize o karakter dizide varsa bulunduğu adresi, eğer yoksa NULL pointer döndürüyor.
+
+- Kısa bir örnek:
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "nutility.h"
+
+#define SIZE	100
+
+
+int main()
+{
+
+	char s[SIZE];
+	printf("bir yazi giriniz:");
+	sgets(s);
+
+	// Bu yazıda a karakterini arayalım.
+	char* p = strchr(s, 'a');
+
+	if (p) { //if (p != NULL) 
+		printf("aradiginiz karakter girilen yazida %d indisinde.\n", p - s);
+		*p = '*';
+		puts(s);
+	}
+	else
+		printf("aranan yazi bulunamadi.....\n");
+
+}---> Gönderilen karakteri sağdan sola yazıda ilk gördüğü adreste buldu.
+
+```
+#
+- Peki biz gönderilen karakterin kaç tane olduğunu bulmak istersek
+
+```
+size_t count(const char* p, int ch)
+{
+	size_t cnt = 0;
+	while (*p) {
+		if (*p++ == ch)
+		  ++cnt;
+
+	}
+
+	return cnt;
+
+}
+```
+
+
+
+
+
+
   
   
   
