@@ -6786,7 +6786,7 @@ size_t mystrlen(const char* p)
 }
 ```
 
-#
+# Ders- 35 - 26.04.2021
 - char* strchr(const char *p, int c)
 - Yukardaki fonksiyon tanımından, fonksiyonun ikinci parametresinin bir karakter numarası olduğunu görüyoruz. 
   geri dönüş değerinin adres olduğunu görüyoruz.
@@ -6843,11 +6843,313 @@ size_t count(const char* p, int ch)
 
 	return cnt;
 
+} ---> standart bir fonksiyon değil
+```
+
+- char* strrchr(const char* p, intc); 
+	- Bu standart fonksiyon ise karakter aramasını sağdan sola doğru gerçekleştirir.
+- Dikkat: Her ne kadar null karakter yazıya dahil olmasa da strchr ile null karakteri aratabilirsiniz.
+
+- Aşağıda ekrana girilen yazının sonuna ünlem işareti eklemeye bakalım.
+
+		char[SIZE];
+		char* p;
+		
+		printf("Bir yazi giriniz: ");
+		sgets(s);
+		
+		p = strchr(s, '\0'); // yazının bittiği yerin adresini bulduk.
+		*p++ = '!'; // Yazının sonuna ! eklendi.
+		*p = '\0'; // Yazının bittiğine dair null karakter eklendi.
+		
+		printf(" (%s) \n", s);
+		
+
+- Şimdi bir de strchr() fonksiyonunu biz yazmayı deneyelim:
+
+```
+char* mystrchr(const char* p, int val)
+{
+	while (*p) {
+		if (*p == val)
+			return (char*)p;
+		*p++;
+	}
+
+	if (val == '\0') // aranan karakterin null karakter olması ihtimaline karşın
+		return (char*)p;
+
+	return NULL;
+}
+
+```
+
+#
+- Şimdi de strrchr() fonksiyonunu yazalım.
+
+```
+char* mystrrchr(const char* p, int val)
+{
+	const char* pfound = NULL;
+
+	while (*p) {
+		if (val == *p)
+			pfound = p;
+		++p;
+	}
+
+	if (val == '\0')
+		return (char*)p;
+
+	return pfound;
+}
+
+```
+#
+
+- Bir yazının adresini tutan pointer'ı yazının sonundaki null karakteri gösterecek hale getirmek için;
+
++ while (*p != '\0')  //while (*p)
+	++p;
+	
++ while(*p++)
+	;
+  --p;
+  
++ if(*p)
+    while (*++p)
+     	;
+	
++ p += strlen(p);
+
++ p = strchr(p, '\0');
+
+
+- char* strstr( const char *psource, const char* psearched);
+	- Yazınin içerisinde yazı arayan fonksiyondur. 1. parametre arama yapılacak dizinin adresidir. 2. parametre ise aranan yazı dizisinin adresi.
+	- Geri dönüş değeri ise yazıyı bulduğu takdirde dizinin bulduğu elemanın adresi, Bulamazsa NULL pointer.
+
+
+- Yazının içerisinde aranan yazıyı yıldız yapan program:
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "nutility.h"
+
+#define SIZE	100
+
+
+int main()
+{
+
+	char source[SIZE];
+	char search[SIZE];
+
+	printf("aranacak yaziyi giriniz:\n");
+	sgets(source);
+	printf("girilen yazinin icerisinde aranacak yaziyi giriniz:\n");
+	sgets(search);
+
+	char *p = strstr(source, search);
+
+	if (p) {  // burada dönen adres olduğu için, adresin null olup olmadığı kontrol ediliyor dikkat!!
+		printf("aranan yazi bulundu...\n");
+		for (int i = 0; i < strlen(search); ++i) {
+			*p = '*';
+			++p;
+		}
+		puts(source);
+	}
+	else
+		printf("aranan yazi girilen yazida bulunamadi...\n");
+
+}
+
+
+```
+
+#
+- Şimdi strstr fonksiyonunu yazalım ilki benim yazdığım hali ikincisi Plauger standart c library kitabından alıntı..
+
+```
+
+char* mystrstr(const char* psource, const char* psearch)
+{
+	const char* temp = psearch;
+	while (1) {
+
+		if (*psource == *temp || *temp == '\0' ) {
+			if (*temp == '\0')
+				return (char*)(psource - strlen(psearch));
+			++psource;
+			++temp;
+			
+
+		}
+
+		else {
+			if (*psource == '\0')
+				return NULL;
+			temp = psearch;
+			++psource;
+		}
+
+	}
+	
+}
+```
+
+# 
+Plauger'ın yazdığı 
+
+```
+
+char* mystrstr(const char* psource, const char* psearch)
+{
+	if (*psearch == '\0')
+		return (char*)psource;
+		
+	for (; (psource = strchr(psource, *psearch)) != NULL; ++psource) {
+		const char* sc1, * sc2;
+
+		for (sc1 = psource, sc2 = psearch; ; ) {
+			if (*++sc2 == '\0')
+				return (char*)psource;
+				
+			else if (*++sc1 != *sc2)
+				break;
+		}
+		
+	}
+	
+	return NULL;
+}
+
+```
+#
+
+- char* strpbrk(const char* psource, const char* pchars);
+	- Birinci parametre arama yapılacak olan diziyi, ikinci parametre ise karakterlerin olduğu bir diziyi ifade ediyor. İkinci parametredeki karakterlerden birini, birinci dizide ilk bulduğu adresi geri dönüş değeri olarak döndürüyor. Bulamazsa NULL pointer döndürüyor.
+
+- Bir örnek yazalim:
+
+```
+        char source[SIZE];
+	char str[] = "aeou";
+
+	printf("aranacak yaziyi giriniz:\n");
+	sgets(source);
+
+	char* p = strpbrk(source, str);
+
+	if (p) {
+		printf("aranan yazi %d indiste bulundu....\n", p - source);
+		*p = '*';
+	    puts(source);
+	}
+	else
+		printf("aranan yazi bulunamadi\n");
+
+```
+
+- Şimdi de strpbrk() fonksiyonunu yazalim:
+
+```
+char* mystrpbrk(const char* p, const char* ch)
+{
+	while (*p) {
+		if (strchr(ch, *p))
+			return (char*)p;
+		
+		++p;
+	}
+	return NULL;
 }
 ```
 
 
+- char* strcopy(char* pdest, const char* psource);
+	- Geri dönüş değeri işlem yaptığı dizinin adresidir. İkinci parametredeki dizi birinci parametredeki adrese kopyalanır.
 
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "nutility.h"
+
+#define SIZE	100
+
+
+
+
+
+int main()
+{
+
+	char source[SIZE];
+	char dest[SIZE];
+
+	printf("kopyalanacak yaziyi giriniz:\n");
+	sgets(source);
+
+	strcpy(dest, source);
+
+	printf("[%s]  [%s] ", source, dest);
+
+
+}
+
+```
+
+#
+
+- Dikkat!! : strcpy fonksiyonu pointer hatalarına açık. Yani sizin gönderdiğiniz adresteki dizilerden kopyalanacak olan dizinin boyutu 
+yetersiz kaldığında 
+
+- strcpy fonksiyonun bizim yazdığımız hali:
+
+```
+
+char* mystrcpy(char* d, const char* s)
+{
+	char* p = d;
+
+	while (*p++ = *s++)
+		; // null statement
+
+	return d;
+
+}
+
+```
+
+- Overlapped Blocks (Kesişen bloklar)
+	- Eğer bir okuma - yazma işlemi kesişen bloklar üstünde yapılıyorsa standart C fonksiyonları işlemin güvenilir 
+	  bir şekilde yapılıp yapılamayacağını belirliyor.
+
+	char str[SIZE];
+	strcpy(str + 2, str); // Tanımsız Davranış (UB);
+	printf("%s\n", str);
+
+
+- strcpy fonksiyonun standartlarda tanım farklılığı olduğunu görüyoruz. 
+ 	- char* strcpy(char* dest, const char *src); ----(c99'a kadar)
+ 	- char* strcpy(char* restrict dest, const char* restrict src); -----(c99'dan sonra)
+
+	- Yukarıdaki restrict anahtar sözcüğü şu anlama gelmektedir. Bu adreslerdeki bellek bloklarının bu işlem yapıldığı sürece 
+	bir kesişim kümesi olmadığına güvenerek yapıyorum. Bu duruma uyulmadığı taktirde UB'ye yol açacaktır.
+	
+- Bu tür kopyalam işlemleri bu güvenceyi veren memove işlemi ile yapılmalıdır.
 
 
 
