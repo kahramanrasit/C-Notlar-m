@@ -7149,18 +7149,284 @@ char* mystrcpy(char* d, const char* s)
 	- Yukarıdaki restrict anahtar sözcüğü şu anlama gelmektedir. Bu adreslerdeki bellek bloklarının bu işlem yapıldığı sürece 
 	bir kesişim kümesi olmadığına güvenerek yapıyorum. Bu duruma uyulmadığı taktirde UB'ye yol açacaktır.
 	
-- Bu tür kopyalam işlemleri bu güvenceyi veren memove işlemi ile yapılmalıdır.
+- Bu tür kopyalama işlemleri bu güvenceyi veren memove işlemi ile yapılmalıdır.
+
+
+- char* strcat(char* pdest, const char* psource);
+	- cat kısaltması "concatenate = birleştirme" kelimesinden gelmektedir.
+	- Bu fonksiyon iki dizideki yazıyı birleştirerek birleştirilen dizinin adresini geri dönüş değeri olarak döndürür.
+	
+
+- Kullanım örneği: 
+
+	
+		char s1[SIZE], s2[SIZE];
+		
+		printf("iki isim giriniz: ");
+		scanf("%s%s", s1, s2);
+		strcat(s1, s2);
+		printf("(%s)\n ", s1);
+
+- Yine bu fonksiyonda da taşma durumunu gözetmek sizin sorumluluğunuzda.
+
+- C'nin c11(2011) standartlarııyla opsiyonel olarak _s ile biten fonksiyonlar var. Bu fonksiyonların
+ farkı yazma amaçlı alınan dizinin boyutunu da alması ve böylece taşmama garantisi de vermesidir.
+ 
+ - Şimdi strcat fonksiyonunu bir de biz oluşturalım.
+ 
+```
+char* mystrcat(char* pdest, const char* psource)
+{
+	char* p = pdest;
+
+	while (*pdest)
+		++pdest;
+
+
+	while (*pdest++ = *psource++)
+		; // null statement
+
+	return p;
+
+}
+```
+- strcat fonksiyonunun plauger'ın yazdığı şekli:
+
+```
+char* mystrcat(char* pdest, const char* psource)
+{
+	char* s;
+	for (s = pdest; *s != '\0'; ++s)
+		;
+	for (; (*s = *psource) != '\0'; ++s, ++psource)
+		;
+
+	return pdest;
+
+}
+```
+- Alternatif olarak :
+
+```
+char* mystrcat(char* pdest, const char* psource)
+{
+	strcpy(pdest + strlen(pdest), psource);
+	return pdest;
+}
+char* mystrcat(char* pdest, const char* psource)
+
+```
+
+
+- Bir örnek:
+
+```
+	char s1[SIZE];
+	char s2[SIZE];
+	char s3[SIZE];
+	
+	printf("İki isim girin: \n");
+	scanf("%s%S", s1, s2);
+	
+	strcpy(s3, s1);
+	strcat(s3, s2);
+	
+	printf("(%s) + (%s) = (%s)", s1, s2, s3);
+
+
+```
+
+- Yazıların karşılaştırılması strcmp fonksiyonu:
+
+	- Herehangi bir programda c ve ya karşılaştırılsın (yazılan satırlar temsili)
+
+		x ve y compare(date x, date y);
+		 
+		if (x > y) ----> retval > 0
+		if (x < y) ----> retval < 0
+		if (x == y)----> retval == 0
+		
+- Yukarıda anlatılmak istenen fonksiyonun geri dönüş değeri int değerden ve iki yazının kıyaslanması geri dönüş değerinin pozitifliği 
+veya negatifliği ile sağlanmaktadır.
+
+- int stcmp(const char* pleft, const char* pright);
+
+		if (strcmp(s1, s2) == 0) ---> s1, s2 birbirine eşitse if in içerisine gir
+		if (!strcmp(s1, s2)) ----> s1 , s2 ye eşitse gir
+
+
+- Yazıların büyüklüğü küçüklüğü konusunda kullanılan algoritma lexicographical compare 'dir.
+
+		- container (collection) comparison
+			- Aynı türden ögeleri bir arada tutan veri yapılarına verilen terim
+
+
+- İki farklı dizi karşılaştırıldığında karşılıklı öğe çiftleri karşılaştırıldığında ilk farklı çift bulunduğunda
+  bu çiftten hangisi daha büyükse o dizi büyük olmuş olur. (ASCII'ye göre sayısal olarak karşılaştırmadır bu)
+  
+  		2 4 7 9 6
+		2 4 7 5 1 ----> burada 9 ile 5 ilk farklı olan değerlerdir. 9 daha büyük olduğundan üstteki dizi daha büyük olur.
+		
+		
+		- 2 4 7 9
+		  3      ----- burada 2. dizi daha büyük olarak algılanır.
+		  
+		- 1 2 3 4
+		  1 2 3   ---> burada 1. dizi dah büyüktür.
+		  
+		- cumhuriyet
+		  ok   ---> o'nun karakter kodlama karşılığı daha büyük olduğundan 2. dizi büyüktür.
+		  
+		- can
+		  candan   ----> candan büyüktür.
+		  
+		  
+		- masa
+		  MASA   ----> masa daha büyüktür.
+		  
+		  
+- Bir örnekle girilen yazılar kıyaslansın:
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "nutility.h"
+
+#define SIZE	100
 
 
 
+int main()
+{
+
+	char s1[SIZE];
+	char s2[SIZE];
+	int result;
+
+	printf("iki kelime girin:  ");
+	scanf("%s%s", s1, s2);
+
+	result = strcmp(s1, s2);
+
+	if (result > 0)
+		printf("%s > %s\n ", s1, s2);
+	else if (result < 0)
+		printf("%s < %s\n", s1, s2);
+	else
+		printf("%s = %s\n", s1, s2);
+
+}
+```
+
+- Bizim yazdığımız hali:
+
+```
+int mystrcmp(const char* pleft, const char* pright)
+{
+	for (; *pleft == *pright; ++pleft, ++pright) {
+		if (*pleft == '\0')
+			return 0;
+	}
+	
+	return *pleft - *pright;
+}
+
+```
+
+
+- stricmp fonksiyonu standart değiş ama genel olarak derleyicilerde vardır.
+	- Karşılaştırmayı "case insensitive" büyük - küçük harf uyumuna bakmadan yapıyor.
+
+- Uyarı:
+
+
+		char s1[SIZE];
+		char s2[SIZE];
+		
+		if (s1 == s2) { // always false
+			printf("something\n");
+		else 
+			printf("something....\n");
+  
+- Yukarıdaki kullanımda array decay özelliği sebebiyle yalnızca dizinin ilk elemanının adresleri karşılaştırılmıştır.
+
+
+- Yazılarda trim: yazının başındaki ya da sonundaki boşlukların ya da özel karakterlerin yazıdan çıkartılması demektir.
+
+
+- Bir mülakat sorusu:
+
+		
+		int is_at_end(const char* p1, const char* p2)
+		- p1 adresindeki yazi p2 adresindeki yazi ile mi bitiyor.
+
+	- eğer doğru ise non-zero, eğer yanlış ise zero değer döner.
+
+
+		int is_at_end(const char* p1, const char* p2)
+		{
+			size_t  len_p1 = strlen(p1);
+			size_t  len_p2 = strlen(p2);
+			
+			if (len_p2 > len_p1) --> eğer bu karşılaştırma yapılmazsa tanımsız davranışa yol açılmış olur.
+				return 0;
+				
+			return !strcmp(p1 + len_p1 - len_p2, p2);
+				
+		}
   
   
-  
-  
-  
-  
-  
-  
+  - Ödev sorusu: ikinci yazıyı birinci yazının başına ekleyen fonksiyonu yazınız:
+  - char* str_pretend(char* pdest, const char* psource);
+- !!!!ara değişken dizi kullanılmadan da çözümü muhakkak vardır deneyiniz.
+```
+
+char* str_prepend(char* pdest, const char* psource)  //psource'dan okuduğun yazıyı pdest'in başına yaz
+{
+	char* p = pdest;
+
+	char temp[SIZE];
+	char* ptemp = temp;
+
+	for (; *ptemp = *psource ; ptemp++, psource++)
+		;
+
+
+	for (; *ptemp = *pdest; ++ptemp, ++pdest)
+		;
+
+	strcpy(p, &temp);
+
+
+	return p;
+
+}
+```
+
+- standart bir fonksiyon değiş ama strrev fonksiyonu yazıyı tersine çeviriyor.
+
+```
+char* mystrrev(char* p)
+{
+	size_t len = strlen(p);
+
+	for (size_t i = 0; i < len / 2; ++i) {
+		char temp = p[i];
+		p[i] = p[len - i - 1];
+		p[len - i - 1] = temp;
+
+	}
+
+	return p;
+}
+
+```
+
   
   
   
