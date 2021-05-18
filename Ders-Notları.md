@@ -7427,6 +7427,967 @@ char* mystrrev(char* p)
 
 ```
 
+# Ders 36 - 28.04.2021
+
+- String literali aslıdna elemanları char türden olan bir dizidir.
+
+		"Necati" --> 7 elemanlı char dizi türü
+		"Necati" --> aslında bu bir dizi olduğu için derleyici bunu adres olarak algılar.
+		
+- Eğer siz şu şekilde bir kod yazarsanız;
+
+		putchar(*"isim");  --> ekrana i harfi yazdırılır.
+		putchar("ismail"[1]); ---> Ekrana s ismi yazdırılı.
+		
+		printf("%zu\n", strlen("ayse")); //yazının uzunlugu olan 4 yazısı yazdırılır.
+		printf("%zu\n", sizeof("ayse")); //ekrana boyut olan 1x5 den 5 yazısı yazdırılır.
+		
+#
+
+		char *p = "dıgukan";
+		
+		for (int i = 0; i < 7; ++i)
+			putchar(p[i]); --> Ekrana dogukan yazdırılır.
+  
+  - String literalleri salt okuma amaçlı kullanılabilecek dizilerdir. Bir string literalini değiştirme girişimi UB'dir.
+
+		char *p = "kaya";
+		*p = 'm'; // UB 
+		
+
+- Bu UB'ye düşme ihtimalini ortadan kaldırmak için doğru kullanım;
+
+		const char* p = "kaya";
+		
+#
+
+
+		char* p = "kaya";
+		*p = 'm'; // geçerli ama UB
+		p[2] = 'n'; // geçerli ama UB
+		
+		- Ama siz eğer const olarak tanımlasaydınız ub ye yol açmadan sentaks hatası olacaktı.
+		
+
+- Bir fonksiyona string literali gönderilirkne de parametre tanımı const olmalıdır. Aksi halde UB'ye yol açabilir.
+
+		char str[SIZE];
+		strcpy(str, "mustafa"); // geçerli
+		
+		char* p = "musa";
+		strcat(p, "can"); //UB
+		- p'nin gösterdiği "musa" dizisine ekleme yapılacak.
+
+- Bir kullanım şekli;
+
+	
+		char str[SIZE];
+		printf("bir isim giriniz: ");
+		sgets(str);
+		
+		if (!strcmp(str, "huseyin")) 
+		 	//code
+			
+		- Yukarıda girilen yazının huseyin olup olmadığı sorgulandı.
+
+- String literalleri statik ömürlü dizilerdir.
+
+		const char *p = "erdinc kaya";
+		printf(p); //doğru bir kullanımdır.
+		
+		char str[100] = "ilyas";
+		printf(str); //geçerli 
+		
+
+- printf("merhaba arkadaslar");
+
+		yukarıdaki bir string literali kullanıldı. Artık bu yazıyı tutan dizi statik ömürlü nesnelerin tutulduğu bellek alanında
+		programın başından sonuna kadar kalıyor. Yani özellikle programcının bellek kullanımı açısından bir problemi varsa string
+		literalleri idareli kullanılmalıdır.
+		
+#
+
+		const char* weekday(int daynum)
+		{
+			switch(daynum) {
+				case 1: return "pazartesi";
+  				case 2: return "sali";
+				case 3: return "carsamba";
+				case 4: return "persembe";
+				case 5: return "cuma";
+				case 6: return "cumartesi";
+				case 7: return "pazar";
+			}
+		}
+		
+
+- String litearlleri, programın başıdnan sonuna kadar bellekte kalırlar. 
+
+	- yazı adresi döndüren bir fonksiyonun bir string literali(adresi) döndürmesi UB değildir.
+	
+	
+  		3["aysegul"]; --> *(3 + "aysegul") == ekran 3 yazdırıldı.
+		
+
+
+- Dikkat: kod içerisindeki özdeş(aynı) string literalleri karşılığı derleyicilerin 
+	- Bunlları tek dizi olarak tutmaları
+	- Ayrı ayrı birden fazla dizi tutmaları 
+	
+Tamamen derleyiciye bağlıdır. (unspecified behavior)
+
+		const char* p1 = "firat";
+		const char* p2 = "firat";
+		
+		if (p1 == p2) --> iki pointerin eşitliği sınanmış ama derleyiciye göre aynı da olabilir farklı da olabilir. 
+		    		  Bu yüzden buna güvenerak asla işlem yapılmamalıdır.
+				  
+- Dikkat: Adresleri karşılaştırmak ile yazıları karşılaştırmak sık yapılan hatadır.
+
+
+		char str[SIZE];
+		
+		if (str == "fadime")
+		
+		- sentaks hatası yoktur. Ancak alwaysa false'dur. Çünkü str bir adresken "fadime" bir string literalidir.
+
+		- doğru yazımı aşağıda verilmiştir.
+
+		if (!strcmp(str, "fadime")
+		
+	
+  - Açık ara farkla mülakatlarda karşımıza en sık çıkan mülakat sorusu.
+# Soru:
+
+
+- Aşağıdaki iki kod satırı arasındaki farkı açıklayınız:
+
+      
+      1- char str[] = "something";
+      2- char* p = "think some";
+      
+      
+      
+# Cevap: 
+
+
+**1- 
+  - 1.kod satırında char türden bir dizi oluşturulmuş. Bu diziye çift tırnak içindeki yazı ile ilk değer verilmiş. Burada 
+  sadece ve sadece bir dizi tanımlanıyor. Yani programın başından sonuna kadar kalacak bir string sabiti yoktur. Bu dizilere ilk değer
+  verme sentaksının bir bileşeni. Yani şöyle düşünmemeliyiz. str dizisi something yazısını tutacak ayrıca derleyicinin yazı için 
+  ayırdığı bellek alanında yazı programın sonuna kadar kalacak. Böyle bir durum söz konusu asla değildir. Bu kod sadece ilk değer 
+  vermenin kısa bir yoludur. Ayrıca str dizini değiştirmenizde hiçbir engel yoktur. Const eklenirse tabiki durum daha farklı olabilir.
+  
+  **2-
+  - 2.kod satırında olay tamamen farklı. Burada ise siz pointer değişken tanımlıyorsunuz. Bu pointer değişkene bir string 
+   literalinin adresiyle ilk değer veriyorsunuz. Yani iki tane değişken oluşturdunuz. Birisi string literali, diğeri ise bu literali
+   gösteren pointer. Ayrıca bu kod satırı c++'da sentaks hatasıdır. const anahtar sözcüğü ile tanımlanmalıdır. C'de de const anahtar 
+   sözcüğüyle tanımlamak daha doğru olacaktır. Aksi halde pointer değişkeni dereference(*) operatörü ile içeriğini değiştirdğinde UB'ye yol
+    açabilir.
+  
+  
+  
+  
+  
+#
+
+
+		char str[100];
+		
+		//str dizisine "can" yazısını yerleştiren bir kkod yazınız.
+		strcpy(str, "can");
+		
+- ilk değer verme dışında bir sabiti fonksiyon kullanmadan yazamazsınız.
+
+		strcat(str, "dan"); ---> str yazısının sonuna dan ekini eklemiş
+		
+
+
+- Tipik bir c programcısının karşısına çıkabilecek bazı yazı manipülaston işlemlerinden örnekler.
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "Rutility.h"
+
+#define SIZE 100
+
+
+
+
+int main()
+{
+	char old_file_name[SIZE];
+	char new_file_name[SIZE];
+
+	printf("Eski dosya ismini giriniz: \n");
+	scanf("%s", old_file_name);
+
+	//1 old_file_name'deki dosya ismini new_file_name dizisine kopyalayınız.
+	
+	strcpy(new_file_name, old_file_name);
+	printf("1  %s\n\n", new_file_name);
+
+	//2 eğer dosya uzantısı yok ise .dat uzantısı olacak biçime getiriniz.
+
+	char *p = strrchr(new_file_name, '.');
+	if (!p) {
+		strcat(new_file_name, ".dat");
+
+		printf("2   %s\n\n", new_file_name);
+	}
+	
+	// 3 eğer dosya uzantısı .xls ise uzantıyı .doc olarak değiştirin
+
+	  if (!strcmp(p, ".xls")) {
+		strcpy(p, ".doc");
+
+		printf("3   %s\n\n", new_file_name);
+	}
+
+	// 4 eğer dosya uzantısı .jpg ise uzantıyı silin 
+
+	else if (!strcmp(p, ".jpg")) {
+		  *p = '\0';
+		printf("4   %s\n\n", new_file_name);
+	}
+
+
+
+	// 5 bunların hiçbiri değilse .txt uzantılı hale getirin
+
+	else {
+		strcpy(p, ".txt");
+		printf("5   %s\n\n", new_file_name);
+	}
+
+}
+```
+  
+#
+
+- Bir örnek:
+
+		const char *p = ""; //null string literal
+		
+		printf("%zu\n", strlen(p)); --> ekrana 0 yazar.
+		
+		printf("%zu\n", sizeof(p)); --> ekrana pointer değişkenin boyutu olan 4 yazar
+		
+		printf("%zu\n", sizeof("")); --> ekrana 1 yazdırılır.
+		
+
+- sizeof'a dair örnekler:
+
+
+		const char*p = "taylan";
+		
+		printf("[1]%zu\n", sizeof(*p));
+		//sizeof operatörü, operandı olan ifadenin türüne bakar.
+		Bu türün sizof değerini üretir. Burda *p char bir tür olduğundan ekrana 1 yazdırılır.
+		
+		printf("[2]%zu\n", sizeof(*p));
+		//sistemdeki pointer sizeof'u bizim derleyici için 4 tür.
+		
+		void func(const char* ptr)
+		{
+			printf("[3] %zu\n", sizeof(*ptr));
+		}
+		
+		//yukarıdaki fonksiyon main fonksiyonundan func("mustafa") diye çağırılsın
+		Yine ekrana char türünün değeri olan 1 yazdırılır.
+		
+		
+		printf("%zu\n", sizeof(p++)); // 4 ekrana yazdırılır pointer türü
+		
+		printf("%zu\n", strlen(p));
+		//sizeof operatörünün operantı olan ifadede işlem yapılmaz. p'nin değeri değişediği için strlen(p) değeri 6 olur.
+		Eğer ++p; ayrı yazılsaydı 5 olurdu.
+  
+  
+  - Karıştırılan tipik bir konu:
+
+
+	sizeof                                          strlen
+
+- bir operatör					- bir fonksiyon
+- anahtar sözcük				- strlen (p) --> bir sabit ifadesi değil
+- sizeof(str) --> bir sabit			- rentime'da çağırılıp geri dönüş değeri elde edilir.
+- compile time'da değeri belli oluyor
+
+
+
+
+		printf("%zu\n", strlen("ali")); //3
+		- adresteki yazının uzunluğu
+
+		printf("%zu\n", sizeof("ali")); // 4
+		- Bu dizinin boyutu değerini compile time' da üretecek.
+
+		printf("%zu\n", strlen("")); //yazının boyutunu yazdırdığı için 0 yazdırılır.
+		
+		printf("%zu\n", sizeof("")); //dizinin boyutunu yazdırdığı için 1 ekrana yazdırır. (\0)
+
+#
+
+
+		int a[sizeof("alican")]; //geçerli
+		int b[strlen("alican")]; // hata, bir sabit ifadesi değildir.
+		
+
+
+**String Literalleriyle İlgili Teknik Detaylar
+
+Hatırlatma: 
+
+		int  a[10];
+		printf("%zu\n", sizeof(a)); --> değeri 40 olur
+		printf("zu\n", sizeof(&a[0]); --> değeri 4 olur.
+		
+		
+#
+
+
+
+		const char* p = "\x42URS\x41";
+		puts(p); --> ekrana BURSA  yazdırılır.
+		
+- x42 gibi \x ile başlayan hex sayı sisteminde karaktere sabiti kullandığında hex sayı sisteminde
+bir rakam belirttiği için derleyici bir yerden sonra hata verir.
+
+
+		const char* p = "\x42babade";
+		- karakter sınırı olmadığı için hata
+
+- Ama octal karakter sabitinde 3 karakter sınırı vardır.
+
+		const char* p = "\10235";
+		\102 sayısı B harfi olarak algılandı sonrası ekrana normal sayı olarak yazdırıldı.
+		ekrana B35 yazdırılmış oldu.
+		
+		
+- \ karakteri, karakter sabitlerinin yazımında escape olarak kullanıldığı için string literali
+ içerisinde ters bölü karakterinin kendisini kullanacaksınız \\ şeklinde yazılır.
+  
+  
+  			puts(\\Rasit\\); --> \Rasit\ yazdırılır.
+			puts("\"murat\""); --> "murat" yazdırılır.
+			- çift tırnak içinde bu geçerlidir.
+			
+- Uzun string literallerinin birden fazla kod satıra yayılmasının 2 yolu vardır.
+
+				puts("su anda bir hata olustu lutfen \
+		devam etmek icin....");
+		
+- Yukarıdaki yöntemde ikinci stıra geçildiğinde, satıra en başından başlanmalıdır.
+	- Genelde bu yol pek tercih edilmez.
+
+			const char* p = "barıs";
+			"burak"   "mete";
+			puts(p); --> ekrana barısburakmete yazılır. 
+			- Daha sık bu şekilde kullanılır.
+
+Bir örnek:  
+
+		
+			printf("[1] kayit yenile\n"
+			       "[2] kayit ara\n"
+			       "[3] kayit sil\n"
+			       "[4] kayit degistir\n");
+
+# Pointer Arrays (Pointer Dizileri)
+
+   	 int a = 10;
+	 int b = 20; 
+	 int c = 30;
+	 
+	 int* p[] = { &a, &b, &c };
+  	 printf("%d\n", *p[0]); --> ekrana 10 yazdırılır.
+	 
+
+#
+
+	int* p[] = { &a, &b, &c };
+	
+	for (int i = 0; i < 3; ++i) {
+		printf("%d\n", *p[i]);
+	} --Z ekrana a, b ve c nin değerleri yazdırıldı.
+	
+	**p = 777; yazarsak dizinin ilk elemanını 777 yapmış oluruz.
+	
+	**p = *p[0] = **(p + 0) dır.
+	
+	**p --> double indirection ya da double dereferencing 
+	
+	- ilk içerik operatörü bizi yine bir adres eriştirdiği için ikinci içerik operatörü ile o adresteki içeriğe erişiyoruz.
+	
+	
+- Sentaksı anlamak için bir soru:
+
+		int a[] = { 2, 4, 6, 8 };
+		int b[] = { 1, 3, 5, 7 };
+		int c[] = { 10, 20, 30 };
+		
+		int* p[] = { a, b, c };
+		
+		p[1][2] = 777;
+		- [] operatörü soldan sağa öncelik yönüne sahip olduğu için p[1], p pointer dizisinin 1 indislii elemanını gösterir. 
+		  Bu elemanda adres olduğu için bu adresteki dizinin 2. indisdeki elemanına 777 sayısı atanmış olur.
+		  
+		- Eğer yine yukarıdaki kodun devamı olarak ;
+	 
+ 		++p[2];
+		++*p[2]; // yazılırsa
+		- ilk satırda p[2] ile c dizisinin adresine ulaşmış oluruz. C dizinin ilk adresini bir artırdığımızda 20 sayısının tutulduğu adrese ulaşmış
+		 oluyoruz. *p[20] ile 20 sayısının adresinin içerik operatörü ile 20 sayısının kendisine ulaşmış oluyoruz. Bunu artırdığımızda 20 sayısı
+		 21 oluyoruz.
+		 
+		 
+  
+  #
+   		int a = 10; 
+		int b = 20;
+		int c = 40;
+		
+		int* p[100] = { &a, &b, &c };
+		- Bu boyut tanımlanan içerikten fazla olduğu için geriye kalan elemanlara NULL pointer değeri verilir.
+#
+
+		int* const p[] = { &a, &b, &c };
+		- dizinin elemanları const demektir. Bu dizinin elemanları hayatları boyunca aynı değeri tutacaklar.
+		
+		p[1] = &x; // hata olur.
+		*p[1] = 88; // geçerlidir. b nesnesinin içeriği değiştirildi.
+		
+#
+
+		const int* p[] = { &a, &b, &c };
+		int const* p[] = { &a, &b, &c };
+		
+		int ival = *p[1]; // geçerli
+		
+		*p[1] = 99; // geçersizdir
+		p[1] = &x; // geçerli
+		
+# Ders 37 - 30.04.2021
+ 
+- Elemanları char* türünden olan bir dizi oluşturursam, bu dizinin elemanlarında mantıksal ilişki içindeki yazıların 
+adreslerini tutabiliyor.
+
+		const char* pmons[] = {
+					"ocak", 
+					"subat", 
+					"mart",
+					"nisan",
+					"mayis",
+					"haziran",
+					"temmuz",
+					"agustos",
+					"eylul",
+					"ekim",
+					"kasım",
+					"aralık" }; //yandaki dizi belirli bir süre tekrar tanımlanmadan kullanılacaktır.
+					
+- Dizinin içerisindekiler bildiğimiz string literalleridir. Yani bu yazılar derleyicinin oluşturduğu dizilerde
+tutulacak. Ve bu dizinin adresleriyle de bu pointer dizisinin elemanlarına ilk değer vermiş oluyorum.
+Biz bu pointer dizisini dolaşırsak  aslıdna bu pointer dizisinin elemanlarından bu yaızların adreslerini elde edebiliriz.
+Dolayısıyla bu yazıları kullanabiliriz.
+		
+- Bu karşımıza çok sık çıkabilecek bir senaryodur.
+		
+		
+		for (size_t i = 0; i < asize(pmons); ++i) 
+			printf("%s   %zu\n",  pmons[i], strlen(pmons[i]));
+			
+- Eğer bir diziyi yukarıdaki gibi sabir bir sırayla kullanarak istiyorsak tanımlanma şekli şöyle olmalıdır.
+
+		char* const pmons[] = { ... }; // gibi
+		
+- Eğer dizi yukarıdaki gibi tanımlanmazsa 	pmons[1] = "karabuk"; 
+gibi kodlarla değiştirilebilir. Hata yoktur ama tanımlanan dizinin amacına göre sabit kalması istendiği taktirde uygulanmalıdır.
+
+- Ayrıca string literalleri tanımlanırken 
+
+		const char* pmons[} = { ... };
+		
+olarak tanımlanmalıdır. Çünkü string literallerinin içi değiştirilmeye çalışılmasın. Değiştirilmeye çalışıldığı
+taktirde UB'ye yol açabilir. Tanımlanmadığını varsayarsak
+		
+		*pmons[0] = 'a'; gibi bir kod yazıldığında sentaks hatası olmaz ama UB olur.
+		
+- Bir önceki sayfadaki tanımlamanın devamı olarak
+
+		int n;
+		printf("yilin kacinci ayi: ");
+		scanf("%d", &n);
+		printf("yilin %d. ayi = %s\n", n, pmons[n - 1]);
+		
+
+  
+  - rastgele bir ay elde etmek istersek:
+
+		randomize();
+		for(;;) {
+			printf("%s", pmons[rand() % 12]);
+			getchar();
+		}
+
+- Adresleriyle birlikte yazalım:
+
+		for (int i = 0; i < 12; ++i) 
+			 printf("%p   %s\n", pmons[i], pmons[i]);
+		
+  
+- Çok kullanılan idiyomatik bir yapı: 
+
+		char entry[40];
+		printf("bir ay ismi giriniz:  \n");
+		scanf("%s", entry);
+		
+		/**** 1. alternatif ****/
+		
+		int i;
+		
+		for (i = 0; i < 12; ++i)
+			if (!strcmp(entry, pmons[i]))
+				break;
+			
+  		if (i < 12)
+			printf("%s yazisi %d. aydir.\n", pmons[i], i + 1);
+		else 
+			printf("%s yazisi bir ay değildir.\n");
+			
+  		/**** 2. alternatif ****/
+
+		int i;
+
+		for (i = 0; i < 12 && strcmp(entry, pmons[i]); ++i) 
+			; // null satetement 
+
+		if (i < 12)
+			printf("%s  yilin %d. ayi \n", entry, i + 1);
+		else
+			printf("%s gecerli bir ay ismi degildir\n", entry);
+	
+  - Büyük - küçük harf uyumunu ortadan kaldırmak için _stricmp() fonsksiyonu kullanılır. Standard değildir.
+
+
+  		const char* p[] = {
+					"ocak", 
+					"subat", 
+					"mart",
+					"nisan",
+					"mayis",
+					"haziran",
+					"temmuz",
+					"agustos",
+					"eylul",
+					"ekim",
+					"kasım",
+					"aralık" };
+  
+  	- Yukardaki dizi ay dizisi olarak değilde herhangi bir isimleri tutan rastgele yazı dizisi olarak varsayarak bir süre bu dizi 
+  	üzerinden işlem yapacağız.
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "Rutility.h"
+
+#define SIZE 100
+
+
+
+
+int main()
+{
+	const char* p[] = {
+					"ocak",
+					"subat",
+					"mart",
+					"nisan",
+					"mayis",
+					"haziran",
+					"temmuz",
+					"agustos",
+					"eylul",
+					"ekim",
+					"kasim",
+					"aralik" };
+
+	
+	for (int i = 0; i < asize(p); ++i)
+		printf("%c \n", *p[i]);
+	
+	printf("\n\n\n");
+
+	for (int i = 0; i < asize(p); ++i)
+		putchar(*p[i]), printf("\n");
+
+
+	printf("\n\n\n");
+	
+	for (int i = 0; i < asize(p); ++i)
+		printf("%c \n", p[i][0]);
+
+
+
+
+}
+
+
+```
+  
+
+#
+
+- Bu yazıların son karakterleri yazdırılsın.
+	
+		for (int i = 0; i < asize(p); ++i)
+			printf("%c \n", p[i][strlen(p[i]) - 1]);
+			
+  
+  - Ekrana bir karakter girilsin. İçinde ekrana girilen karakterden olanlar yazılsın.
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "Rutility.h"
+
+#define SIZE 100
+
+
+
+
+int main()
+{
+
+	const char* p[] = {
+					"ocak",
+					"subat",
+					"mart",
+					"nisan",
+					"mayis",
+					"haziran",
+					"temmuz",
+					"agustos",
+					"eylul",
+					"ekim",
+					"kasim",
+					"aralik" };
+
+	
+	
+	
+	int c;
+	printf("ekrana bir karakter giriniz:\n");
+	scanf("%c", &c);
+
+	for (size_t i = 0; i < asize(p); ++i) {
+		if (strchr(p[i], c))
+			printf("%s \n", p[i]);
+	}
+
+
+}
+
+```
+
+#
+ - Ekrana karakterler girilsin. Bu karakterlerden herhangi birine sahip olanları ekrana yazdıran program:
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "Rutility.h"
+
+#define SIZE 100
+
+int main()
+{
+
+	const char* p[] = {
+					"ocak",
+					"subat",
+					"mart",
+					"nisan",
+					"mayis",
+					"haziran",
+					"temmuz",
+					"agustos",
+					"eylul",
+					"ekim",
+					"kasim",
+					"aralik" };
+
+	
+	
+	
+	char str[20];
+
+	printf("karakterleri girin: \n");
+	scanf("%s", str);
+
+	for (size_t i = 0; i < asize(str); ++i) {
+		if (strpbrk(p[i], str))
+			printf("%s\n", p[i]);
+	}
+}
+
+``` 
+ 
+- İçinde ekrana girilen yazıyı içeren yazıları ekrana yazdıran program:
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "Rutility.h"
+
+#define SIZE 100
+
+
+
+
+int main()
+{
+
+	const char* p[] = {
+					"ocak",
+					"subat",
+					"mart",
+					"nisan",
+					"mayis",
+					"haziran",
+					"temmuz",
+					"agustos",
+					"eylul",
+					"ekim",
+					"kasim",
+					"aralik" };
+
+	
+	
+	
+	char str[20];
+
+	printf("karakterleri girin: \n");
+	scanf("%s", str);
+
+	for (size_t i = 0; i < asize(str); ++i) {
+		if (strstr(p[i], str))
+			printf("%s\n", p[i]);
+	}
+}
+```
+ 
+- Ödev: yukarıdaki isimlerden bütün harfleri tek (unique) olan isimleri yazdırınız.
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "Rutility.h"
+
+#define SIZE 100
+
+
+
+
+int main()
+{
+
+	const char* p[] = {
+					"ocak",
+					"subat",
+					"mart",
+					"nisan",
+					"mayis",
+					"haziran",
+					"temmuz",
+					"agustos",
+					"eylul",
+					"ekim",
+					"kasim",
+					"aralik" };
+
+	
+	
+	
+	for (int i = 0; i < asize(p); ++i) {
+
+		for (int j = 0; j < asize(p[i]); ++j) {
+			char ch = p[i][j];
+			
+			if (strchr(p[i] + j + 1, ch))
+				goto dontwrite;
+			
+		}
+		printf("%s\n", p[i]);
+	dontwrite:
+		; //null statement
+
+	}
+
+	
+
+
+
+}
+```
+ 
+ 
+- Dizinin içerisindeki string literallerini A'dan Z'ye sıralı şekilde düzenleyiniz.
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "Rutility.h"
+
+#define SIZE 100
+
+
+
+
+int main()
+{
+
+	const char* p[] = {
+					"ocak",
+					"subat",
+					"mart",
+					"nisan",
+					"mayis",
+					"haziran",
+					"temmuz",
+					"agustos",
+					"eylul",
+					"ekim",
+					"kasim",
+					"aralik" };
+
+	
+	for (size_t i = 0; i < asize(p) - 1; ++i) {
+		for (size_t j = 0; j < asize(p) - 1 - i; ++j) {
+			if (strcmp(p[j], p[j + 1]) > 0) {// B, A --> 66, 65
+				const char* ptemp = p[j];
+				p[j] = p[j + 1];
+				p[j + 1] = ptemp;
+			}
+		}
+	}
+
+	for (size_t i = 0; i < asize(p); ++i)
+		printf("%s \n", p[i]);
+
+}
+```
+#
+
+- Bir mülakat sorusu: Yazının kısa olan başta ve aynı uzunluktakiler de kendi içinde alfabetik sıralı olacak kodu yazınız.
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "Rutility.h"
+
+#define SIZE 100
+
+
+
+
+int main()
+{
+
+	const char* p[] = {
+					"ocak",
+					"subat",
+					"mart",
+					"nisan",
+					"mayis",
+					"haziran",
+					"temmuz",
+					"agustos",
+					"eylul",
+					"ekim",
+					"kasim",
+					"aralik" };
+
+	
+	for (size_t i = 0; i < asize(p) - 1; ++i) {
+		for (size_t j = 0; j < asize(p) - 1 - i; ++j) {
+			size_t len_1 = strlen(p[j]);
+			size_t len_2 = strlen(p[j + 1]);
+
+			if (len_1 > len_2 || (len_1 == len_2 && strcmp(p[j], p[j + 1]) > 0)){
+				const char* ptemp = p[j];
+				p[j] = p[j + 1];
+				p[j + 1] = ptemp;
+			}
+		}
+	}
+
+	for (size_t i = 0; i < asize(p); ++i)
+		printf("%s \n", p[i]);
+
+}
+```
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
