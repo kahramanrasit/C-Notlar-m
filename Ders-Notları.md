@@ -8372,6 +8372,467 @@ int main()
   
   
   
+  - Örnek bir hatalı yazım:
+ 
+ 		for (size_t i = 0; i < asize(p); ++i) {
+			_strrev(p[i]);  // UB olur
+			puts(p[i]);
+  		}
+		- Eğer dizi const olarak tanımlanmadıysa böyle bir kullanım string literalini değiştirme girişiminde bulunduğumuz
+		için tanımsız davranış olur.
+		
+- Bir pointer dizinin son elemanı NULL pointer belirlenebilir. Bu döngülerde son değeri rahat bulmamızı sağlar.
+
+		const char* p[] = { "abc", "def", NULL};
+		int i = 0; 
+		while (p[i] != NULL)
+			printf("%s", p[i++]);
+			
+
+- Bir dizinin eleman sayısından az string literali olarak ilk değer verilirse geriye kalan elemanlar NULL pointer olur. Ve siz eğer
+tüm diziyi dolaşı dereference etmeye çalışırsanız UB olur.
+
+	const char* p[3] = { "ali", "ata", "bak" };
+	for (int i = 0; i < 20; ++i)
+	 	puts(p[i]); // UB
+		
+
+# Pointer to Pointer (Pointer gösteren pointerlar)
+
+		int x = 10;
+		int *ptr = &x;
+		
+		printf("&x = %p\n", &x);  //x'in adresi 
+		printf("ptr = %p\n", ptr); // x'in adresi 
+		printf("&x = %p\n", &ptr); // ptr'nin adresi
+  
+  #
+  
+  
+  
+  		T x; // T bir tür ve x'in türü T
+ 		&x; --> x'in adresinin türü (T*)
+		
+		T* p;  // p'nin türü (T*)
+		&p;  // p'nin adresinin türü (T**)
+  
+  		T** ptp;  // ptp'nin türü (T**)
+		&ptp;   // ptp'nin adresinin türü (T**)
+  
+  
+  - Yani pointer değişkenlerin adresleri ayrı bir türdür.
+  - Eğer siz bşr ptr pointer değişkenin adresini bir değişkende tutmak isterseniz
+
+		int x = 10;
+		int* ptr = &x; // pointer to int
+		int** p = &ptr; //pointer to pointer to int
+		int y = 20;
+		*p = &y; // ptr artık y'yi gösteriyor.
+		**p = 45; // yazdığımızda x'e 45 ataması yapmış oluyoruz (double direction, double dereferencing)
+		++**p;  // x'i bir artır.
+		
+  
+  
+![image](https://user-images.githubusercontent.com/34141599/118786829-e0beb100-b89a-11eb-9a54-469ff69eb8ea.png)
+
+  
+  
+  - Bir örnek:
+
+
+		int a[] = { 5, 10, 15, 20, 30 };
+		int* p = a;
+		int** ptr = &p;
+
+		++* ptr;  		// ++p yani p bir sonraki adresi göstermeye başladı.
+		++** ptr;   		// p nin gösterdiği adresteki içeriği bir arttır.
+		print_array(a, 5);	
+		
+- Nerelerde kullanıldığına dair bir örnek:
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "Rutility.h"
+
+#define SIZE 100
+
+
+int g;
+
+void func(int** p)
+{
+	*p = &g;
+}
+
+int main()
+{
+	int* ptr;
+
+	func(&ptr);
+
+}
+
+
+```
+  
+
+
+- Bir yerel pointer değişkeniniz varsa örneğin int* türden bu pointer değişkeni call by reference biçimiyle bir fonksiyona göndermeniz gerekiyorsa fonksiyonu 
+pointer değişkenin adresiyle çağırmalısınız. Bu durumda da fonksiyonun parametre değişkeni pointer to pointer olacaktır.
+
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "Rutility.h"
+
+#define SIZE 100
+
+
+void pswap(int** ppval, int** ppnum)  //ppval = &pval, ppnum = &pnum
+{
+	int* ptemp = *ppval;  // *ppval = pval, *ppnum = pnum
+	*ppval = *ppnum;
+	*ppnum = ptemp;
+}
+void myswap(int* pval, int* pnum) //pval = &val, pnum = &num
+{
+	int temp = *pval;
+	*pval = *pnum;
+	*pnum = temp;
+}
+
+int main()
+{
+	int val = 5;
+	int num = 10;
+
+	int* pval = &val;
+	int* pnum = &num;
+
+	printf("*pval = %d, *pnum = %d \n", *pval, *pnum);
+
+
+	pswap(&pval, &pnum);
+
+	printf("*pval = %d, *pnum = %d ", *pval, *pnum);
+
+	printf("\n\n");
+
+	printf("val = %d, num = %d\n", val, num);
+
+	myswap(&val, &num);
+
+	printf("val = %d, num = %d", val, num);
+
+}
+
+
+```
+  
+  #
+  
+  		int x = 5;
+  		int *ptr = &x;
+  		func(ptr); // bu fonksiyon x'i değiştirir ancak ptr'yi değiştiremez
+		func(&ptr); // bu fonksiyon hem x'i hem ptr'yi değiştirir.
+  
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "Rutility.h"
+
+#define SIZE 100
+
+int g = 15;
+
+void func(int* p) 
+{
+	*p = 9;  // x'in değeri değiştirildi
+	p = &g;  /*ptr'nin değerini değiştirme girişiminde bulunuyor fakat burda ptr için hiç bir 
+			 değişiklik yapılmıyor. yerel değişken olan p değiştiriliyor sadece */
+
+}
+void func2(int** p) // p = &ptr
+{
+	**p = 4;  // x'in değerini değiştird
+	*p = &g;  // ptr'nin değerini değiştirdi
+}
+
+int main()
+{
+	int x = 5;
+
+
+	int* ptr = &x;
+
+	printf("x = %d,   ptr = %p\n", x, ptr);
+
+	func(ptr); /* sadece x'i değiştirebilir. 
+			   ptr'yi değiştiremez çünkü ptr'nin adresine sahip değil*/
+
+	printf("x = %d,   ptr = %p\n", x, ptr);
+	
+	func2(&ptr); /*hem x'i hem ptr'yi değiştirebilir. 
+				 Çünkü fonksiyon her ikisinin de adresine erişebiliyor.
+				 */
+
+	printf("x = %d,   ptr = %p, &g = %p\n", x, ptr, &g); 
+
+
+}  
+```
+  
+- Aşağıdaki fonksiyon ne yapıyor ?? 
+
+```
+
+void foo(int** p1, int** p2)
+{
+	int temp = **p1;
+	**p1 = **p2;
+	**p2 = temp;
+}
+
+int main()
+{
+
+
+	int x = 10;
+	int y = 34;
+	int* p = &x;
+	int* q = &y;
+	
+	foo(&p, &q);
+
+	printf("x = %d\n", x);
+	printf("y = %d\n", y);
+
+}
+```
+ - Yukarıdaki kod parçacığı x ile y'nin değerlerini yer değiştiriyor.
+
+
+
+
+- Öyle bir fonksiyon tanımlansın ki,
+ Bir tam sayı dizisinin hem en küçük hem de en büyük elemanlarının adreslerini çağıran koda iletsin.
+ 
+ 
+ 
+ 		void get_min_max(const int* pa, size_t size, int** pmin, int** pmax);
+		
+		- Bu fonksiyon çağırılırken 1. parametreye 1. dizinin adresi yazılacak, 2. parametreye dizinin boyutunu,
+		3. parametreye int* türünden bir nesnenin adresi gönderilecek ki o adresi gönderilen pointer değişkene bu dizinin en 
+		küçük elemanının adresini yazacağız 4. parametreye de bu dizinin en büyük elemanının adresi yazılacak.
+		
+  
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "Rutility.h"
+
+#define SIZE 10
+
+
+void get_min_max(const int* pa, size_t size, int** pmin, int** pmax)
+{
+	 *pmin = *pmax = (int*)pa;
+
+	for (size_t i = 1; i < size; ++i) {
+		if (pa[i] < **pmin)
+			*pmin = (int*)(pa + i);
+		if (pa[i] > **pmax)
+			*pmax = (int*)(pa + i);
+	}
+}
+
+int main()
+{
+
+	int a[SIZE];
+	int* ptr_min;
+	int* ptr_max;
+
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	get_min_max(a, SIZE, &ptr_min, &ptr_max);
+
+	printf("min = %d, max = %d \n", *ptr_min, *ptr_max);
+	
+	swap(ptr_min, ptr_max);
+
+	print_array(a, SIZE);
+
+
+}
+```
+ - get_min_max fonkisiyonuna yapılan çağrıda ptr_min ve ptr_max'in adreslerini Yani pointer değişkenlerin adreslerini gönderdim. 
+ Ancak swap çağrısında ise ptr_min ve ptr_max ile swap fonksiyonuna dizinin en küçük ve en büyük elemanlarının adreslerini gönderdim.
+ Dolayısı ile swap fonksiyonu ptr_min ve ptr_max'ı değil dizinin en küçük elemanıyla en büyük elemanını takas edecektir.
+  
+  - Bir pointer dizisini bir fonksiyona gönderip işlem yapmak istersek:
+
+
+```
+void print_names(char** p, size_t size)
+{
+	for (size_t i = 0; i < size; ++i)
+	{
+		printf("%s ", p[i]); //p = &p[0]
+	} 
+
+	/*alternatif olarak*/
+	while (size--)
+		printf("%s ", *p++);
+}
+
+int main()
+{
+	char* p[] = { "ali", "ata", "bak" };
+
+	print_names(p, asize(p)); // p = &p[0]
+
+
+}
+```
+
+- İsimleri sıralayan bir program:
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "Rutility.h"
+
+#define SIZE 10
+
+void pswap(char** p1, char** p2)
+{
+	char* ptemp = *p1;
+	*p1 = *p2;
+	*p2 = ptemp;
+}
+void sort_names(char** p, size_t size)
+{
+	for (size_t i = 0; i < size - 1; ++i) {
+		for (size_t j = 0; j < size - 1 - i; ++j) {
+			if (strcmp(p[j], p[j + 1]) > 0) {// B, A --> 66, 65 
+				pswap(p + j, p + j + 1);
+				// pswap(&p[j], &p[j + 1];
+			}
+		}
+	}
+}
+
+void print_names(char** p, size_t size)
+{
+	for (size_t i = 0; i < size; ++i) {
+		printf("%s ", p[i]);
+	}
+}
+int main()
+{
+	char* p[] = { "zehra", "abdi", "hakki", "hekim", "burak", "zeytin" };
+
+	sort_names(p, asize(p));
+	
+	print_names(p, asize(p));
+
+}
+```
+
+- Pointer dizilerinin üstünde işlem yapan fonksiyonların parametrelerinin dopal olarak dizinin ilk elemanının adresini almasını istiyorsak fonksiyonumuzun
+ parametresini pointer to pointer yapmalıyız. Çünkü sonuçta bir pointer nesne adresiyle çağırılacaktır.
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
