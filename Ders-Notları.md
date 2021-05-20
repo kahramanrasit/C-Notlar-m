@@ -8769,16 +8769,115 @@ int main()
 }
 ```
 
-- Pointer dizilerinin üstünde işlem yapan fonksiyonların parametrelerinin dopal olarak dizinin ilk elemanının adresini almasını istiyorsak fonksiyonumuzun
+- Pointer dizilerinin üstünde işlem yapan fonksiyonların parametrelerinin doğal olarak dizinin ilk elemanının adresini almasını istiyorsak fonksiyonumuzun
  parametresini pointer to pointer yapmalıyız. Çünkü sonuçta bir pointer nesne adresiyle çağırılacaktır.
   
   
   
+  # Pointer to Pointer & const keyword
   
+  - Hatırlatma:
+
+		int x = 10;
+		
+		- int * const ptr = &x; --> const pointer
+		  ptr = &y; --> hata
+		  *ptr = 20; --> geçerli
+		  
+		- const int* ptr = &x; --> pointer to const
+		  int const* ptr = &x; 
+		  
+		  *ptr = 20; --> hata
+		  ptr = &y; --> geçerli
+		  
+		  
+#
+
+		int x = 10;
+		int y = 20;
+		int z = 30;
+		
+		int* p = &x;
+		int* q = &y;
+		
+	      - int **const ptr = &p;
+	        ptr = &q; --> hata
+  		*ptr = &z; --> geçerli
+		**ptr = 77; --> geçerli
+		
+	      - int *const* ptr = &p;
+	      	ptr = &q; --> geçerli
+		*ptr = &z; --> hata
+		**ptr = 77; --> geçerli
+		
+	      - int const **ptr = &p;
+	        const int **ptr = &p;
+		ptr = &q; --> geçerli
+		*ptr = &x; --> geçerli
+		**ptr = 77; --> geçersiz
+		
+		
+		
+- Bir önceki yazılan programda fonksiyonları inceleyelim. 
+
+		void print_names(char** pa, size_t size);
+		
+olarak tanımlanmıştı. Bu fonksiyon gelen diziyi sadece okuma amaçlı kullanacağı için const'u kullanım yerimiz:
+
+		void print_names(char* const* pa, size_t size);
+
+olacaktır. Çünkü * pa'ya atama yapmak demek dizinin elemanlarını değiştirmek demektir.
+
+sort_names fonksiyonu ise dizideki yazılarda değişiklik yapacağı için herhangi bir const keyword'u kullanılmaz.
+
+
+# Void Pointers
+
+void is a type --> void bir türdür.
+
+- Bir değişkenin türü void olamaz.
+
+	void x; // geçersiz
+	
+- Elemanları void türden olan bir dizi de olamaz.
+
+		void a[20]; // geçersiz
+		
+		sizeof(void);  // geçersiz
+		
+		bir tür istisnası
+		
+- Bir ifadenin türü void olabilir.
+
+		int val = 10;
+		(void)ival; --> void cast
+		
+- Siz eğer bir fonksiyonun geri dönüş değeri olduğu halde kullanmak istemiyorsanız ve derleyiciden "discard to return value" uyarısını almak 
+ istemiyorsanız void cast kullanmalısınız.
+ 
+ 		int foo(int)
+		{
+			//codes
+		}
+		int main()
+		{
+			(void)foo(12);  // void cast
+		}
   
-  
-  
-  
+ - Yukarıda siz hem derleyiciye hem de programı okuyan kişiye fonksiyonun geri dönüş değerini bilerek ve isterek kullanmadığınızdan bahsetmiş oluyorsunuz.
+
+
+- Lojik yorumlamaya tabii tutulan yerde void bir tür kullanamazsınız. 
+
+		void func(int);
+		
+		int main()
+		{
+			if (func(3)){  ---> hataaa
+				//codes
+			
+			}
+		}
   
   
   
