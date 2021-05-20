@@ -1,3 +1,6 @@
+# 1141
+
+
 
 # Token (Atom)
 
@@ -146,7 +149,7 @@ iki işlenen gerektiren işleçlere ikili işleçler denir.
  Not: Initialization is not a assignment (ilk değer ifadesi bir atama 
  değildir.)
 
- y=5; // Bu bir atamadır (assignment).
+ y = 5; // Bu bir atamadır (assignment).
  
  int y = 5; //Bu bir ilk değer ifadesi. (initialize).
 
@@ -170,11 +173,11 @@ iki işlenen gerektiren işleçlere ikili işleçler denir.
  
  #### TANIMSIZ DAVRANIŞ
  
-   ```
+```
    -> Otomatik ömürlü değişkenler'e ilk değer ataması yapılmazsa hayata
    belirsiz değer (Garbage Value) ile başlar. Eğer değişken bu değeri ile
    kullanılırsa tanımsız davranışa yol açar.
-   ```
+```
 
  - Static storage class: Programın daha çalışmaya başlamasından, yani 
  main fonksiyonu çalışmaya başlamadan önce çalışmaya başlarlar.
@@ -187,13 +190,14 @@ iki işlenen gerektiren işleçlere ikili işleçler denir.
  otomatik ömürlüdür. Ancak static anahtar kelimesi ile tanımlandığında static
  ömürlü olur. Static ömürlü değişkenler hayata 0 değeri ile başlarlar.
  
- ```
+
  -> Static ömürlü değişkene ilk değer başlatması yapılırken sabit ifade 
  kullanılmalıdır.
- int x=10+20;// global alanda yazılan bu kod kabul görür.
- int y=x;// ancak bu kod hatalıdır çünkü y 'ye değişken ilk değer
- ataması yapılmaya çalışılmıştır. 
-```
+ 
+ 	int x = 10 + 20;// global alanda yazılan bu kod kabul görür.
+ 	int y = x;// ancak bu kod hatalıdır çünkü y 'ye değişken ilk değer
+	 ataması yapılmaya çalışılmıştır. 
+
 
 
  
@@ -216,8 +220,8 @@ iki işlenen gerektiren işleçlere ikili işleçler denir.
  
  void func()
  {
-   int X=10;
-   //local variable 
+   int X = 10;
+   // local variable 
    // yerel değişken
 
    /* bu fonksiyon her çağırıldığında x değerine 10 ilk değer 
@@ -228,15 +232,15 @@ iki işlenen gerektiren işleçlere ikili işleçler denir.
  {
    /*eğer bir fonksiyon içerisinde static bir değer tanımlaması yapmak 
    istiyorsak aşağıdaki gibi yapılır.
-   static int x=1;*/
+   static int x = 1; */
    // burada biz "static lokal değişken" tanımlamış olduk
 
  }
 
   void func()
  {
-   static int x=10;
-   x+=10;
+   static int x = 10;
+   x += 10;
    /*bu fonksiyon ilk çağırıldığında x değişkeni statik lokal değişken
    olarak tanımlanıp ilk değeri verilir ve her çağırılmada tanımlaması 
    tekrar yapılıp ilk değeri verilmez. Yani diğer çağırılmalarda 
@@ -323,9 +327,9 @@ Bu sebeple mümkün olan her yerde değişkenlere ilk değer ifadesi verilmelidi
 
   int main()
   {
-  int x = 10;
+ 	 int x = 10;
 
-  printf("x=%d\n", x);
+	  printf("x=%d\n", x);
   
   /*Burada isim arama söz konusu olduğu için
   printf ile x aranmaya başlar. Bu arama yukarı doğru gerçekleşir ve
@@ -455,19 +459,19 @@ Bu sebeple mümkün olan her yerde değişkenlere ilk değer ifadesi verilmelidi
   - control statement (kontrol deyimi)
 
 
-  - z=10 (bu bir ifade) "expression"
+  - z = 10 (bu bir ifade) "expression"
   
-  - z=10; (bu bir deyim) "expression statement"
+  - z = 10; (bu bir deyim) "expression statement"
 
 
  Compound statement örnek olarak
  
   ```
- if(x>5)
+ if(x > 5)
  {
 
- ++a;
- x=5;
+	 ++a;
+	 x = 5;
 
  // if koşulu gibi block içerisindeki deyimlerin bütününe compound (bileşik) 
  deyim denir. Bir blok içerisinde olduğu için bu böyledir.
@@ -615,9 +619,9 @@ int main()
 
 int x = 10;
 int x = 45;
-max (x+30,y-10);
+max (x + 30, y - 10);
 
-//Burada max fonksiyonunun argümanı (40,35)'dir.
+//Burada max fonksiyonunun argümanı (40, 35)'dir.
 
 }
 
@@ -668,7 +672,7 @@ Tanımlanma şekli:
 ```
 void func(int x, int y,...)
 {
-Variadic Function
+	//Variadic Function
 }
 //Yukarıdaki tanımlanan fonksiyona en az 2 tane argüman gönderilebilir. 
 
@@ -757,7 +761,7 @@ gerçekleşerek bu karakterin kod numarası tutulur.
 
 **Not:** ASCII karakter kodlamasında büyük harf ve küçük harf sıralaması tek bir blok halinde değildir.
 Sebebi ise büyük harf ile küçük harf arasındaki sayı farkını 32 yani 2^5 yapabilmektir. 
-Böylece bitsel işlemlerde büyük-küçük harf değişimi tek bir biti set-reset yapılarak sağlanabilmektedir.
+Böylece bitsel işlemlerde büyük - küçük harf değişimi tek bir biti set - reset yapılarak sağlanabilmektedir.
 
 - Karakter kodlamalarında, harf karakterine Alphabetic Character,
 Rakam kodlamalarına ise Numeric/Digit Character denilir.
@@ -813,7 +817,7 @@ Mesela Space, Enter gibi.
 - Bir program çalışır haldeyken dış dünya ile veri alış-verişi 
 sağlamasına denir.
     - standard input stream (klavye)
-    - sandart output stream (consol a  bağlı)
+    - sandard output stream (consol a  bağlı)
     - standard error stream
 
 - Bir giriş-çıkış işlemi 2 farklı şekilde yapılabilir.
@@ -876,8 +880,8 @@ Printf fonksiyonun sayı sistemlerinin formatları:
 
 int main()
 {
-    int x=987;
-    printf("%d",printf("%d",printf("%d",x)));
+    int x = 987;
+    printf("%d", printf("%d",printf("%d",x)));
     /*Bu kodun çalışma şekli ilk olarak en içteki printf fonksiyonu çalışır.
     Yani ekrana 987 yazılır. Bir dıştaki printf fonksiyonu bi önceki fonksiyon çalışırken ürettiği değeri yazar.
     Printf fonksiyonu yürütüldüğünde ekrana kaç karakter yazdıysa, yazdığı karakter sayısını üretir. Yani ekrana 
@@ -905,17 +909,17 @@ int main()
 
 # SCANF FONKSİYONU
 
-İnt scanf(const char*p,...);
+int scanf(const char *p, ...);
 
 - Scanf fonksiyonu call by referance olmak zorundadır.
-	- örnek olarak scanf("%d",&x); &x kullanılmasının sebebi call by referance olmasıdır.
+	- Örnek olarak scanf("%d", &x); &x kullanılmasının sebebi call by referance olmasıdır.
 
-- Scanf fonksiyonu Satır Tamponlu (Line-Buffered) yapıdadır.
+- Scanf fonksiyonu Satır Tamponlu (Line - Buffered) yapıdadır.
 	- Yani new-line karakteri gelene kadar devam eder.
 
 - Örnek olarak :
 
-scanf("%d",&x); Yazıldığında ekrana giriş olarak 1234abc yazıldığında 
+scanf("%d", &x); Yazıldığında ekrana giriş olarak 1234abc yazıldığında 
 ekrana sadece 1234 yazılır. Çünkü %d formatı onluk sayı sisteminde bir tam sayı girilecek demektir.
 
 scanf'in geri dönüş değeri başarılı olup olmadığını anlatmaktadır.
@@ -937,7 +941,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
 - binary operator  --> çift terimli operator
 - ternary operator --> 3 terimli operator
 
-- a+b  ----> + operatorü ortada olduğu için bu operator burada infix konumda kullanılmıştır.
+- a + b  ----> + operatorü ortada olduğu için bu operator burada infix konumda kullanılmıştır.
 - !x   ----> burada ! operatörü başta olduğu için prefix konumunda kullanılmıştır.
 - y++  ----> burada ++ operatörü sonda kullanıldığı için postfix konumunda kullanılmıştır.
 
@@ -1100,7 +1104,7 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
  
  örnek:
  ```
- x=y==z; // Burada == operatörü = operatöründen daha önceliklidir. Aşağıdaki ifadeyle aynıdır.
+ x = y == z; // Burada == operatörü = operatöründen daha önceliklidir. Aşağıdaki ifadeyle aynıdır.
  
  if(y==z)
  
