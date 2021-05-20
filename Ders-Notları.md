@@ -1,4 +1,4 @@
-# 1141
+# 
 
 
 
@@ -1165,17 +1165,17 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
    
    - C dilinde atama operatörleri de diğer tüm operatörler gibi bir değer üretir.
    - Atama operatörünün ürettiği değer nesneye atanan değerdir.
-   x=y  ifadesinin ürettiği değer, x'e atanan değer olan y'nin değeridir.
+   x = y  ifadesinin ürettiği değer, x'e atanan değer olan y'nin değeridir.
    
    
    örnek:
    
     
    ```
-    int x=10, y=24, t=5, z=7;
-    x+=y+=t*=z%=5;
+    int x = 10, y = 24, t = 5, z = 7;
+    x += y += t *=z %= 5;
     // Atama operatörlerinde işlem önceliği sağdan sola olduğu için sağdan başlanarak sola doğru işlemler yapılır.
-   //Sonuç olarak x=44 , y=34 , z=2 , t=10 değerleri atanmış olur.
+   //Sonuç olarak x = 44 , y = 34 , z = 2 , t = 10 değerleri atanmış olur.
    ```
   
     
@@ -1198,20 +1198,20 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
     
    Örnek olarak :
    
-   ```  
-  int  y=0;
+```  
+  int  y = 0;
     y++ || f(y); // yandaki deyimde lojik veya bir yan etki noktasına sahip olduğu için y, 1 artırıldıktan 
     sonra f fonksiyonuna y değeri 1 olarak gönderilir.
     
-   ```
+```
    
    Örnek olarak :
 
-       ```
-        int x=10,y;
-        x++ , y=x; // Bu deyimde virgül bir yan etki noktası olduğu için x değeri 1 artırılıp 
+```
+        int x = 10, y;
+        x++, y=x; // Bu deyimde virgül bir yan etki noktası olduğu için x değeri 1 artırılıp 
         11 olduktan sonra y değişkenine 11 olarak atanır.
-      ```
+```
     
     
     
@@ -1231,12 +1231,12 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
      
    **Bir Mülakat Sorusu:
      
-      ```
-     int x=10;
-     int y = (x=7) + x;
+```
+     int x = 10;
+     int y = (x = 7) + x;
      /*Burada yine x'e 7 ataması yapılarak bir yan etkisi vardır. Ancak bu yan etkinin oluşması için kod, yan etki noktasına ulaşmalı.
      Bu kodda yan etki noktasına ulaşılmadan x tekrar kullanılmıştır.*/
-    ```
+```
      
      
   - Her operantın ürettiği değer gibi virgül operatörü de bir değer üretir.
@@ -1244,28 +1244,28 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
      
   örnek:
      
-     ```
+```
       
-      int a,b=10,c=20;
-      a=(b,c); //Burada a'ya atanan değer 20'dir.
+      int a, b = 10, c = 20;
+      a = (b, c); //Burada a'ya atanan değer 20'dir.
       
-      ```
+```
       
    Block Elimination:
    
   
       if (x>20)
       {
-      a++;
-      b++;
+      	a++;
+      	b++;
       }
       
-  yerine 
+yerine 
   
-      if(x>20)
-         a++,b++;
+      if(x > 20)
+         a++, b++;
 	 
-   Bu bir block elimination örneğidir.
+Bu bir block elimination örneğidir.
       
       
      
@@ -1275,23 +1275,23 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
       
   Örnek Bir Mülakat Sorusu:
        
-       ```
+```
        double x=2.5;
        
-       while(x < 5,0)  /*Burada tam sayı yazılırken nokta yerine virgül kullanıldığında, virgül operatörünün 
-       sağ operantı değer üreteceği için while,sonsuz döngüde alır.*/
+       while(x < 5, 0)  /*Burada tam sayı yazılırken nokta yerine virgül kullanıldığında, virgül operatörünün 
+     			  sağ operantı değer üreteceği için while,sonsuz döngüde alır.*/
        {
        		//kodlar
        }
        
-        ```
+```
 	
   Örnek:
       
       
        ```
-      func(x,y); // Burada fonksiyona 2 argüman gönderilmiş.
-      func((x,y)); // Burada ise fonksiyona 1 argüman gönderilmiş. Parantezin içerisindeki virgül operatörünün sağ operantı gönderilmiştir.
+      func(x, y); // Burada fonksiyona 2 argüman gönderilmiş.
+      func((x, y)); // Burada ise fonksiyona 1 argüman gönderilmiş. Parantezin içerisindeki virgül operatörünün sağ operantı gönderilmiştir.
       
        ```
       
@@ -1360,19 +1360,19 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
       
        ```
        
-     --->  if (a=func(),a>10)
+     --->  if (a = func(), a > 10)
        {       }
        
        ile
        
-       a=func();
-       if(a>10)
+       a = func();
+       if(a > 10)
        {  }
        
        aynıdır.
        
        
-     --> if((x=func)<10)
+     --> if((x = func) < 10)
          {    }
 	 
 	 
@@ -1384,33 +1384,33 @@ beklenmez. Bu durumda scanf, standart inputun bufferındaki karakterleri kullan�
        
        ```
       
-       --> if(x==5) yerine if(x=5) yazmak.
+       --> if(x == 5) yerine if(x = 5) yazmak.
        Lojik eşit yerine atama operatörü kullanıldığında x 'e atanan değer yani 5 üretilir.
        if koşul ifadesi olduğu için sorulan soru 0 veya 0 dışında bir değer olduğu için
        bu durumda sıfır dışında bir değer olarak algılar ve x değeri 5 olsa da olmasa da
-       if'in içine girilir. Bu hatadan kaçınmak için if(5==x) şeklinde kullanım söz konusudur.
+       if'in içine girilir. Bu hatadan kaçınmak için if(5 == x) şeklinde kullanım söz konusudur.
        
-       --> if(5<x<20)
-       Doğru yazımı if(x>5 && x<20) olacaktır.
+       --> if(5 < x < 20)
+       Doğru yazımı if(x > 5 && x < 20) olacaktır.
        Matematiksel notasyon şeklinde yazıldığında ise derleyicinin algılama şekli operatör öncelik sırasına göre
-       (5<x)<20 olacaktır. Bu değer de her zaman doğru olarak algılanacağı için ve sentaks hatası olmadığı için 
+       (5 < x) < 20 olacaktır. Bu değer de her zaman doğru olarak algılanacağı için ve sentaks hatası olmadığı için 
        problemli bir durumdur.
-       
-       --> if(dval>4,5) // burada yazılmak istenen gerçek sayı nokta ile değil de virgül operatörüyle ayrıldığı için
+        
+       --> if(dval > 4, 5) // burada yazılmak istenen gerçek sayı nokta ile değil de virgül operatörüyle ayrıldığı için
        ve virgül operatörü sağ operantının değerini üreteceği için 5 değeri de lojik doğru olarak algılandığından dolayı
        bu değer her zaman doğru olarak algılanır.
        
        -->if(func()) yerine if(func) yazılması. Sentaks hatası vermez ama istediniz işlemi yapmaz.
        
-       -->if(x!=5 || x!=13)
+       -->if(x  != 5 || x != 13) 
          Bu ifade de && operatörü yerine veya operatörü kullanılmış ve her zaman doğru bir ifadedir.
 	 
        -->if(x == 3); Bu koşulda noktalı virgül bir ifade olduğu için if'in altındaki kodlar koşturulurken 
        if'in içerisinden çıkılmış olur.
          derleyici bu koşulu şöyle algılar:
-	 if(x==3) 
+	 if(x == 3) 
 	     ; //null statement
-	 x=2;
+	 x = 2;
 	
 	 ```
 	 
@@ -1437,7 +1437,7 @@ Ve karakter kodunu döndürür.
 		//ekrana girilen karakterin ascii kodu ve hangi karakter girildiği yazdırılmıştır.
 		
 		```
-	
+- getchar() fonksiyonu line - buffered fonksiyon, yani ekrana enter (new line) karakteri girelene kadar değer alır ancak tek karakteri (extract) alır.	
 	
 Buffer (Tampon Bellek) : Ara bellek olarak adlandırılır. 
 Bir cihazda verilerin topluca yazılmadan önce biriktirdikleri bellektir.
@@ -1456,7 +1456,7 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 		
 		while ((c=getchar()) != '\n')
 		{
-		     printf("%c  %d\n",c,c);
+		     printf("%c  %d\n", c, c);
 		}
 		
 		/* Bu programda ekrana enter(new line) karakteri giriline kadar ekrana girilen karakter ve ascii kodu yazdırılır.
@@ -1475,16 +1475,16 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
  	Yukarıdaki soruya ek olarak ortak buffer'ı daha iyi anlamamız için ;
 	
 		```
-		int c,x;
+		int c, x;
 		
-		printf("Bir giriş yapın:");
-		scanf("%d",&x);
-		printf("%d\n",x);
+		printf("Bir giris yapin:");
+		scanf("%d", &x);
+		printf("%d\n", x);
 		
 		
-		while ((c=getchar()) != '\n')
+		while ((c = getchar()) != '\n')
 		{
-		      printf("%c  %d\n",c,c);
+		      printf("%c  %d\n", c, c);
 		}
 		
 		```
@@ -1504,13 +1504,13 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 	yazdırma işlemini durdurdu ve scanf fonksiyonundan çıktı. Sonrasında getchar fonksiyonu boşluk atomunu da yazdırdı. 
 	boşluk atomu ascii de 32 kodunu aldığı için karşısına 32 yazıldı.
 	Ayrıca bu kodda bir hususa daha dikkat çekmek gerekirse scanf fonksiyonu çağırılırken decimal formatta çağırılıyor 
-	yani siz decimal formatta bir değer gönderip enter(new line"\n) kullanırsanız bu karakterde buffer'da kalacağı için while 
+	yani siz decimal formatta bir değer gönderip enter(new line "\n") kullanırsanız bu karakterde buffer'da kalacağı için while 
 	döngüsüne gelindiğinde derleyici new line karakterini görerek while döngüsünün içine girmeden geçer.
 	
 	
 	
 	  
-	            ```
+```
 		    
 		    int c;
 		    int sum = 0;
@@ -1529,7 +1529,7 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 		    else
 				printf("hayir tam bolunmez:");
 
-		    ```
+```
    Açıklama: Yukarıdaki programda getchar foksiyonu girilen karakterin ascii kodunu girdiği için c'ye atanan değer bir 
    rakamın ascii kodu olur. Bu kod 0'ın kodu olan 48 den çıkarılırsa tam olarak o rakam elde edilir. Bu yüzden c - '0' olarak kullanılmıştır.
    
@@ -1601,8 +1601,8 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 	 - getchar, standard bufferdan bir karakter alıp onun karakter sayısını yazdırıyor.
 	 
 	 
-	 		- c1=getchar();//ekrana A yazılırsa 65 sayısını c1'e atar. Giriş Fonksiyonudur.
-	 		- c2=putchar(65)// 65 sayısını fonksiyona gönderir ve ekrana A yazdırır. Çıkış fonksiyonudur.
+	 		- c1 = getchar();//ekrana A yazılırsa 65 sayısını c1'e atar. Giriş Fonksiyonudur.
+	 		- c2 = putchar(65)// 65 sayısını fonksiyona gönderir ve ekrana A yazdırır. Çıkış fonksiyonudur.
 
 
 
@@ -1645,9 +1645,9 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 
 	```
 	
-	int a,b
-	printf("iki tam sayı giriniz:")
-	scanf("%d%d",&a,&b);
+	int a, b;
+	printf("iki tam sayı giriniz: ")
+	scanf("%d%d", &a, &b);
 	
 	if(isprime(a) == isprime(b))
         /*if'in içerisindeki koşul böümünü böyle kullanırsak isprime fonksiyonu,
@@ -1716,7 +1716,7 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 	     
 	- Clamp nedir?
 	  Bir aralık belirtilir ve bu aralığın dışında olan değerler üst sınırın üzerindeyse üst sınır değeri olarak algılanır.
-	  Alt sınırın altındaysa alt sınır değeri olarak algılanır. Örnek vermek gerekirse 18,36 sınır değerleri olsun
+	  Alt sınırın altındaysa alt sınır değeri olarak algılanır. Örnek vermek gerekirse 18, 36 sınır değerleri olsun
 	  eğer 20 sayısı girilirse o sayı 20 olarak kullanılır. Eğer 39 girilirse o sayı 36 olarak, 15 girilirse 18 olarak kullanılır.
 	  
 	 
@@ -1742,7 +1742,7 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 	
 	     ```
 	      m = x > 10 ? a : b
-	     //x >10 ise m'ye a'yı ata, değil ise m'ye b'yi ata.
+	     //x > 10 ise m'ye a'yı ata, değil ise m'ye b'yi ata.
 	     
 	     
 	     a > b ? a : b;
@@ -1777,20 +1777,22 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
  
  		  int i = 0;
                   while (i++ < 100);
-		  	printf("%d",i);
--> Yukarıdaki kodda küme parentezi kullanılmadığı için ilk deyim olarak ; alınmıştır.  Ve i++ olduğu için while'dan çıkıldığında i=101 olur.
+		  	printf("%d", i);
+			
+-> Yukarıdaki kodda küme parentezi kullanılmadığı için ilk deyim olarak ; alınmıştır.  Ve i++ olduğu için while'dan çıkıldığında i = 101 olur.
 
 
 
 
 - n Klavyeden girilen bir pozitif sayı olsun. 
-	- while(n--) ile while(n--<0) arasında bir fark yoktur.
+	- while(n--) ile while(n-- < 0) arasında bir fark yoktur.
 
 
 
 
 - Maksimum munch kuralı :
 		int z= x+++y;
+		
 Burada x++ derleyicinin algılayabileceği en uzun atom olduğu için x++ +y olarak tokenize edilir.
 
 
@@ -1799,19 +1801,19 @@ Burada x++ derleyicinin algılayabileceği en uzun atom olduğu için x++ +y ola
 ```
 	int power(int base, int expr)
 	{
-		int result =1;
+		int result = 1;
 		while(expr--)
-			result *=base;
+			result *= base;
 			
 		return result ;
 	}
 	
 	int main()
 	{
-		int x,y;
-		printf("iki tam sayı giriniz:");
-		scanf("%d%d",&x,&y);
-		printf("%d ussu %d =%d\n",x,y,power(x,y));
+		int x, y;
+		printf("iki tam sayı giriniz: ");
+		scanf("%d%d", &x, &y);
+		printf("%d ussu %d =%d\n", x, y, power(x, y));
 		
 	}
 ```
@@ -1836,9 +1838,9 @@ Burada x++ derleyicinin algılayabileceği en uzun atom olduğu için x++ +y ola
 Örnek: 
 ```
 		
-		int i=1,n=5;
+		int i = 1, n = 5;
 		
-		while (i<100)
+		while (i < 100)
 		{
 			if(i % n == 0);
 			{
@@ -1846,7 +1848,7 @@ Burada x++ derleyicinin algılayabileceği en uzun atom olduğu için x++ +y ola
 				i++;
 			}
 		}
-		//i'nin yeri yanlış yazıldığı için ilk döngüye 1 ile başlayıp if'e giremediği için sonsuz döngüde kalır.
+		//i++'ın yeri yanlış yazıldığı için ilk döngüye 1 ile başlayıp if'e giremediği için sonsuz döngüde kalır.
 ```
 
 #
@@ -1862,7 +1864,7 @@ int ch;
 printf("evet mi hayir mi ? (e) (h)");
 while(1)
 {
-	ch=_getch();
+	ch = _getch();
 	if(ch == 'e' || ch == 'h')
 		break;
 }
@@ -1878,7 +1880,7 @@ else
 	
 ///Yukarıdaki koda alternatif olarak :
 
-	while((ch == _getch()) !='e' && ch != 'h')
+	while((ch == _getch()) != 'e' && ch != 'h')
 		;  //Null Statement
 
 ```
@@ -1904,6 +1906,7 @@ while( ---)
 	statement;
 	statement;
 	statement;
+	
 	while(---)
 	{
 		if(exp)
@@ -1923,7 +1926,7 @@ while( ---)
 #
 
 - Break yerine programın herhangi bir yerinde goto deyimi kullanılarak gidilecek etiket belirlenip istenilen noktaya ulaşılabilir.
-	- etiket-label
+	- etiket - label
 	
 	
 
@@ -1938,7 +1941,7 @@ while( ---)
 
 
 - if ile alakalı bir not:
- 	- if(val <= 0 )
+ 	- if(val <= 0)
  		return val;
 	  else 
 	  	return val;
@@ -1952,9 +1955,9 @@ while( ---)
  
 ```
 	if(x != 0)
-		y=x;
+		y = x;
 	else 
-		y=0; // if kullanılmasına gerek yoktur. bu kodun karşılığı zaten y=x'dir.
+		y = 0; // if kullanılmasına gerek yoktur. bu kodun karşılığı zaten y = x'dir.
 		
 		
 ```
@@ -1964,16 +1967,16 @@ while( ---)
 - Klavye Kısaltmaları:
 	- ctrl k c -> açıklama satırı yap
 	- ctrl k u -> açıklama satırını kaldır.
-	- ctrl shift L -> bulunan satırı direk siler.
+	- ctrl L -> bulunan satırı direk siler.
 	- ctrl D -> bulunan satırı aşağıya kopyalar.
-	- shft alt -> satırsal olarak seçip satırsal olarak işlem yapabiliriz.
+	- shift alt -> satırsal olarak seçip satırsal olarak işlem yapabiliriz.
 	
 	
 	
 	
 	
 -For statement
-	- for(expr1 ; expr2 ;expr3)
+	- for(expr1; expr2; expr3)
 	- Eğer expr2'ye hiç birşey yazılmazsa lojik 1 kabul edilir.
 	- for(;;) -> infinite loop  <- while(1)
 	 
@@ -1987,16 +1990,16 @@ while( ---)
 
 ```
 
-	int x,a;
-	scanf("%d",&x);
+	int x, a;
+	scanf("%d", &x);
 	
-	if(x>10)
-		a=5;
+	if(x > 10)
+		a = 5;
 	else 
-		a=7;
+		a = 7;
 	// Burada  a' ya ilk değer ifadesi verilmek istenmiş, ancak scope farklılığı sebebiyle doğru bir kullanım olmamıştır.
 	
-	Bunun yerine  a = x>10 ? 5: 7; daha doğru bir kullanımdır.
+	Bunun yerine  a = x > 10 ? 5 : 7; daha doğru bir kullanımdır.
  			- Koşul operatörünün ilk değer verme amaçlı kullanımı oldukça yaygındır.
  ```
  
