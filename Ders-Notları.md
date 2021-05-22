@@ -1,4 +1,4 @@
-# 1993
+# 
 
 
 
@@ -2009,21 +2009,21 @@ while( ---)
 Örnek :  Aşağıdaki kodda ya bir karakter ekleyerek ya da bu kodda bir karakteri değiştirerek ekrana 5 kere something yazdırılacaktır.
 
 ```
-	int n=5;
-	for(int i=0; i<n; i--)
+	int n = 5;
+	for(int i = 0; i < n; i--)
 		printf("something\n");
 		
 	// cevap:
-		- i<n ifadesinde i yerine -i yazmak.
-		- i<n ifadesinde < yerine + yazmak.
-		- i-- yerine n-- yazmak.
+		- i < n ifadesinde i yerine -i yazmak.
+		- i < n ifadesinde < yerine + yazmak.
+		- i--  yerine n-- yazmak.
 ```
 
 
 #
 
 - Collatz Sanısı 
-	- Sayı tek ise 3 katının 1 fazlası bulunan sayı çifti 2'ye bölünecek.
+	- Sayı tek ise 3 katının 1 fazlası alınacak , bulunan sayı çift ise  2'ye bölünecek.
 	- Örnek olarak sayı 23 ise 3 katının 1 fazlası 70. 2'ye bölünecek. 35. tekrar  katının 1 fazlası alınır 106 diye devam eder.
 	
 
@@ -2082,14 +2082,14 @@ int isprime(int val)
 		return val == 3;
 	if (val % 5 == 5)
 		return val == 5;
-	for (int i = 7; i * i <= val; i++)
+	for (int i = 7; i * i <= val; i++)   /* Bir sayının asal çarpanları, o sayının karakökü kadar büyük olabilir.*/
 	{
 		if (val % i == 0)
 			return 0;
 	}
 	return 1;
 
-}
+} 
 
 
 
@@ -2123,26 +2123,32 @@ int main()
 ```
 	int factorial (int n)
 	{
-	return n < 2 ? 1 : n*factorial(n-1);
+		return n < 2 ? 1 : n*factorial(n-1);
 	}
 ```
 
 
 #
 
-- Mülakat Sorusu:
+- Mülakat Sorusu: Aşağıdaki kodda ekrana ne yazdırılır?
+
 
 ```
-int i=0;
+int i = 0;
 do
 {
 	printf("%d\n",i);
 	i++;
-	if(i<15)
+	if(i < 15)
 		continue;
-		}while(0);
+		
+	}while(0);
 
-// Bu kodda ekrana 1 yazdırılır. Continue komutunu görünce koşul ifadesi neredeyse program oraya dallanır.
+
+
+
+
+// Bu kodda ekrana 0 yazdırılır. Continue komutunu görünce koşul ifadesi neredeyse program oraya dallanır.
 ```
 
 
