@@ -1,4 +1,4 @@
-# 2162
+# 2500
 
 
 
@@ -2323,18 +2323,19 @@ Bu komut kaynak kod içindeki bir yazıyı başka bir yazı ile değiştirmek i�
 	- #define SIZE 100 komutu ile, kaynak kod içerisinde gördüğü her bir SIZE atomu yerine 100 atomunu yerleştirir.
 	 Derleme modülüne girecek kaynak programda, SIZE atomu artık yer almaz.
 	- Önişlemci komutları kullanılırken parantezler konusunda dikkatli olunmalıdır. Bir örnekle gösterelim.
-	- 
+	
 ```
 #define MAX 100+200
 
 int main()
 {
-	int a=5*MAX;
-	printf("a= %d\n",a);
+	int a = 5  *MAX;
+	printf("a = %d \n", a);
 }
 ```
 #
-Yukarıdaki örnekte parentez kullanılmadığı için MAX yerine direk olarak 200+100 yazılınca oluşan ifade a = 5 * 100+200; olur. Bu da istenen sonucu karşılamayabilir.
+
+Yukarıdaki örnekte parentez kullanılmadığı için MAX yerine direk olarak 200 + 100 yazılınca oluşan ifade a = 5 * 100 + 200; olur. Bu da istenen sonucu karşılamayabilir.
 
 #
 
@@ -2356,9 +2357,9 @@ Yukarıdaki örnekte parentez kullanılmadığı için MAX yerine direk olarak 2
 
 int main()
 {
-SIZE = 50;
+	SIZE = 50;
 }
-// Bu kodun okunma şekli 100=50; olacaktır. Ve bu sentaks hatasıdır.
+// Bu kodun okunma şekli 100 = 0; olacaktır. Ve bu sentaks hatasıdır.
 // Ancak bu kodu şu şekilde kullanırsak ;
 
 #define SIZE a[0]
@@ -2367,7 +2368,7 @@ int main()
 {
 int a[100]
 
-SIZE =4;---> olarak yazdığımızda bı kodda sentaks hatası yoktur.
+SIZE = 4;---> olarak yazdığımızda bı kodda sentaks hatası yoktur.
 }
 ``` 
 #
@@ -2388,13 +2389,13 @@ SIZE =4;---> olarak yazdığımızda bı kodda sentaks hatası yoktur.
 #define square(a)   a*a
 int main()
 {
-int x,y;
-printf(" bir tamsayı girin:");
-scanf("%d",&x);
-y=square(x+1); // y=x+1*x+1; derleyici bu şekilde algılayacak.
+	int x, y;
+	printf(" bir tamsayı girin: ");
+	scanf("%d", &x);
+	y = quare(x + 1); // y = x + 1 * x + 1; derleyici bu şekilde algılayacak.
 }
 
-//doğru olan tanım şekli #define square(a)  (a)*(a) şeklindedir.
+//doğru olan tanım şekli #define square(a)  (a) * (a) şeklindedir.
 
 ```
 #
@@ -2404,10 +2405,10 @@ y=square(x+1); // y=x+1*x+1; derleyici bu şekilde algılayacak.
 #define square(a)   (a)*(a)
 int main()
 {
-int x,y;
-printf(" bir tamsayı girin:");
-scanf("%d",&x);
-y=square(x++); // y=(x++)*(x++); burada yan etki noktasına gelinmeden x iki kez kullanılmış olur ve bu tanımsız davranıştır.
+	int x, y;
+	printf(" bir tamsayı girin: ");
+	scanf("%d", &x);
+	y = square(x++); // y = (x++) * (x++); burada yan etki noktasına gelinmeden x iki kez kullanılmış olur ve bu tanımsız davranıştır.
 }
 ```
    
@@ -2418,9 +2419,9 @@ y=square(x++); // y=(x++)*(x++); burada yan etki noktasına gelinmeden x iki kez
 #define SQUARE(a) ((a)*(a))
 int main()
 {
-int y = 10;
-int z = SQUARE(foo(y)),
-//burada foo fonksiyonu 2 kez çağırılmış oldu. Eğer square bir fonksiyon olsaydı bir kez çağırılıp geri dönüş değeri ile makraya gidilecekti.
+	int y = 10;
+	int z = SQUARE(foo(y)),
+	//burada foo fonksiyonu 2 kez çağırılmış oldu. Eğer square bir fonksiyon olsaydı bir kez çağırılıp geri dönüş değeri ile makraya gidilecekti.
 }
 ```
 - bir mülakat sorusu: 
@@ -2485,7 +2486,7 @@ int main()
 	
 	int main()
 	{
-	printf(str(github));
+		printf(str(github));
 	}
 	// Derleyicinin gördüğü printf("github");    olur.
 	
@@ -2501,17 +2502,17 @@ int main()
 
 int main()
 {
-int a=10;
-int b=7;
-int c=11;
+	int a = 10;
+	int b = 7;	
+	int c = 11;
 
-iprint(a);
-iprint(a+b);
-iprint(a*a+ b*b+c*c);
-//burada ekran çıktısı 
-a=10
-a+b=17
-a*a+ b*b+c*c=590              olur.
+	iprint(a);
+	iprint(a + b);
+	iprint(a * a + b * b + c * c);
+	//burada ekran çıktısı 
+	a = 10
+	a + b = 17
+	a * a + b * b + c * c = 590              olur.
 }
 
 
@@ -2528,25 +2529,27 @@ a*a+ b*b+c*c=590              olur.
 	#define uni(a,b) a##b
 	int main()
 	{
-		int counter =0
-		uni(co,unter)=20;
-		printf("%d",counter);
+		int counter = 0
+		uni(co, unter) = 20;
+		printf("%d", counter);
 	
 		// ekrana 20 yazılır.
 	}
 		
-```	
 ```
+#
+
 
 #
 - Define farklı bir kullanım şekli;
+- 
 ```
 #define PUBLIC
 
 PUBLIC int g=45;
 PUBLIC int square(int x)
 {
-return x*x;
+	return x*x;
 }
 //Bu kodda PUBLIC sözcüğü derlendiğine derleyici, PUBLIC sözcüğünü görmez. 
 ```
@@ -2576,27 +2579,29 @@ mesela;
 ```
 #define NEC 1
 
-#if NEC==0
+#if NEC == 0
 
 #else 
 
-#if NEC ==1
+#if NEC == 1 
 
 #else
 #endif
-#endif------> Bu şekilde kullanılırsa her if için bir endif yazılması gerekir. Ancak aşağıdaki gibi kullanılırsa ;
+#endif ------>  Bu şekilde kullanılırsa her if için bir endif yazılması gerekir. Ancak aşağıdaki gibi kullanılırsa ;
 
-#if NEC==0
+#if NEC == 0
 
-#elif NEC ==1
+#elif NEC == 1
 
-#elif NEC==2
+#elif NEC == 2
 
 #endif
+
 ```
 
 
 #
+
 
 ```
  - #ifdef NEC ----> NEC makrosu define edilmişse önişlemci bu aralığa girecek.
