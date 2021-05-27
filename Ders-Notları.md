@@ -1,4 +1,4 @@
-# 2500
+# 3000
 
 
 
@@ -1791,7 +1791,7 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 
 
 - Maksimum munch kuralı :
-		int z= x+++y;
+		int z = x+++y;
 		
 Burada x++ derleyicinin algılayabileceği en uzun atom olduğu için x++ +y olarak tokenize edilir.
 
@@ -2135,6 +2135,7 @@ int main()
 
 ```
 int i = 0;
+
 do
 {
 	printf("%d\n",i);
@@ -2142,7 +2143,7 @@ do
 	if(i < 15)
 		continue;
 		
-	}while(0);
+}while(0);
 
 
 
@@ -2259,7 +2260,7 @@ geri dönüş değerinin olmadığı bildiriliyor. Bu C diline ait bir kural.
 
 - Preprocessor:
 	- Önişlemcinin , bilgisayarın işlemcisi ya da başka bir donanımsal elemanıyla hiçbir ilgisi yoktur.
-	 	- ÖnişleMci belirli bir işi gören bir yazılım programıdır.
+	 	- Önişlemci belirli bir işi gören bir yazılım programıdır.
 	- Önişlemci, kaynak dosya üzerinde birtakım düzenlemeler ve değişiklikler yapan bir ön programdır.
 	- Önişlemci programının bir girdisi bir de çıktısı vardır. Önişlemcinin girdisi kaynak dosyanın kendisidir. 
 	Önişlemci programın çıktısı ise derleme modülünün girdisini
@@ -2566,6 +2567,7 @@ PUBLIC int square(int x)
 - Koşullu derlemede bir kural vardır. Eğer makronun tanımı yapılmamışsa makro sıfır olarak işleve alınır.
 
 mesela;
+
 ```
 #if MAX > 10
 	typedef int word;
@@ -2599,9 +2601,7 @@ mesela;
 
 ```
 
-
 #
-
 
 ```
  - #ifdef NEC ----> NEC makrosu define edilmişse önişlemci bu aralığa girecek.
@@ -2668,6 +2668,7 @@ bir başlık dosyasının içine ;
 #endif
 ---> şeklinde bir koşul ve makro tanımlanırsa ilk girişte koşulda sorgulanan makro tanımlanmadığı için girer ve kodu işler.
 Eğer ikinci kez tanımladıysa koşuldaki makro, birinci girişindeki tanımladığı koşul geçemez.
+
 ```
 - !!!! Multiple inclusion guard her başlık dosyasında olmalıdır. 
 
@@ -2686,20 +2687,21 @@ Eğer ikinci kez tanımladıysa koşuldaki makro, birinci girişindeki tanımlad
  #define SIZE 100
  #define SIZE 500
 - Önişlemci programında name look up terimi yoktur. Bu derleyici ile alakalıdır.
+
 ```
 
 - Yani biz bir makroyu kullandıktan sonra tekrar değer vermek istersek önce o makroyu #undef komutu ile içeriğini temizlememiz gerekir.
 
 
 
-- Pre-defined Symbolic Constant(ön tanımlı sabit )
+- Pre - defined Symbolic Constant(ön tanımlı sabit)
 	- Dil tarafından tanımlı kabul edilen makrolara denir. 
-		- __FILE__---->bulunduğu dosyanın ismi  ile yer değiştiren makro.
-		- __LINE__---->bulunduğu line'ın numarasıyla yer değiştiren makro.
-		- __DATE__---->derlendiği tarih ile yer değiştiren makro.
-		- __TIME__---->derlendiği saat ile yer değiştiren makro.
-		- __STDC__---->standart bir C derleyiciyse bu makro define edilmiş kabul edilir.
-		- __func__---->bulunduğu fonksiyonun ismi ile yer değiştiren makro.
+		- __FILE__----> bulunduğu dosyanın ismi  ile yer değiştiren makro.
+		- __LINE__----> bulunduğu line'ın numarasıyla yer değiştiren makro.
+		- __DATE__----> derlendiği tarih ile yer değiştiren makro.
+		- __TIME__----> derlendiği saat ile yer değiştiren makro.
+		- __STDC__----> standart bir C derleyiciyse bu makro define edilmiş kabul edilir.
+		- __func__----> bulunduğu fonksiyonun ismi ile yer değiştiren makro.
 
 
 
@@ -2766,7 +2768,7 @@ void print_season(int month)
 }---> Case'lerde boşta kalan yani case'den sonra deyim olmadan switch'den çıkan bir case olmamalıdır.
 
 ```
-- Fallthrouh: break komutu kullanmadan 2 case'i birleştirdiğinizde, bu durumu bilerek ve isteyerek yaptığınızı 
+- Fallthrough: break komutu kullanmadan 2 case'i birleştirdiğinizde, bu durumu bilerek ve isteyerek yaptığınızı 
 yorum satırıyla case'in yanına eklenmelidir ki kodu okuyan kişi, kodu yazan kişinin bunu bilinçli bir şekilde yaptığınızı anlasın.
 
 
@@ -2783,7 +2785,7 @@ yorum satırıyla case'in yanına eklenmelidir ki kodu okuyan kişi, kodu yazan 
   
   - ival + dval ---> Bir int türünden değeri bir double türden değerle toplarsanız eğer derleyici arka planda tür dönüşümü yaparak ival'i,
   double türe dönüştürür. Bu olaya ;
-  	- imlicit type conversion denir.
+  	- implicit type conversion denir.
   		- implicit = örtülü , gizli , kapalı
   	- explicit type conversion : Kodu yazan kişinin bu kodda tür dönüşümü olacağını belirtmesine denir.
   		- type-cast operatörü
@@ -2795,7 +2797,7 @@ yorum satırıyla case'in yanına eklenmelidir ki kodu okuyan kişi, kodu yazan 
 		- Bu dönüşümler geçici nesne (temprory obj) oluşturularak yapıldığı için aslında değişkenin türü değiştirilmiyor.
 		
 		
-- a+b ---> bu işlemde en kapsamlı tür hangisiyse işlem o türde yapılıyor.
+- a + b ---> bu işlemde en kapsamlı tür hangisiyse işlem o türde yapılıyor.
 
 1 - long double
   - double
@@ -2824,7 +2826,7 @@ yorum satırıyla case'in yanına eklenmelidir ki kodu okuyan kişi, kodu yazan 
 
 - Aynı türlerin operantlarının rank'ı aynı ise fakat türleri farklı ise, tür dönüşümü her zaman işaretsiz yöne yapılır.
 
-- a+b ---> operantlar farklı rankta fakat büyük olan rank işaretli , küçük olan rank işaretsiz ise ,
+- a + b ---> operantlar farklı rankta fakat büyük olan rank işaretli , küçük olan rank işaretsiz ise ,
  Bu durumda eğer işaretli olan tür işaretsiz olan türün bütün değerlerini tutabiliyorsa 
  tür dönüşümü işaretli ranki yüksek olan türe yapılacak. Aksi halde bunun işaretsiz türüne yapılacak.
  
@@ -2843,24 +2845,24 @@ using namespace std;
 
 int main()
 {
-	char c1=10;
-	char c2=20; // işlemin sonucunun türü int olacak 
+	char c1 = 10;
+	char c2 = 20; // işlemin sonucunun türü int olacak 
 	
-	cout << typeid (c1+c2).name()<<"\n";
+	cout << typeid (c1 + c2).name()<<"\n";
 }
 --------------
 
-short s1=10;
-short s2=20; // int
+short s1 = 10;
+short s2 = 20; // int
 
 --------------
 
-unsigned int uval =5;
-int ival =10// unsigned int 
+unsigned int uval = 5;
+int ival = 10// unsigned int 
 
 --------------
 
-long uval =10;
+long uval = 10;
 unsigned int ival = 10;
 
 --------------
@@ -2884,7 +2886,7 @@ unsigned int ival =10;//4 byte  --> long long
  	int x = -1;
 	unsigned int y = 2;
 	
-	if (x >y)
+	if (x > y)
 		printf("evet dogru\n");
 	else
 		printf("hayir yanlıs\n");
@@ -2894,8 +2896,8 @@ unsigned int ival =10;//4 byte  --> long long
  
  
  - int x = 10;
-   double d1 = x/3;-->sonuç = 3 olur.
-   double d2 = x/3.;---> sonuç = 3.333 olur.
+   double d1 = x/3;	-->sonuç = 3.00 olur.
+   double d2 = x/3.;	---> sonuç = 3.333 olur.
    ```
    
    
@@ -2906,14 +2908,14 @@ unsigned int ival =10;//4 byte  --> long long
 Örnek olarak ; 
 	- Sistemdeki int türü 2 byte olsun.
 	
-		int ival=1000;
-		ival*1000u;--> bunun sonucu 1000000 % 65536 olur.
+		int ival = 1000;
+		ival * 1000u;--> bunun sonucu 1000000 % 65536 olur.
 
 
 - Atama tür dönüşümleri:
 
 		 int x; 
-		 x=expr; --> expr hangi türde olursa olsun, 
+		 x = expr; --> expr hangi türde olursa olsun, 
 		 tür dönüşümü kendisine atama yapılan nesnenin türüne yapılacak.
 		
 - Küçük türden büyük türe atama  yapmakta bir sakınca yok.
@@ -2950,13 +2952,13 @@ Bir mülakat sorusu:
 ```
 	double dval ;
 	printf("[-5 +5] araliginda bir gercek sayi giriniz:");
-	scanf("%lf",&dval);
-	printf("%lf ====> %d \n",dval,???);
+	scanf("%lf", &dval);
+	printf("%lf ====> %d \n", dval, ???);
 	
 	
 	---> ??? yerine öyle bir ifade yazın ki matematiksel yuvarlama işlemini yapsın.
 	
-	??? ====> (int)(dval >= 0 ? dval + 0.5 : dval - 0.5)
+	??? ====> dval >= 0 ? (int)(dval + 0.5) : (int)(dval - 0.5))
 ```
   
   # Rastgele Sayı Üretimi 
@@ -2968,7 +2970,7 @@ Bir mülakat sorusu:
   - Genetic algorithm 
   - Olasılık hesabı 
   - İstatistiksel hesaplamalar
-  - Test kodlarındaki test datsı oluşturmak 
+  - Test kodlarındaki test datası oluşturmak 
   - Bazı arama/sıralama algoritmaları
   
   
@@ -3000,11 +3002,11 @@ Bir mülakat sorusu:
 rand() --> fonksiyonun kullanıldığı seed (tohum) değeri 1 olduğu için üretilirken aynı sırada rastgele sayı üretilecektir.
 
 
-	for (int i=0;i<5 ; i++)
+	for (int i = 0; i < 5 ; i++)
 	{
-	printf(""%d",rand());
+		printf(""%d",rand());
 	}
--> Bu kodun üreteceği sayıların sırası belirlidir.(Default değer olan 1 değeri gönderilirç)
+-> Bu kodun üreteceği sayıların sırası belirlidir.(Default değer olan 1 değeri gönderilir)
 	 Ekran çıktısı:
 	 41 19467 6334 26500 19169
 	 	olur. Ve bu sıralama ve değerler tohum değeri(seed) sabit olduğu için her seferinde aynı olur.
@@ -3013,7 +3015,7 @@ rand() --> fonksiyonun kullanıldığı seed (tohum) değeri 1 olduğu için ür
 srand(num) fonksiyonuna değer gönderilmelidir. Srand fonksiyonuna gönderilen tohum değeri değiştikçe üretilen rastgele sayılar da değişir.
 
 	
-		for (unsigned int i=1; i<100 ; i++)
+		for (unsigned int i = 1; i < 100 ; i++)
 		{ 
 			srand(i);
 			printf("tohum değeri %u için sayı zincirinin ilk 100 sayısı \n",i);
@@ -3042,22 +3044,26 @@ srand(num) fonksiyonuna değer gönderilmelidir. Srand fonksiyonuna gönderilen 
 		
 - Rastgele alfa-numeric karakter yazdırımı:
 	
-		for(;;)
-		{
-			for(;;)
+			int c;
+			for (;;)
 			{
-				c=rand()%128;
-				if(isalnum(c))
-					break;
+				for (;;)
+				{	
+					c = rand() % 128;
+					if (isalnum(c))
+						break;
+				}
+				printf("%c ", c);
+				_getch();
 			}
-		}
+  
   
   - Yukarıdaki kodu bir C idiyomu ile yazalım:
   	
 		int c;
 		for(;;)
 		{
-			while(!ispunct(c=rand()%128))
+			while(!ispunct(c = rand() % 128))
 			;// null statement
 			
 			putchar(c);
