@@ -1,4 +1,4 @@
-# 3000
+# 3200
 
 
 
@@ -3086,8 +3086,9 @@ srand(num) fonksiyonuna değer gönderilmelidir. Srand fonksiyonuna gönderilen 
 Bu idiyomun kullanım şekli ;
 
 	#include <time.h> 
+	
 	srand((unsigned)time(NULL));
-	for(int i=0; i<10; ++i)
+	for(int i = 0; i < 10; ++i)
 	{
 		printf("%d ",rand());
 	}
@@ -3112,8 +3113,8 @@ Bu idiyomun kullanım şekli ;
 	   int main()
 	   {
 	   	int heads_counter =0;
-		forint i=0 ; i< NTOSS ; ++i)
-			if(rand()%2==HEADS)
+		forint i = 0 ; i < NTOSS; ++i)
+			if(rand() % 2 == HEADS)
 				++heads_counter;
 		
 		printf(" Tura gelme olasılığı : %.12f\n",(double)heads_counter/NTOSS);
