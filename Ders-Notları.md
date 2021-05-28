@@ -1,4 +1,4 @@
-# 3200
+# 3600
 
 
 
@@ -3386,7 +3386,7 @@ Dizinin boyutu dışında veya negaitif bir terimine atama yapmak tanımsız dav
 #
 
 
-- a[5] ---> l vale expression.
+- a[5] ---> l value expression.
 	- a[5]++
 	- ++a[5]
 	- &a[5]
@@ -3431,7 +3431,7 @@ void printf_random_password(void)
 {
 	srand(time(NULL));
 	int len = rand() % 5 + 6;
-	for (int i=0; i < len; ++i)
+	for (int i = 0; i < len; ++i)
 	{
 		putchar(randam_char());
 	}
@@ -3454,11 +3454,11 @@ main fonksiyonun başıdır.
 - Dizilere ilk değer verilmesi:
 	- int a[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 	- int [3] = {1, 2, 3, 4} // geçersiz (boyut aşımı)
-	- Dizinin boyutundan daha az ilk değer diğer değerler default olarak 0 ilk değeri alır.
-	- int a[5]; ---> çöp değer ile başlar.
+	- Dizinin boyutundan daha az ilk değer verildiğinde diğer değerler default olarak 0 ilk değeri alır.
+	- int a[5]; ---> Dizinin elemanları hayata çöp değer ile başlar.
 	- int a[3] = {1, 2, 3,} --> trailing comma
 	- int a[]; --> sentaks hatası
-	- int a[] = {1, 2, 3, 4,5} --> sentaks hatası yok. Dizinin boyutu otomatik olarak 3 algılanır.
+	- int a[] = {1, 2, 3, 4, 5} --> sentaks hatası yok. Dizinin boyutu otomatik olarak 5 algılanır.
 
 - Dizinin boyutunu belirten ifade sabit ifadesi olmalıdır.
 
@@ -3474,7 +3474,7 @@ main fonksiyonun başıdır.
 - Bir döngü içerisinde a[i] ve i[a], ikiside a dizisinin i. elemanı anlamına gelir.
 
 
-  - Rastgele sayılarala bir dizi oluşturup elemanları toplamını bulan program:
+  - Rastgele sayılarla bir dizi oluşturup elemanları toplamını bulan program:
 
 
   ```
@@ -3484,6 +3484,7 @@ main fonksiyonun başıdır.
   
   #define SIZE 20
   #define asize(x)  (sizeof(x) /sizeof(x[0]))
+  
   void set_array_random(int* p, int size)
   {
 	while (size--)
@@ -3502,11 +3503,11 @@ main fonksiyonun başıdır.
   
   int main()
   {
-  	int a[SIZE]
+  	 int a[SIZE]
  	 int sum = 0;
  	 randomize();
- 	 set_array_random(a,SIZE);
-	 print_array(a,SIZE);
+ 	 set_array_random(a, SIZE);
+	 print_array(a, SIZE);
 	 for(int i = 0; i < SIZE; ++i)
 	 {
 	 	sum += a[i];
@@ -3574,7 +3575,7 @@ main fonksiyonun başıdır.
   
   
   ```
-    #include <stdio.h>
+   #include <stdio.h>
   #include <stdlib.h>
   #include <time.h>
   
@@ -3641,7 +3642,7 @@ main fonksiyonun başıdır.
 	//Üçüncü algoritma
 	
 	int i;
-	for(i = 0; i<SIZE && a[i] != sval; ++i)
+	for(i = 0; i < SIZE && a[i] != sval; ++i)
 		; // null statement
 	
 	if(i < SIZE)
@@ -3656,11 +3657,11 @@ main fonksiyonun başıdır.
   #### Sizeof Operatörü
   
   - Anahtar sözcükte operatör olan tek anahtar sözcük.
-  - Compile-time operator
+  - Compile - time operator
   	- Diğer operatörlerden farklı olarak bu operatörün ürettiği değer derleme zamanında derleyici 
   	tarafından bir sabit olarak elde edilecek.
 	
-- sizeof operatörü bir türün storage ihtiyanının kaç byte olduğunu gösterir.
+- sizeof operatörü bir türün storage ihtiyacınının kaç byte olduğunu gösterir.
 - sizeof operatörünün ürettiği değer derleyiciye bağlı olan işaretsiz tam sayı türünde bir değerdir.
 
 - Kullanım şekli:
@@ -3684,7 +3685,7 @@ olan ifadenin türüne bakar ve o türün storage değerini elde eder.
 - Örnek olarak : 
 
 		int x = 9;
-		printf("%zu\n", sizeof x + 5);--> ekran 9 değeri yazdırılır.
+		printf("%zu\n", sizeof x + 5);  --> ekran 9 değeri yazdırılır.
 		printf("%zu\n",sizeof (x + 5));---> ekrana 4 değeri yazdırılır.
 		
 		char c;
