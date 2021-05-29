@@ -1,4 +1,4 @@
-# 3600
+# 3903
 
 
 
@@ -3729,9 +3729,9 @@ olan ifadenin türüne bakar ve o türün storage değerini elde eder.
 		int a[50];
 		double da[20];
 		
-		printf("sizeof(buf) = %zu \n",sizeof(buf));-->200*1byte =200
-		printf("sizeof(a) = %zu\n",sizeof(a));---> 50*4byte= 200
-		printf("sizeof(da) = %zu\n",sizeof(da);---> 20*8 = 160
+		printf("sizeof(buf) = %zu \n",sizeof(buf));--->200 * 1 byte = 200
+		printf("sizeof(a) = %zu\n",sizeof(a));---> 50 * 4 byte= 200
+		printf("sizeof(da) = %zu\n",sizeof(da);---> 20 * 8 = 160
 		
 		
 - sizeof(a[0]) = dizinin bir teriminin byte'ını verir.
@@ -3741,7 +3741,7 @@ olan ifadenin türüne bakar ve o türün storage değerini elde eder.
 - Örnek kullanım:
 
 		int a[] = { 2, 5, 7, 9, 11, 13,}
-		for (int i = 0;i < sizeof(a) / sizeof(a[0]); ++i);
+		for (int i = 0; i < sizeof(a) / sizeof(a[0]); ++i);
 			printf("%d ",a[i]);
 			
 			
@@ -3772,7 +3772,7 @@ olan ifadenin türüne bakar ve o türün storage değerini elde eder.
   
   
   - Rastgele sayi üreten bir dizi tanımlansın. Dizinin içerisinde sadece 
-  1 adet olan aynı sayıda başla olmayan elemanlar ekrana yazdırılsın.
+  1 adet olan aynı sayıdan başka olmayan elemanlar ekrana yazdırılsın.
   	- Print all unique elements of an array.
   	
 ``` 
@@ -3801,7 +3801,7 @@ int main()
 	printf("\n\n");
 
 	/***1. Çözüm***
-	* O(n) karmaşıklığında
+	* O(n^2) karmaşıklığında
 	
 	for (int i = 0; i < SIZE; ++i) {
 		int cnt = 0;
@@ -3814,7 +3814,7 @@ int main()
 	}*/
 
 	/***1. Çözüm break statement ile***
-	* O(n) karmaşıklığında (complexity)
+	* O(n^2) karmaşıklığında (complexity)
 	
 	int i, j;
 	for (i = 0; i < SIZE; ++i) {
@@ -3849,7 +3849,7 @@ int main()
   
   - Max Subsequence Algorithm
   	- Subsequence: Bir dizinin içerisinde ardışık n tane elememan. Yani bir tür alt dizi.
-  	- Max Subsequence: Öyle bir alt dizi bulunacak ki bu alt dizinin elemnaları 
+  	- Max Subsequence: Öyle bir alt dizi bulunacak ki bu alt dizinin elemanları 
   	toplamı bu dizide bulunabilecek en büyük toplam olacak.  
 		- Bu kuralın uygulanabilmesi için dizinin elemanlarından en az biri negatif olmalıdır.
   
