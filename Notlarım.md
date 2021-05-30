@@ -22,6 +22,7 @@ Tokenlar aşağıdaki gibi sınıflandırılabilirler:
  
  7- Operators (Operatörler)				
 
+
 1-Keywords: Programlama dilinde ön tanımlama yapılmış ve rezerve edilmiş 
 kelimelerdir.
 Bu kelimeleri bir değişken olarak tanımlayıp kullanamayız. Anahtar kelimelere
