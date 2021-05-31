@@ -1762,7 +1762,7 @@ beklemeden emir verebilmek  başka bir deyişle hızı artırabilmek.
 	     
 	     ```
 	    
-# Ders 15- 08/03/2021
+# Ders 15 - 08/03/2021
 
  # Loop Statement 
  
@@ -2257,7 +2257,7 @@ geri dönüş değerinin olmadığı bildiriliyor. Bu C diline ait bir kural.
 	 	- Tür eş isim bildirimleri
 
 
-# Ders 18-15/03/2021
+# Ders 18 - 15/03/2021
 
 - Preprocessor:
 	- Önişlemcinin , bilgisayarın işlemcisi ya da başka bir donanımsal elemanıyla hiçbir ilgisi yoktur.
