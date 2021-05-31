@@ -2812,7 +2812,7 @@ yorum satırıyla case'in yanına eklenmelidir ki kodu okuyan kişi, kodu yazan 
   - signed int
   
   
-3 -   "integral promotion"
+3 -   "integer promotion"
     - unsigned short 
     - signed short 
     - unsigned char
