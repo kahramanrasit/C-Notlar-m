@@ -2,6 +2,7 @@
 
 
 
+
 # Token (Atom)
 
  - Derleyicinin anlamlandırabildiği en küçük program parçasıdır.
