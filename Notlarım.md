@@ -8908,19 +8908,237 @@ void is a type --> void bir türdür.
 		}
   
   
+  # Ders 38 Tarih 03 05 2021
+  
+  		int func(int);
+	
+		int main()
+		{
+			(void)func(12);
+		}
+	
+	Yukarıda bir fonksiyon tanımında geri dönüş değeri olmasına rağmen void - cast ile bu geri 
+	dönüş değerinin kullanılmayacağı belirtilmiştir.
+	
+
+		void func(int);
+		
+	Yukarıdaki fonksiyonun tanımına bakılarak bu fonksiyonun geri dönüş değerinin olmadığı 
+	anlamına gelmez. Farklı yollarla iletiyor olabilir. Sadece return value' sı yoktur. 
+	Bir değişkenin adresi aracılığıyla geri dönüş değeri gönderdiği unutulmamalıdır.
+	
+- C dilinde C++'dan farklı olarak fonksiyon tanımında bir durum söz konusudur.
+
+		void func();
+		void func(void);
+- Yukarıdaki iki tanım arasında bir fark vardır. C'de fonksiyon parametresi içerisine void 
+yazıldığında fonksiyonun parametre değişkeninin olmadığı anlamına gelirken parantezin içerisi
+boş bırakıldığında bu fonksiyonun parametrik yapısı hakkında bir bilgi verilmediği anlamına 
+gelir.
+
+
+- Şimdi void ile yeni bir türden bahsedeceğiz. 
+- Bir pointerın tanımında, void anahtar sözcüğünden sonra asterisk atomu gelirse, yeni bir tür ile 
+ karşılaşmış oluyoruz. Bu türe void pointer türü diyoruz. (void*) türü. 
+ 
+ 		void* ptr;
+		
+- Buradaki fark ise ptr öyle bir pointer ki her türden nesnenin adresini tutabiliyor.
+Yani ptr nesnesi yukarıdaki gibi tanımlandığında ptr nesnesine (int, double long vs.) türden nesnelerin adreslerini atayarak kullanabilirsiniz. 
+Ancak önceki pointer tanımlamalarına baktığımızda pointer değişkeni tanımlarken biz bir tür belirtiyorduk ve bu pointer nesnesine sadece o türden nesneler atayabiliyorduk.
+
+
+Yani adete void* türü bize diyor ki türün ne olursa olsun adresini tutabilirim ben sadece adres ile ilgileniyorum türünle ilgilenmiyorum. 
+
+		int x = 10;
+		char str[] = "ali";
+		double dval = 2.3;
+
+		void* ptr = &x;
+
+		ptr = str;
+		ptr = &dval;
+		// Yukarıdaki atamalardan hepsi geçerlidir.
+
+  
+ - Void pointerın en dikkat edilmesi gereken nokta void pointerı dereference ederek bir nesneye
+ ulaşıp o nesneye atama yapamazsınız. 
+ 
+ 		*ptr = 23; // sentaks hatasıdır.
+		++ptr;  // sentaks hatası.
+- Yani void pointer, pointer aritmetiğine tabi değildir.
+
+- İki void pointer da birbirinden çıkartılamaz.
+
+- Burada akıllara o zaman void pointer değişkeni l value expression mıdır sorusu gelebilir ancak
+void ptr l value dur. Ancak onun gösterdiği nesneye erişim söz konusu değildir.
+
+- Peki o zaman void pointerla neler yapabiliriz sorusuna cevaplar verelim:
+
+
+		int x = 10; 
+		
+		void* vptr = &x; // bir nesnenin adresini ilk değer olarak verebiliriz.
+		
+		vptr = NULL; // NULL pointer atanabilir.
+		
+		if (vptr != NULL) // bir nesnenin NULL pointer olup olmadığı sorgulanabilir.
+		if (vptr)
+		
+		if (vptr == &x)  // bir nesnenin adresine eşit olup olmadığı sınanabilir.
+		
+		
+- C ile C++ arasında bir fark söz konusu:
+
+		int x = 10;
+		void* vptr = &x;
+		int* iptr;
+		
+		iptr = vptr; // Bu koda C'de geçerli ve implicit tür dönüşümü gerçekleşirken
+		// C++ dilinde void* türünden diğer adreslere örtülü tür dönüşümü geçerli değildir.
+		
+- Ancak tabi ki C'de bu özellik olsa dahi tür dönüştürme operatörünün kullanılması daha elzemdir.
+
+		iptr = (int*) vptr;
+		
+- Bizim tanışmadığımız bir kodlama şekli var.
+- Generic programming , yani türden bağımsız programlama demek
+
+- Mesela bizim tanımladığımız fonksiyonlar bir türe hizmet ediyor. 
+- Ancak generic fonksiyonlar bu şekilde değil. Yani generic fonksiyonlar bütün türlere hizmet veriyor. Mesela print_array fonksiyonu generic bir fonksiyon olsaydı türü ne olursa olsun dizinin tüm elemanlarını yazdırabilecekti.
+
+- Bir nesne veya nesneler dizisi üzerinde yapılacak bir çok işlem nesnenin türü bilinmeden de yapılabilir. 
+
+- Mesela bir soru: C'nin imkanlarıyla öyle bir swap fonksiyonu yazın ki, iki int nesneyi de takas edebilsin, iki double nesneyi de veya iki int diziyi de takas edebilsin. 
+		
+		
+  		void gswap(void* vpx, void* vpy, size_t sz)
+		{
+			char* px = vpx;
+			char* py = vpy;
+			
+			while (sz--)
+			{
+			char temp = *px;
+			*px++ = *py;
+			*py++ = temp; 
+			}
+		}
+	- Yukarıdaki fonksiyonda türden bağımsız olarak bellekte tutulan nesnenin byte larının değişimi yapıldı. Yalnız burada C++ diline göre derlersek sentaks hatası vardır. Çünkü tür dönüşümü implicit olarak yapılamaz(vpx ile px arasında).
+  
+```
+  void gswap(void* vpx, void* vpy, size_t sz)
+{
+	char* px = (char*)vpx;
+	char* py = (char*)vpy;
+
+	while (sz--) {
+		char temp = *px;
+		*px++ = *py;
+		*py++ = temp;
+	}
+}
+int main()
+{
+	int x = 10, y = 20;
+
+	gswap(&x, &y, sizeof(int));
+
+	printf("x = %d, y = %d\n", x, y);
+
+	double dx = 34.76, dy = 68.23; 
+
+	gswap(&dx, &dy, sizeof(double)); // değişimin yapılacağı iki nesnenin türü aynı olmak zorunda
+
+	printf("dx = %f, dy = %f", dx, dy);
+
+	int a[5] = { 1, 3, 5, 7, 9 };  
+	int b[5] = { 2, 4, 6, 8, 10 }; // dizi boyutları aynı olmak zorunda
+
+	gswap(a, b, sizeof a);
+
+
+}
+
+
+```
   
   
+- Standart olan string.h başlık dosyası içerisinde alan generic fonksiyonlar:
+
+	- memset
+	- memcpy
+	- memchr
+	- memcmp
+
+
+- memset, bir bellek bloğunun bütün byte larını bir tam sayı değeriyle doldurmak için kullandığımız bir fonksiyon:
+	
+		void* memset(void* vp, int val, size_t n)
+	
+	- İlk parametresi set edilecek bellek bloğunun adresini isteyen void pointer,
+	- ikinci parametresi her bir byte a yazılacak tam sayı değeri
+	- üçüncü parametresi de byte olarak bellek bloğunun büyüklüğü.
   
+  - memset fonksiyonu ile bir diziyi sıfırlama
+
+```
+	int a[SIZE];
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	memset(a, 0, sizeof(a));
+	print_array(a, SIZE);
+```
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
+- Bir örnek daha
+
+```
+	int a[SIZE];
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	int idx;
+	int n;
+
+	printf("Hangi indeksten baslanarak kac tane elemean sifirlanacak\n");
+	scanf("%d%d", &idx, &n);
+
+
+	memset(a + idx, 0, n * sizeof(int));
+	print_array(a, SIZE);
+```
+
+- Char türünden bir örnek:
+
+
+```
+	char str[SIZE] = "NECATI ERGIN";
+
+	memset(str + 2, '*', 2);
+
+	puts(str)
+
+```
+
+- memset fonksiyonunu kendimiz yazarsak;
+
+```
+void* memset(void* vptr, int val, size_t size)
+{
+	char* p = (char*)vptr;
+
+	while (size--)
+		*p++ = (char)val;
+
+	return vptr;
+}
+```
+
+
+
   
   
   
