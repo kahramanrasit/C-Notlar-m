@@ -9142,14 +9142,343 @@ void* memset(void* vptr, int val, size_t size)
 }
 ```
 
+- memcpy, en sık çağırılan standard c fonksiyonlarından biridir.
+- Bir bellek bloğunu bir yerden bir yere kopyalıyor. 
+
+		void* memcpy(void* vpdest, const void *vpsource, size_t n);
+		
+	- Birinci parametre kopyalamanın yapılacağı yerin adresi.
+	- Kaynak olarak kullanılacak bellek bloğunun adresi yani sadece okuma amaçlı olduğundan const anahtar sözcüğüyle birlikte.
+	- Üçüncü parametre de kaç tane byte kopyalanacağıdır.
+
+- Bir örnek:
+
+```
+	int a[SIZE];
+	int b[SIZE];
+	
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	memcpy(b, a, sizeof(a));
+	
+	print_array(b, SIZE);
+```
+
+- Bir örnek daha
+
+```
+	int a[SIZE];
+	int b[SIZE] = { 0 };
+	
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	int idx_a, idx_b, n;
+	printf("a'nin hangi elemanindan baslanacak\n");
+	scanf("%d", &idx_a);
+	printf("b'nin hangi elemanindan baslanacak\n");
+	scanf("%d", &idx_b);
+	printf("kac tane eleman kopyalanacak\n");
+	scanf("%d", &n);
+	
+
+	memcpy(b + idx_b, a + idx_a, n * sizeof(int));
+	
+	print_array(b, SIZE);
+
+```
+
+- memcpy fonksiyonunu kendimiz yazmak istersek:
+
+```
+void* mymemcpy(void* vpdest, const void* vpsource, size_t size)
+{
+	const char* psource = (const char*)vpsource;
+	char* pdest = (char*)vpdest;
+
+	while (size--)
+		*pdest++ = *psource++;
+
+	return vpdest;
+}
+```
+
+- C dökümnatasyonuna bakıldığında memcpy fonksiyonunun tanımında restrict anahtar sözcüğünü görüyoruz. Bu kelime ile derleyiciye şunun garantisi verilir. gönderilen iki nesnenin bellek bloğunun herhangi bir durumda kesişmediğinin garantisini vermiş oluruz. Herhangi bir kesişme durumunda UB olur.
+
+- Bir örnek üzerinden bakalım:
+
+		int a[100];
+		
+		memcpy(a + 20, a + 10, 20 * sizeof(int)); // UB
+		
+- Yukardaki örnekte görüldüğü üzere yazılan kodda kopyalanan bellek bloğunun kesiştiği görülmektedir.
+
+		void* memcpy(void* restrict vpdest, const void* restrict vpsource, size_t n);
+		
+- Sıradaki fonksiyon olan memmove fonksiyonuna geldiğimizde, memmove fonksiyonunun restrict olmadığını görüyoruz. Yani bu bellek bloklarının ortak ara kesiti olsada doğru çalışma garantisi veriyor.
+
+		void* memmove(void* vpdest, const void *vpsource, size_t n);
+		
+- memmove fonksiyonu ile kaydırma türü işlemler yapılmaktadır.
+
+- örnek olarak yukarıdaki yazdığımız kod satırını memmove ile yazarsak;
+
+		int a[100];
+		
+		memmove(a + 20, a + 10, 20 * sizeof(int));
+
+- Biz bu overlapted olarak str fonksiyonunda dikkat edilmesi gerektiğini aşağıdaki şekilde kullanılmaması gerektiğinden bahsetmiştik.
 
 
+		char str[100] = "something";
+		
+		strcpy(str + 2, str); // ub
+		
+		puts(str);
+		
+- Biz bunu güvenli bir şekilde kaydırmak isetersek memmove fonksiyonunu kullanabiliriz:
+
+		char str[100] = "something";
+		
+		memmove(str + 2, str, strlen(str) + 1); // \0 karakter de kopyalandığı için + 1
+		
+		puts(str);
+		
+- Yukarıda bir yazıyı 2 indeks sağa kaydırma işlemi yapıldı.
+
+
+- memmove fonksiyonunu kendimiz yaparsak;
+
+```
+void* mymemmove(void* vpdest, const void* vpsource, size_t n)
+{
+	char* pdest = (char*)vpdest;
+	const char* psource = (const char*)vpsource;
+
+	if (pdest < psource) {
+		while (n--)
+			*pdest++ = *psource++;
+	}
+	else {
+		pdest += n;
+		psource += n;
+		while (n--)
+			*--pdest = *--psource;
+	}
+
+	return vpdest;
+}
+```
+- Yukarıda görüldüğü üzere bellek bloklarının çakışması durumunda kopyala sondan başa doğru yapılmaktadır.
+
+
+
+- memchr fonksiyonu ise bir bellek bloğunda bir byte arıyor.
+
+		void* memchr(const void* vp, int val, size_t n);
+	
+	- Birinci parametre aramanın yapılacağı bellek bloğu.
+	- İkinci parametre aranacak olan byte değeri
+	- Üçüncü parametre ise aramanın yapılacağı boyut.
+
+- Geri dönüş değeri ise aranan byte bulunduğunda bulunan byte'ın adresini döndürecek, eğer yoksa NULL pointer döndürecek.
+
+- memchr fonksiyonunu öncelikle kendimiz yazalım:
+
+		void* mymemchr(const void* vp, int val, size_t n) 
+		{
+			const char* p = (const char*)vp;
+			
+			while (n--) {
+				if (*p == val)
+					return (char*)p;
+				++p;
+			}
+			
+			return NULL;
+		}
+	
+- strchr den farkı ne diye bir soru sorarsak, strchr yazıda bir karakter arıyor ve sonunda null karakter olduğuna güveniyor. Ancak memchr'de bir yazı olması söz konusu değildir.
   
-  
-  
-  
-  
-  
+ - Örnek üzerinde baktığımızda;
+
+	char str[100] = "mehmet alican korkmaz";
+
+- Yukarıdaki gibi bir yazı dizisi oluşturulduğunda siz ortadaki alican yazısında 'm' karakterini aramak için yapsanız bunu uygulayamazsınız çünkü strchr ile alican yazısının ilk adresini gönderdiğinizde arama null karakteri görene kadar gerçekleşecek. Ancak memchr ile yaparsanız ilk adresi ve boyutu da ek olarak gönderdiğiniz için bu aramayı sağlıklı bir şekilde gerçekleştirip alican yazısında 'm' karakterinin olmadığı bilgisini elde edebilirsiniz.
+
+- Bir örnekte inceleyelim:
+
+```
+char str[100] = "32759832446545465465465465487987987981321321658498e79q283749892387598723644652634409457320974281";
+
+	char* p = (char*)memchr(str + 20 , '7', 20);
+
+	if (p != NULL)
+		printf("bulundu.. %d indiste", p - str);
+	else
+		printf("bulunamadi");
+```
+
+- Yukarıdaki örnekte 20. indisten başlanarak 20 karakter içerisinde 7 sayısının olup olmadığı arandı.
+
+
+
+- Sıradaki fonksiyon memcmp.
+- strcmp ile farkını unutmamak lazım. strcmp bir yazıyı karşılaştırıyor. memcmp bir bellek bloğunu karşılaştırıyor. 
+
+	int memcmp(const void* vpx, const void* vpy, size_t n);
+ 
+ - Yukarıdaki memcmp fonksiyonu ilk bellek bloğu büyükse eğer pozitif değer döndürüyor,
+ - İkinci bellek bloğu büyükse eğer negatif değer döndürüyor.
+ - Eğer eşitse 0 değerini döndürüyor.
+
+- Burada dikkat edilmesi gereken nokta byte olarak karşılaştırma yapıldığı için değerlerin büyüklüğü konusunda bir karşılaştırılmamalıdır. Bu sizi yanıltabilir.
+
+- Bir örnek;
+
+		int a[SIZE] = { 1, 3, 5, 7, 9 };
+		int b[SIZE] = { 1, 3, 5, 7, 9 };
+		
+		if (!memcmp(a, b, sizeof(a)))
+			printf("evet iki dizi esit\n");
+		else
+			printf("hayir iki dizi esit degil\n");
+			
+			
+
+- Şimdi fonksiyonu kendimiz bir yazalım ki fonksiyonun işlevini daha iyi anlayabilelim:
+
+```
+int mymemcmp(const void* vpx, const void* vpy, size_t n)
+{
+	const unsigned char* px = vpx;
+	const unsigned char* py = vpy;
+
+	while (n--) {
+		if (*px != *py)
+			return *px > *py ? 1 : -1;
+		++px;
+		++py;
+	}
+
+	return 0;
+}
+
+```
+ 
+- Yukarıdaki fonksiyonda diğer fonksiyonlardan farklı olarak neden unsigned char kullanıldı diye soracak olursak byte olarak karşılaştırma yapıldığı için işaretli olduğu düşünülürse eğer işaret biti de devreye girecektir bu sebeple bir byte olarak karşılaştırma söz konusu olduğunda işaretsiz türler kullanılmalıdır.
+
+- Mesela strcmp ile memcmp nin farkını anlayabilmemiz için elimizde iki farklı yazının olduğunu varsayalım. Bu iki yazıdan birinci yazının 5. 6. 7. karakterleri ile, ikinci yazının 3. 4. 5. karakterlerini karşılaştırma şansınız strcmp de yokken memcmp de vardır.
+
+		if (!memcmp(s1 + 4, s2 + 2, 3))
+			//code
+
+- Yukarıda ki karşılaştırmayı bahsettiğimiz gibi strcmp ile yapmaya çalışırsak eğer str cmp yazının sonuna kadar olan kısmı ele alacağı için yani null karakter görene kadar, yukarıdaki karşılaştırmayı strcmp ile gerçekleştiremezsiniz.
+
+
+
+- Acaba türden bağımsız olarak bir diziyi reverse eden bir fonksiyon yazabilir miyiz??
+	- Eğer dizinin başlangıç adresini, sizeof değerini ve dizinin boyutunu bilirsek yazabiliriz.
+
+- Generic bir reverse algoritmasıyla oluşturulmuş fonksiyon:
+
+```
+//vp: reverse edilecek dizinin adresi
+//size: reverse edilecek dizinin boyutu
+//sz: reverse edilecek dizinin sizeof u
+
+void gereverse(void* vptr, size_t size, size_t sz)
+{
+	char* p = (char*)vptr;
+
+	for (size_t i = 0; i < size / 2; ++i) {
+		gswap(p + i * sz, p + (size - 1 - i) * sz, sz);
+	}
+
+}
+
+int main()
+{
+	int a[] = { 0, 2, 4, 6, 8 };
+	double b[] = { 1.1, 2.2, 3.3, 4.4, 5.5, 6.6 };
+
+	gereverse(a, asize(a), sizeof(int));
+	gereverse(b, asize(b), sizeof(double));
+
+	print_array(a, asize(a));
+
+	for (size_t i = 0; i < asize(b); ++i) {
+		printf("%f ", b[i]);
+	}
+
+}
+
+```
+
+- Generic reverse fonksiyonun farklı bir yazım şekli;
+
+```
+void gereverse(void* vp, size_t size, size_t sz)
+{
+	char* ps = (char*)vp;
+	char* pe = ps + (size - 1) * sz;
+
+	while (ps != pe) {
+		gswap(ps, pe, sz);
+		ps += sz;
+		pe -= sz;
+	}
+}
+```
+
+- Peki biz her generic fonksiyon tanımında void pointer kullanıp byte'sal işlem yaptığımız için char türüne dönüştürüyoruz. Direk olarak fonksiyon tanımlanırken neden char türünde tanımlamıyoruz??
+
+- Bu sorunun cevabı şu şekilde;
+	
+	- C' ye void pointerlar standartlaştırma sürecinde eklendi. Yoksa geleneksel C de void pointerlar yoktu. Void pointer ın olmadığı dönemde zaten direk olarak char türünde tanımlamalarla generic fonksiyonlar oluşturuluyordu. Ancak siz bir fonksiyonun parametresini char* yaptığınızda, bu fonksiyonun bildirimini okuyan kişinin bu fonksiyonun char yazı türünde bir işlem mi yaptığı yoksa char dizi üzerinde işlem yapan bir fonksiyon mu yoksa generic bir fonksiyon mu olduğu konusunda kafa karıştırıyor. 
+			
+			void func(char* vpi size_t n);
+			
+			int main() 
+			{
+				int a[100];
+				func(a);
+			}
+	- Ayrıca yukarıdaki gibi bir fonksiyon çağrısı yapıldığında c++ da hata verir, C'de uyarı verir. Bu fonksiyonu çağıracak olan kişi de bir yerlerde yanlış yaptığını düşünebilir.
+	- Yani void pointerlar tamamen semantik bir yapı. Yani fonksiyonun daha iyi anlaşılabilmesi için kullanılan bir türdür void pointerlar. Yoksa zaten işin arka planında byte sal işlem döndüğü için char* türü kullanılmalıdır.
+
+
+
+- Bir dizide arama yapan fonksiyonu generic olarak nası oluşturabiliriz birlikte inceleyelim:
+
+```
+void* gesearch(const void* vpa, size_t size, size_t sz, const void* vpkey)
+{
+	const char* p = (const char*)vpa;
+
+	for (size_t i = 0; i < size; ++i) {
+		if (!memcmp(p + i * sz, vpkey, sz)) {
+			return (char*)(p + i * sz);
+		}
+	}
+
+	return NULL;
+
+}
+
+```
+- Yukarıdaki arama algoriması fonksiyonun tanımı yapıldı. Birinci parametre arama yapılacak diziyi, ikinci parametre arama yapılacak dizinin boyutunu, üçüncü parametre dizi türünün sizeof değeri, dördüncü parametre ise arama yapılacak nesnenin adresini içermektedir. 
+- İlk olarak dizinin başlangıç adresi char* türüne dönüştürülüyor. 
+- Dizinin i indisli elemanının adresi : p + i * sz
+- Karşılaştırma yapılacak nesnenin adresi vpkey
+- İki bellek bloğunun eşitliği memcmp fonksiyonu ile sınanıyor. 
+- Ve bunun sonucunda eğer aranan değer bulunursa dizide bulunduğu adres döndürülüyor. Eğer bulunamazsa da NULL pointer döndürülüyor.
+
+
+		
   
   
   
