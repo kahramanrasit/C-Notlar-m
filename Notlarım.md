@@ -8925,16 +8925,17 @@ void is a type --> void bir türdür.
 		
 	Yukarıdaki fonksiyonun tanımına bakılarak bu fonksiyonun geri dönüş değerinin olmadığı 
 	anlamına gelmez. Farklı yollarla iletiyor olabilir. Sadece return value' sı yoktur. 
-	Bir değişkenin adresi aracılığıyla geri dönüş değeri gönderdiği unutulmamalıdır.
+	Bir değişkenin adresi aracılığıyla geri dönüş değeri gönderebileceği unutulmamalıdır.
 	
 - C dilinde C++'dan farklı olarak fonksiyon tanımında bir durum söz konusudur.
 
 		void func();
 		void func(void);
+		
 - Yukarıdaki iki tanım arasında bir fark vardır. C'de fonksiyon parametresi içerisine void 
 yazıldığında fonksiyonun parametre değişkeninin olmadığı anlamına gelirken parantezin içerisi
 boş bırakıldığında bu fonksiyonun parametrik yapısı hakkında bir bilgi verilmediği anlamına 
-gelir.
+gelir. C++ da ise bu iki durum arasında bir fark yoktur. 
 
 
 - Şimdi void ile yeni bir türden bahsedeceğiz. 
@@ -8958,6 +8959,7 @@ Yani adete void* türü bize diyor ki türün ne olursa olsun adresini tutabilir
 
 		ptr = str;
 		ptr = &dval;
+		
 		// Yukarıdaki atamalardan hepsi geçerlidir.
 
   
@@ -8966,6 +8968,7 @@ Yani adete void* türü bize diyor ki türün ne olursa olsun adresini tutabilir
  
  		*ptr = 23; // sentaks hatasıdır.
 		++ptr;  // sentaks hatası.
+		
 - Yani void pointer, pointer aritmetiğine tabi değildir.
 
 - İki void pointer da birbirinden çıkartılamaz.
@@ -8995,7 +8998,7 @@ void ptr l value dur. Ancak onun gösterdiği nesneye erişim söz konusu değil
 		int* iptr;
 		
 		iptr = vptr; // Bu koda C'de geçerli ve implicit tür dönüşümü gerçekleşirken
-		// C++ dilinde void* türünden diğer adreslere örtülü tür dönüşümü geçerli değildir.
+		// C++ dilinde void* türünden diğer adreslere örtülü tür dönüşümü geçerli değildir. type cast uygulanmalıdır.
 		
 - Ancak tabi ki C'de bu özellik olsa dahi tür dönüştürme operatörünün kullanılması daha elzemdir.
 
@@ -9024,7 +9027,9 @@ void ptr l value dur. Ancak onun gösterdiği nesneye erişim söz konusu değil
 			*py++ = temp; 
 			}
 		}
+		
 	- Yukarıdaki fonksiyonda türden bağımsız olarak bellekte tutulan nesnenin byte larının değişimi yapıldı. Yalnız burada C++ diline göre derlersek sentaks hatası vardır. Çünkü tür dönüşümü implicit olarak yapılamaz(vpx ile px arasında).
+	
   
 ```
   void gswap(void* vpx, void* vpy, size_t sz)
@@ -9044,7 +9049,7 @@ int main()
 
 	gswap(&x, &y, sizeof(int));
 
-	printf("x = %d, y = %d\n", x, y);
+	printf("x = %d, y = %d\n", x, y); // değişimin yapılacağı iki nesnenin türü aynı olmak zorunda.
 
 	double dx = 34.76, dy = 68.23; 
 
