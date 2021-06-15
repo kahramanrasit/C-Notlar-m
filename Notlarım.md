@@ -9520,7 +9520,7 @@ int main()
 
 - gsearch fonksiyonun bir farklı yazım biçimi:
 
-````
+```
 void* gsearch(const void* vptr, size_t size, size_t sz, const void* vpkey)
 {
 	const char* p = (const char*)vptr;
@@ -9534,9 +9534,13 @@ void* gsearch(const void* vptr, size_t size, size_t sz, const void* vpkey)
 
 	return NULL;
 }
-```
+````
 
-- Yukarıdaki döngüde her döngü adımında p pointer ı sz kadar artırıldığında bir sonraki nesnenin ilk byte'ına geçilmiş olur. Ve memcmp ile biz bellek bloğu karşılaştırması yaptığımız için nesneler arası geçişi byte sal olarak bu idiyomla yapıyoruz.
+#
+
+
+- Yukarıdaki döngüde her döngü adımında p pointer ı sz kadar artırıldığında bir sonraki nesnenin ilk byte'ına geçilmiş olur. 
+Ve memcmp ile biz bellek bloğu karşılaştırması yaptığımız için nesneler arası geçişi byte sal olarak bu idiyomla yapıyoruz.
 
 
 - Türden bağımsız olarak bir diziyi küçükten büyüğe doğru sıralayan bir fonksiyon yazılabilir mi??
