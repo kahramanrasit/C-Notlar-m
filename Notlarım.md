@@ -9551,9 +9551,78 @@ Ve memcmp ile biz bellek bloğu karşılaştırması yaptığımız için nesnel
 	ancak birbirine göre büyüklük sorusunun nasıl sorabiliriz. Biz bunların türünü bilmiyoruz. memcmp fonksiyonu ile büyüklük karşılaştırması yapamayız. memcmp bu sayıların türünü bilmiyor. Dizinin elemanlarının türünü bilmeden karşılaştırma yapamam. Bu olay memcmp deki byte karşılaştırmasından çok farklı bir olay. 
 	- Ancak böyle bir sıralama yapan generic fonksiyon standart kütüphanede mevcuttur. İsmi qsort olan fonksiyon generic bir sıralama fonksiyonudur. Bunu nasıl yaptığına gelecek olursak., çağıran koddan bir fonksiyon istiyor, dizinin iki elemanının karşılaştırılması için bu gönderilen fonksiyon kullanılır. Yani siz bir fonksiyon ile bir fonksiyona, bir fonksiyon gönderiyorsunuz. Bu yapıyı oluşturmak için fonksiyon pointerları yapısını öğreneceğiz. 
 		
+  # Ders 39 Tarih 05 05 2021
+  
+  - Dizi üzerinde yapılan işlemlerden birisi de "fill" doldurma. Fill, bir veri yapısını belirli
+  bir değerle set etmedir.
   
   
+```
   
+void* fill_array(void* vp, size_t size, size_t sz, const void* vpval)
+{
+	char* p = (char*)vp;
+
+	while (size--) {
+		memcpy(p, vpval, sz);
+		p += sz;
+	}
+
+	return vp;
+}
+
+int main()
+{
+	int a[SIZE];
+	int x;
+	printf("bir tamsayi giriniz: ");
+	scanf("%d", &x);
+
+	fill_array(a, SIZE, sizeof(int), &x);
+
+	print_array(a, SIZE);
+
+	double da[SIZE];
+	double dval;
+	printf("bir gercek sayi giriniz:  ");
+	scanf("%lf", &dval);
+
+	fill_array(da, SIZE, sizeof(double), &dval);
+
+	for (int i = 0; i < SIZE; ++i) {
+		printf("%lf ", da[i]);
+	}
+}
+```
+
+- Bir void* türünü gösterecek pointera ihtiyacınız var ise void** türü kullanılır.
+
+
+		int x = 10;
+		double dval 3.4;
+		
+		void* vptr;
+		
+		void** vp = &vptr;
+		*vp = &dval; // vptr nin içerisinde dval in adresi atandı.
+		
+		**vp = 10; // geçersizdir. Daha önce de dediğimiz gibi bir void* türü pointerı 
+		dereference ederek içeriğini değiştiremeyiz.
+  
+ - Örnek olarak;
+
+		void func(int x, int y, void** vptr);
+		
+- Yukarıdaki gibi bir fonksiyon tanımı gördüğünüzde 3. parametrede bir void* türden pointerın
+ adresi istendiğini ve bu adrese bir void* türünden bir nesnenin adresi yazılacağını anlıyoruz.
+ 
+ 
+ 		void a[]; // yandaki gibi bir dizinin olması söz konusu değilken
+		void* a[]; // yandaki gibi bir dizi olması söz konusudur.
+		
+		void* a[] = { &x, &dval }; // gibi farklı türlerin adresleriyle ilk değer verilebilir.
+		
+		
   
   
   
