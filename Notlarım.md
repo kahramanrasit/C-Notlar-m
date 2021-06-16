@@ -9623,35 +9623,443 @@ int main()
 		void* a[] = { &x, &dval }; // gibi farklı türlerin adresleriyle ilk değer verilebilir.
 		
 		
+		
+  # Function Pointer (Foksiyon Pointerları)
+  
+  - C dilinde pointerlar ikiye ayrılıyor. Birisi nesne adresleri (object pointers) iken, diğeri fonksiyon adresleri
+  (function pointers).
+  - Bir nesnenin adresi dediğimizde programın çalışması esnasında o nesnenin bellekte nerede tutultuğunun adresidir.
+  - Fonksiyon adresi dediğimizde ise, fonksiyonların kodunun çalışması için makine komutlarına ihtiyacımız var. O
+  makine komutlarının da belleğe yüklenmesi gerekiyor. İşte o makine komutlarının belleğe yüklendiği adres de fonksiyonun adresi gibi görülebilir. Dolayısıyla bir fonksiyonun adresi elinizdeyse oradaki komutları 
+  çalıştırabilirsiniz. 
+  
+  - Bir fonksiyonun adresini nasıl elde ediyoruz. 
+  	 - fonksiyonun ismini adres operatörünün operandı yaptığınızda elde edersiniz.
+  
+  		int func(int);
+		
+		int main()
+		{
+			&func; // ifadesi func fonksiyonun adresi anlamına geliyor.
+		}
+		
+	- İkinci bir yolu daha mevcut.
+		- Nasıl bir dizinin ismi bir ifade içinde kullanıldığında dizinin ilk elemanının adresine 
+		dönüştürülüyorsa (array decay), bir fonksiyon ismi de bir ifade içinde kullanıldığında o fonksiyonun
+		adresine dönüştürülür. (function to pointer conversion).
+		
+				&func // func ın adresi
+				func // bu da func ın adresidir.
+				
+	- Her ifadenin bir türü vardır.
+	
+			&func // fonksiyon adresinin de bir türü vardır. 
+			// int (*)(int, ...) // fonksiyonların türlerinin sentaks yapısı yanda gösterilmiştir.
+  			// return val (* pointer olduğunu gösteriyor)  (parametre değişkenlerinin türleri)
+			
+  	- Örnek olarak;
+
+			double foo(double, double); 
+			
+			int main()
+			{
+				&foo; // ifadesinin türü: double (*) (double, double) --- olur.
+			}
+  
+  
+ 
+  - Yani fonksiyon adresi türü diye tam olarak tek bir tür yok. Fonksiyon adresleri geri dönüş değeri ve 
+  parametrelerin türü ile ilişkilidir. 
+  
+  - Mesela strcmp fonksiyonun adresinin türüne bakalım:
+
+		&strcmp; // int (*)(const char*, const char*) --- olur.  
+		&strlen; // size_t (*)(const char*) -- olur.
+  		&isalpha; // int (*)(int) -- olur. 
+  
+  - Nasıl nesnelerin adreslerini tutan değişkenler oluşturabiliyorsak, fonksiyonların adreslerini tutan değişkenler 
+  de oluşturabiliyoruz. İşte böyle nesnelere fonksiyon pointerları diyoruz.
+  
+  		int foo(int);
+		int func(int);
+		int main()
+		{
+			int (*fp)(int) = &foo; // yandaki fp fonskiyon pointer değişkenidir. ilk değer olarak
+						// foo nun adresi verilmiş.
+						
+			fp = &func;    // Burada ise fp fonksiyon pointerına func değişkeninin adresini atamış oluyoruz.
+		}
+		
+- Yukarıdaki bildirimi yaparken & operatörünü kullanmadan da yapabilirdik.
+
+		int foo(int);
+		
+		int main()
+		{
+			int (*fp)(int) = foo;  // burada da adres operatörü(&) kullanmadan ilk değer verildi.
+		}
+  
+  	
+  		
+  - strcmp fonksiyonun adresiyle ismi fp olacan değişkene ilk değer verelim.
+
+		int (*fp)(const char*, const char*) = &strcmp;
+		int (*fp) (const char*, const char*) = strcmp;
+		
+  - strlen fonksiyonunu fp isimle fonksiyon pointerıyla ilk değer verelim.
+
+		size_t (*fp)(const char*) = strlen;
+		
+- Bizim tanımlamış olduğumuz print_array fonksiyonunun adresiyle ilk değer verelim.
+
+		void (*fpx)(const int*, size_t) = &print_array;
+		
+
+  #
+  
+  		void func(int x)
+		{
+			printf(func fonksiyonu cagirildi. x = %d\n", x);
+		}
+		
+		int main()
+		{
+			func(10);
+		}
+		
+  - Yukarıda bir fonksiyon çağırıldı.
+  Fonksiyon çağrı operatörü ( ) , operatör öncelik tablosunda birinci sıradaydı. Peki fonksiyon çağrısının 
+  sentaksına bakacak olursak;
+  
+  		adres(varsa argümanlar) // gördüğünüz üzere fonksiyon isminin olduğu kısım aslında bir adrestir.
+		
+- Yani yukarıdaki func fonksiyonunu aşağıdaki şekilde de çağırabilirsiniz;
+
+		(&func)(10);
+		
+- Madem ki bir fonksiyon pointerı değişkeninin değeri, bir fonksiyonun adresi o zaman fonksiyon çağrı operatörünün
+ operantı bir function pointer değişken de olabilir. 
+ 
+ 
+ 		 void func(int x)
+		{
+			printf(func fonksiyonu cagirildi. x = %d\n", x);
+		}
+		
+		int main()
+		{
+			void (*fptr)(int) = &func;
+			
+			fptr(10);
+		}
+  
+  
+  - Yukarıda gördüğünüz üzere bir fonksiyonu çağırmanın bir başka yolu, bir fonksiyon pointer değişkenini, fonksiyon
+  çağrı operatörünün operantı yapmaktır.
+  
+  
+ 		void f1(void)
+		{
+			printf("f1 cagirildi.\n");
+		}
+
+		void f2(void)
+		{
+			printf("f2 cagirildi.\n");
+		}
+
+		int main()
+		{
+			void (*fp)(void);
+
+			fp = f1;
+			fp();
+			fp = &f2;
+			fp();
+		}
+  
+  - Yukarıda gördüğünüz gibi bir değişken ismiyle farklı fonksiyonları çağırma işlemi gerçekleşmiştir.
+Ancak dikkat edilmesi gereken nokta fonksiyon pointerının türüyle fonksiyon  türünün uyuşması kesinlikle olmalıdır.
+olmaması durumunda  C'de yanlış ve C++ 'da sentaks hatasıdır.
+
+
+- Peki biz pointerlarda içerik operatörünü kullanarak içeriğe erişebiliyorken fonksiyon pointerında bu içerik
+operatörüyle ne yapabiliriz? Bu sorunun cevabı olarak fonksiyon çağrısının başka bir biçimi ortaya çıkıyor.
+
+
+		
+  
+  		void f(void)
+		{
+			printf("f cagirildi.\n");
+		}
+
+		int main()
+		{
+			void (*fp)(void) = func;
+			
+			fp();
+			(*fp)(); // ikinci çağırma şekli.
+				 // ikinci kullanım oldukça yaygındır bunun sebebi pointer olduğunu 
+				 // okuyan programcıya belirtmektir.
+		}
+
+- Bildiğimiz üzere pointer değişkenlerinin sizeof'u aynıydı ve sistem den sisteme göre değişebilmekteydi. 
+(int*, double*) gibi türlerin benim sistemimde storage'ı 4 byte'tır.
+
+- Fonksiyon pointerlarının da sisteme bağlı olarak değişebilmekle birlikte benim sistemimde 4 byte olmasına karşın normal pointerlarla aynı storage değerine sahip olacağı garantisi verilemez. 
+  
+  
+- Tüm object pointers sizeof değeri aynıdır.
+- Tüm function pointers sizeof değeri aynıdır.
+- object pointer sizeof değeri ile function pointer sizeof değeri aynı olmayabilir.
   
   
   
+- Fonksiyon pointerlarının en çok kullanıldığı yer fonksiyonların parametre değişkeni olması.
+  
+  
+  		void func(void (*f)(void)); // yandaki fonksiyon bildiriminde parametre değişkeni bir function pointerdır.
+		
+		 
+  #
+  
+  		void func(void (*f)(void))
+		{
+			//code
+		}
+		
+		void f1(void)
+		{
+			//code
+		}
+		
+		int main()
+		{
+			func(&f1);
+			func(f1);
+		}
+		
+  - Yukarıda gördüğünüz üzere bir fonksiyona bir fonksiyonun adresinin gönderilmesi işlemi gerçekleşmiştir.
+
+- Yukarıda gördüğümüz fonksiyon içerisinde fonksiyon çağırılmasına *callback deniyor. 
+  
+  
+  		func(&f1); // burada f1 bir callback'tir.
+		
+
   
   
   
+  - Konuyu çok daha iyi anlamamız için bir örnek;
+
+```
+
+void print_chars(const char* fname, int (*fp)(int))
+{
+	puts(fname);
+
+	for (int i = 0; i < 128; ++i) {
+		if ((*fp)(i))
+			printf("%c ", i);
+	}
+
+	printf("\n\n");
+}
+
+int main()
+{
+	print_chars("isupper", isupper);  // function convertion kuralı uygulandı.
+	print_chars("islower", &islower); // fonksiyon adresiyle gönderildi.
+	print_chars("isdigit", &isdigit);
+	print_chars("ispunct", &ispunct);
+}
+
+```
+  
+
+ - Şimdi bir func fonksiyonu tanımlanmış olsun. func fonksiyonunu çağırdığımda default olarak a fonksiyonunu 
+ çağırsın. Ben bu func fonksiyonundan a fonksiyonunu değil de b fonksiyonunu çağırmak istersem nasıl bir yol 
+ izlemeliyim. (çok sık kullanılan bir C idiyomatik bir yapısıdır.)
+ 
   
   
+  		void a(void)
+		{
+			printf("a fonksiyonu cagirildi\n");
+		}
+		
+		void b(void)
+		{
+			printf("b fonksiyonu cagirildi\n");
+		}
+		
+		void (*gfptr)(void) = &a;   /* func fonksiyonun içerisinde default olarak a fonksiyonu çağırılması
+					     için global bir fonksiyon pointerı tanımlandı. Böyle global bir
+					     fonksiyon pointer ı kullanılmasının sebebi ise  a fonksiyonunu 
+					     değiştirerek farklı bir fonksiyon çağırılmasını sağlamaktır.   */
+  		
+		void func(void)
+		{
+			gfptr(); /* gfptr global fonksiyon değişkeni kullanılarak ilk a fonksiyonu çağırılıyor.
+				 ana kodda sonrasında bu a fonksiyonu değiştirilip b fonksiyonu çağırılacak*/
+		}
+		
+		void set_func(void (*fp)(void))  
+		{
+			gfptr = fp;  /* görüldüğü üzere bu default a değerinin değiştirilebilmesi için bir set 
+				     fonksiyonu kullanıldı. Bu fonksiyonun parametresi de bir fonksiyon pointerı.
+				     Yani siz bir fonksiyonun adresini gönderdiğinizde default olarak çağırılacak 
+				     olan a fonksiyonunu değiştirmiş oluyorsunuz ve adresi girilen fonksiyon 
+				     çağırılmış olacak.
+		}
+  		
+		int main()
+		{
+			func();   // default olarak a fonksiyonu çağırıldı.
+			set_func(&b);  // a fonksiyonunu tutan global fonksiyon pointerı, set fonksiyonu ile değiştirildi.
+			func(); // şuan da ise b fonksiyonu çağırıldı. 
+		}
+  - Yukarıda ayrıca set fonksiyonu kullanılmasının sebebi standart fonksiyonlarda siz tanımlanan global değişkeni
+  görmeden set fonksiyonu ile bu global değişkeni değiştireceksiniz. 
   
   
+  - Daha önce qsort fonksiyonun, fonksiyon pointerları ile tanımlandığını bu konudan sonra anlatılacağından bahsetmiştik.
+	- qsort bir sıralama ilişkisiyle bir fonksiyonu sıralıyor fakat generic bir fonksiyondur kendisi.
+	Yani qsort fonksiyonu ile türden bağımsız bir sıralama söz konusudur.
+	
+		void qsort(void *vpa, size_t size, size_t sz, int (*fp) (const void*, const void*));
   
+  	- Geri dönüş değeri void olan bir fonksiyon.
+  	- ilk parametresi sıralamanın yapılacağı dizinin adresini içeriyor.
+  	- İkinci parametresi dizinin boyutu
+  	- Sıralanacak dizinin bir ögesinin sizeof değeri
+  	- Sıralanacak dizinin iki elemanının karşılaştırılması amacıyla kullanılacak olan fonksiyonun adresi olan function pointer;
+  		- Fakat geri dönüş değeri int olan ve parametre değişkenleri const void* olan iki adet değişken.
   
+  		
+  #
   
+  - Aşağıda kullanım şekline bir örnek verilmiştir.
+
+```
+
+	//qsort icmp fonksiyonuna neyle çağrı yapacak
+	//dizinin 2 elemanının adresleriyle (yani 2 elemanın bellek bloklarıyla)
+
+	int icmp(const void* vpx, const void* vpy)
+	{
+	if (*(const int*)vpx > *(const int*)vpy)
+		return 1;
+	if (*(const int*)vpx < *(const int*)vpy)
+		return - 1;
+
+	return 0;
+	
+	}
+
+
+
+int main()
+{
+	int a[SIZE];
+
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	qsort(a, SIZE, sizeof(int), &icmp);
+	
+	print_array(a, SIZE);
+}
+```
+
+- Yukarıdaki program parçacığında qsort fonksiyonu ile dizi küçükten büyüğe sıralandı.
+
+#
+
+- Daha iyi anlaşılması için double türü kullanılarak bir örnek:
+
+ ```
+ 
+int dcmp(const void* vpx, const void* vpy)
+{
+	double x = *(const double*)vpx;
+	double y = *(const double*)vpy;
+
+	return x > y ? 1 : x < y ? -1 : 0;
+}
+
+int main()
+{
+	double a[] = { 3.4, 1.1, 0.7, 6.8, 0.98, 2.45, 5.6, -1.2, 3.33 };
+
+	qsort(a, asize(a), sizeof(double), &dcmp); //dcmp callback olarak kullanıldı.
+
+	for (int i = 0; i < asize(a); ++i) {
+		printf("%lf ", a[i]);
+	}
+}
+
+```
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+ - int türlerde aşağıdaki gibi idiyomatik bir yapı mevcut.
+
+		int icmp(const void* vpx, const void* vpy)
+		{	
+			*(const int*) vpx - *(const int*)vpy;
+		}
+		
+- Ancak yukarıdaki kullanım söz konusu olduğunda karşımıza taşma durumuyla UB olarak çıkabilir.
+Bu yüzden bu idiyom taşmanın olmayacağının garantisini verebileceğiniz durumlarda kullanılması gerekmektedir.
+
+
+- Şimdi sırada qsort fonksiyonunun benzerini kendimiz yazalım (yalnız bizim fonksiyonumuz bubblesort algoritmasını kullanıcak):
+
+```
+int icmp(const void* vpx, const void* vpy)
+{
+	if (*(const int*)vpx > *(const int*)vpy)
+		return 1;
+	if (*(const int*)vpx < *(const int*)vpy)
+		return -1;
+
+	return 0;
+
+}
+
+void gbsort(void* vpa, size_t size, size_t sz, int(*fp) (const void*, const void*))
+{
+	char* p = (char*)vpa;
+
+	for (size_t i = 0; i < size - 1; ++i) {
+		for (size_t j = 0; j < size - 1 - i; ++j) {
+			if (fp(p + j * sz, p + (j + 1) * sz) > 0) {
+				gswap(p + j * sz, p + (j + 1) * sz, sz);
+			}
+		}
+	}
+}
+
+int main()
+{
+	int a[SIZE];
+
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE); 
+
+	gbsort(a, SIZE, sizeof(int), &icmp);
+
+	print_array(a, SIZE);
+}
+```
+
+
+- Bir dizinin elemanlarını yazdıran bir generic bir fonksiyon yazalım:
+
+
+
   
   
   
