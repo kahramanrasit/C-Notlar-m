@@ -9701,7 +9701,7 @@ int main()
   
   	
   		
-  - strcmp fonksiyonun adresiyle ismi fp olacan değişkene ilk değer verelim.
+  - strcmp fonksiyonun adresiyle ismi fp olacak olan değişkene ilk değer verelim.
 
 		int (*fp)(const char*, const char*) = &strcmp;
 		int (*fp) (const char*, const char*) = strcmp;
@@ -9716,6 +9716,7 @@ int main()
 		
 
   #
+  
   
   		void func(int x)
 		{
@@ -9737,8 +9738,7 @@ int main()
 
 		(&func)(10);
 		
-- Madem ki bir fonksiyon pointerı değişkeninin değeri, bir fonksiyonun adresi o zaman fonksiyon çağrı operatörünün
- operantı bir function pointer değişken de olabilir. 
+- Madem ki bir fonksiyon pointerı, fonksiyonun adresini belirtiyor, o halde çağrı operatörünün operantı da fonksiyon pointerı olabilir. 
  
  
  		 void func(int x)
@@ -9779,8 +9779,8 @@ int main()
 		}
   
   - Yukarıda gördüğünüz gibi bir değişken ismiyle farklı fonksiyonları çağırma işlemi gerçekleşmiştir.
-Ancak dikkat edilmesi gereken nokta fonksiyon pointerının türüyle fonksiyon  türünün uyuşması kesinlikle olmalıdır.
-olmaması durumunda  C'de yanlış ve C++ 'da sentaks hatasıdır.
+Ancak dikkat edilmesi gereken nokta fonksiyon pointerının türüyle, fonksiyonun türü kesinlikle uyuşmalıdır.
+uyuşmaması durumunda  C'de yanlış ve C++ 'da sentaks hatasıdır.
 
 
 - Peki biz pointerlarda içerik operatörünü kullanarak içeriğe erişebiliyorken fonksiyon pointerında bu içerik
@@ -9799,15 +9799,16 @@ operatörüyle ne yapabiliriz? Bu sorunun cevabı olarak fonksiyon çağrısın�
 			void (*fp)(void) = func;
 			
 			fp();
-			(*fp)(); // ikinci çağırma şekli.
-				 // ikinci kullanım oldukça yaygındır bunun sebebi pointer olduğunu 
-				 // okuyan programcıya belirtmektir.
+			(*fp)(); /* ikinci çağırma şekli.
+				    ikinci kullanım oldukça yaygındır bunun sebebi pointer olduğunu 
+				    okuyan programcıya belirtmektir. */
 		}
 
 - Bildiğimiz üzere pointer değişkenlerinin sizeof'u aynıydı ve sistem den sisteme göre değişebilmekteydi. 
 (int*, double*) gibi türlerin benim sistemimde storage'ı 4 byte'tır.
 
-- Fonksiyon pointerlarının da sisteme bağlı olarak değişebilmekle birlikte benim sistemimde 4 byte olmasına karşın normal pointerlarla aynı storage değerine sahip olacağı garantisi verilemez. 
+- Fonksiyon pointerlarının da sisteme bağlı olarak değişebilmekle birlikte benim sistemimde 4 byte 
+olmasına karşın normal pointerlarla aynı storage değerine sahip olacağı garantisi verilemez. 
   
   
 - Tüm object pointers sizeof değeri aynıdır.
@@ -9819,7 +9820,7 @@ operatörüyle ne yapabiliriz? Bu sorunun cevabı olarak fonksiyon çağrısın�
 - Fonksiyon pointerlarının en çok kullanıldığı yer fonksiyonların parametre değişkeni olması.
   
   
-  		void func(void (*f)(void)); // yandaki fonksiyon bildiriminde parametre değişkeni bir function pointerdır.
+  		void func(void (*f)(void)); // yandaki fonksiyon bildiriminde, paremetre değişkeninin bir fonksiyon pointerı olarak tanımlandığını görüyoruz.
 		
 		 
   #
@@ -9836,13 +9837,13 @@ operatörüyle ne yapabiliriz? Bu sorunun cevabı olarak fonksiyon çağrısın�
 		
 		int main()
 		{
-			func(&f1);
+			func(&f1);  // f1 fonksiyonu func fonksiyonuna parametre değişkeni olarak gönderildi.
 			func(f1);
 		}
 		
-  - Yukarıda gördüğünüz üzere bir fonksiyona bir fonksiyonun adresinin gönderilmesi işlemi gerçekleşmiştir.
+- Yukarıda gördüğünüz üzere bir fonksiyona, bir fonksiyonun adresinin gönderilmesi işlemi gerçekleşmiştir.
 
-- Yukarıda gördüğümüz fonksiyon içerisinde fonksiyon çağırılmasına *callback deniyor. 
+- Yukarıda gördüğümüz fonksiyon çağrısında gönderilen fonksiyona  *callback fonksiyonu deniyor. 
   
   
   		func(&f1); // burada f1 bir callback'tir.
@@ -9920,6 +9921,9 @@ int main()
 			set_func(&b);  // a fonksiyonunu tutan global fonksiyon pointerı, set fonksiyonu ile değiştirildi.
 			func(); // şuan da ise b fonksiyonu çağırıldı. 
 		}
+		
+		
+		
   - Yukarıda ayrıca set fonksiyonu kullanılmasının sebebi standart fonksiyonlarda siz tanımlanan global değişkeni
   görmeden set fonksiyonu ile bu global değişkeni değiştireceksiniz. 
   
@@ -10007,7 +10011,7 @@ int main()
 
 		int icmp(const void* vpx, const void* vpy)
 		{	
-			*(const int*) vpx - *(const int*)vpy;
+			return *(const int*) vpx - *(const int*)vpy;
 		}
 		
 - Ancak yukarıdaki kullanım söz konusu olduğunda karşımıza taşma durumuyla UB olarak çıkabilir.
@@ -10101,23 +10105,32 @@ int main()
 
 # Fonksiyon Göstericileri ve typedef bildirimleri
 
-- Bir fonksiyonun adres türü ile bir fonksiyon pointer ı tanımlansın.
-
-		int (*fp)(const void*, const void*);
-		// şimdi fp'nin adresiyle ilk değerini alan fptr değişkeni tanımlayın.
-		// yanit pointer to function pointer
-		int(**fptr)(const void*, const void*) = &fp;
-		// elemanları fp gibi olan 10 elemanlı bir dizi tanımlayınız. fa
-		int (*fa[10])(const void*, const void*);
-		// şimdi öyle bir fonksiyon tanımlayalım ki, fonksiyoun parametresi fp gibi bir pointer olsun.
+		//Bir fonksiyonun adres türü ile bir fonksiyon pointer ı tanımlansın.
 		
-		void f1(int (*fp)(const void*, const void*));
-		// bu tanımlanan fonksiyonun 2 adet fp gibi pointer a sahip parametresi olsaydı;
-		void f2(int (*fpx)(const void*, const void*), int (*fpy)(const void*, const void*));
+			int (*fp)(const void*, const void*);
+		
+		// şimdi fp'nin adresiyle ilk değerini alan fptr değişkeni tanımlayın.
+		// yani pointer to function pointer
+		
+			int (**fptr)(const void*, const void*) = &fp;
+		
+		// elemanları fp gibi olan 10 elemanlı bir dizi tanımlayınız. fa
+		
+			int (*fa[10])(const void*, const void*);
+	
+		// şimdi öyle bir fonksiyon bildirelim ki, fonksiyon parametresi fp gibi bir pointer olsun.
+		
+			void f1(int (*fp)(const void*, const void*));
+		
+		// bu tanımlanan fonksiyonun 2 adet fp gibi pointer a sahip parametresi olsaydı
+		
+			void f2(int (*fpx)(const void*, const void*), int (*fpy)(const void*, const void*));
+			
 		// peki ya fonksiyonun geri dönüş değeri de böyle bir pointer olduğunu düşünelim;
-		//Bu durumda bildirim çok daha farklı bir hal alıyor.
+		//Bu durumda bildirim çok daha farklı bir hal alıyor. Fonksiyon ismi f3, ilk parametrenin ismi fpx, ikinci parametrenin ismi fpy.
 		
 		int(* f3(int (*fpx)(const void*, const void*), int (*fpy)(const void*, const void*)))(ccnst void*, const void*);
+		
 		
 - Yukarıda gördüğünüz durum sıkça karşımıza çıkabilecek bir durum olduğu için ve hem yazması hem okunması zor olduğu için tipik olarak typedef bildirimi kullanılır.
 
@@ -10127,8 +10140,8 @@ int main()
 		
 		//Şimdi yukarıda verilen bildirimler ver tanımlar aşağıda typedef ile yapılsın.
 		
-		//int (*fp)(const void*, const void*);
-		FPTR fp;
+		//int (*fp)(const void*, const void*); typedef'den önce
+		FPTR fp; // typedef den sonra
 		
 		//int(**fptr)(const void*, const void*) = &fp;
 		FPTR *fptr = &fp;
@@ -10180,8 +10193,56 @@ int main()
 }
 
 ```
+ #  Ders 40 Tarih 07 05 2020
  
-  
+ - Fonksiyon pointer dizileri:
+
+- ctype başlık dosyasındaki test fonksiyonlarının adresleriyle ilk değerlerini
+almış bir function pointer oluşturalım.
+
+		int (*fa[])(int) = { &isupper, &islower, &isdigit, &isalnum,
+		&isxdigit, &ispucnt &isspace, &isblank, &isprint, &iscntrl };
+		
+- Eğer yukarıdaki bildirimi typedef bildirimi ile tanımlasaydım;
+
+		typedef int(*FTEST)(int);
+		
+		FTEST a[] = { &isupper, ... };
+		
+- Şimdi bir örnekle betimleyelim:
+	- Örneğimizde ctype başlık dosyalarının olduğu bir fonksiyon pointer dizisi olacak.
+	- Ekrana bir karakter girilecek ve girilen karakter fonksiyon pointerı 
+	dizisindeki bütün fonksiyonlar çağırılarak ok veya not ok ekrana yazdırılacak
+	- Yani siz 'A' harfi girdiğinizde ekrana sırasıyla ok, not ok gibi yazılar çıkacak
+	Bunun anlamı isupper fonksiyonu doğru değerini gönderdiyse ok, yanlış değerini gönderdiyse not ok olarak ekrana yazdırıldığını anlayacağız.
+	
+		
+```
+typedef int (*FTEST)(int);
+
+int main()
+{
+	FTEST fa[] = { &isupper, &islower, &isdigit, &isalnum, &isxdigit, &ispunct, &isspace, &isblank, &isprint, &iscntrl };
+
+	int ch;
+
+	ch = getchar();
+
+	for (size_t i = 0; i < asize(fa); ++i) {
+		if (fa[i](ch)) // if ((*fa[i])(ch)), if ((*(fa + i))(ch)) 
+			printf("ok \n");
+		else
+			printf("not ok \n");
+	}
+
+}
+````
+- Yukarıdaki fonksiyonda fa dizisinin alternatif yazım şekilleri yanında verilmiştir.
+
+
+
+
+
   
   
   
