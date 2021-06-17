@@ -10058,8 +10058,73 @@ int main()
 
 - Bir dizinin elemanlarını yazdıran bir generic bir fonksiyon yazalım:
 
+```
+void gprint(const void* vpa, size_t size, size_t sz, void (*fpa)(const void*))
+{
+	const char* p = (const char*)vpa;
+
+	while (size--) {
+		fpa(p);
+		p += sz;
+	}
+	printf("\n\n");
+}
+
+void iprint(const void* vpa)
+{
+	printf("%3d ", *(const int*)vpa);
+}
+
+void dprint(const void* vpa)
+{
+	printf("%3f ", *(const double*)vpa);
+}
+
+int main()
+{
+	int a[SIZE];
+
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	gprint(a, SIZE, sizeof(int), &iprint);
+
+	double b[3] = { 2.4, 3.5, 5.6 };
+
+	gprint(b, 3, sizeof(double), &dprint);
+
+}
+
+```
 
 
+# Fonksiyon Göstericileri ve typedef bildirimleri
+
+- Bir fonksiyonun adres türü ile bir fonksiyon pointer ı tanımlansın.
+
+		int (*fp)(const void*, const void*) = strcmp;
+		// şimdi fp'nin adresiyle ilk değerini alan fptr değişkeni tanımlayın.
+		// yanit pointer to function pointer
+		int(**fptr)(const void*, const void*) = &fp;
+		// elemanları fp gibi olan 10 elemanlı bir dizi tanımlayınız. fa
+		int (*fa[10])(const void*, const void*);
+		// şimdi öyle bir fonksiyon tanımlayalım ki, fonksiyoun parametresi fp gibi bir pointer olsun.
+		
+		void f1(int (*fp)(const void*, const void*));
+		// bu tanımlanan fonksiyonun 2 adet fp gibi pointer a sahip parametresi olsaydı;
+		void f2(int (*fpx)(const void*, const void*), int (*fpy)(const void*, const void*));
+		// peki ya fonksiyonun geri dönüş değeri de böyle bir pointer olduğunu düşünelim;
+		//Bu durumda bildirim çok daha farklı bir hal alıyor.
+		
+		int(* f3(int (*fpx)(const void*, const void*), int (*fpy)(const void*, const void*)))(ccnst void*, const void*);
+		
+- Yukarıda gördüğünüz durum sıkça karşımıza çıkabilecek bir durum olduğu için ve hem yazması hem okunması zor olduğu için tipik olarak typedef bildirimi kullanılır.
+
+- Şimdi typedef de temel kural, hangi türe eş isim vermek istiyorsak o türden bir değişken tanımlanmalıydı.
+
+		typedef int(*FPTR)(const void*, const void*);
+		
   
   
   
