@@ -10147,7 +10147,40 @@ int main()
 		FPTR f3(FPTR, FPTR);
   
   
+  #
   
+  - Soru: Aşağıdaki char diziyi a dan z ye sıralayın callback fonksiyonunu yazınız:
+
+```
+int scmp(const void* vpx, const void* vpy)
+{
+
+}
+
+int main()
+{
+	char* p[] = { "ocak",
+				"subat",
+				"mart",
+				"nisan",
+				"mayis",
+				"haziran",
+				"temmuz",
+				"agustos",
+				"eylul",
+				"ekim",
+				"kasim",
+				"aralik" };
+
+	qsort(p, asize(p), sizeof(char*), &scmp);
+
+	for (size_t i = 0; i < asize(p); ++i) {
+		printf("%s\n", p[i]);
+	}
+}
+
+```
+ 
   
   
   
