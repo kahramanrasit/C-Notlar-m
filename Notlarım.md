@@ -10103,7 +10103,7 @@ int main()
 
 - Bir fonksiyonun adres türü ile bir fonksiyon pointer ı tanımlansın.
 
-		int (*fp)(const void*, const void*) = strcmp;
+		int (*fp)(const void*, const void*);
 		// şimdi fp'nin adresiyle ilk değerini alan fptr değişkeni tanımlayın.
 		// yanit pointer to function pointer
 		int(**fptr)(const void*, const void*) = &fp;
@@ -10123,9 +10123,28 @@ int main()
 
 - Şimdi typedef de temel kural, hangi türe eş isim vermek istiyorsak o türden bir değişken tanımlanmalıydı.
 
-		typedef int(*FPTR)(const void*, const void*);
+		typedef int(*FPTR)(const void*, const void*); // typedef bildirimi yapıldı. 
 		
-  
+		//Şimdi yukarıda verilen bildirimler ver tanımlar aşağıda typedef ile yapılsın.
+		
+		//int (*fp)(const void*, const void*);
+		FPTR fp;
+		
+		//int(**fptr)(const void*, const void*) = &fp;
+		FPTR *fptr = &fp;
+		
+		//int (*fa[10])(const void*, const void*);
+		FPTR fa[10];
+		
+  		// fonksiyon bildirirken de 
+		//void f1(int (*fp)(const void*, const void*));
+		void f1(FPTR);
+		
+		//void f2(int (*fpx)(const void*, const void*), int (*fpy)(const void*, const void*));
+		void f2(FPTR, FPTR);
+		
+		//int(* f3(int (*fpx)(const void*, const void*), int (*fpy)(const void*, const void*)))(ccnst void*, const void*);
+		FPTR f3(FPTR, FPTR);
   
   
   
