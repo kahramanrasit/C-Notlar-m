@@ -10239,6 +10239,104 @@ int main()
 ````
 - Yukarıdaki fonksiyonda fa dizisinin alternatif yazım şekilleri yanında verilmiştir.
 
+- Bir lookup table kullanılarak test fonksiyonlarının isimleriyle birlikte yazımı:
+
+```
+
+typedef int (*FTEST)(int);
+
+int main()
+{
+	FTEST fa[] = { &isupper, &islower, &isdigit, &isalnum, &isxdigit, &ispunct, &isspace, &isblank, &isprint, &iscntrl };
+	const char* pa[] = { "isupper", "islower", "isdigit", "isalnum", "isxdigit", "ispunct", "isspace", "isblank", "isprint", "iscntrl "};
+
+	int ch;
+
+	printf("Bir karakter giriniz: \n");
+	ch = getchar();
+
+	for (size_t i = 0; i < asize(fa); ++i) {
+		if (fa[i](ch))
+			printf("%s testi icin ok\n", pa[i]);
+		else
+			printf("%s testi icin Not ok\n", pa[i]);
+			
+	}
+
+}
+```
+- Şimdi ekrana bir karakter girilsin ve sonrasında hangi testin yapılması istendiği girilsin ve sonuc ona göre verilsin.
+
+```
+
+typedef int (*FTEST)(int);
+
+int main()
+{
+	FTEST fa[] = { &isupper, &islower, &isdigit, &isalnum, &isxdigit, &ispunct, &isspace, &isblank, &isprint, &iscntrl };
+	const char* pa[] = { "isupper", "islower", "isdigit", "isalnum", "isxdigit", "ispunct", "isspace", "isblank", "isprint", "iscntrl " };
+
+	char entry[40];
+	int ch;
+	printf("Bir harf giriniz:\n");
+	ch = getchar();
+	printf("Bir test fonksiyonu seciniz:\n");
+	scanf("%s", entry);
+
+	size_t idx;
+	for (idx = 0; idx < asize(pa); ++idx) {
+		if (!strcmp(pa[idx], entry))
+			break;
+	}
+
+	if (idx == asize(pa))
+		printf("aradıgınız test fonksiyonu mevcut degildir.\n");
+	else if (fa[idx](ch))
+		printf("%s fonksiyonu icin %c karakteri ok\n", entry, ch);
+	else
+		printf("%s fonksiyonu icin %c karakteri not ok\n", entry, ch);
+	
+}
+```
+
+- Fonksiyon pointerı gösteren bir pointerla fonksiyon çağırmaya örnek:
+
+			int square(int x)
+			{
+				return x * x;
+			}
+
+			int main()
+			{
+				int (*fp)(int) = square;
+				int (**fptr)(int) = &fp;
+
+				int x = (*fptr)(20);
+	
+				printf("x = %d ", x);
+			}			
+
+
+- Geri dönüş değeri bir fonksiyon pointerı olan bir foo  fonksiyonu örneği yapalım:
+
+		int square(int x)
+		{
+			return x * x;
+		}
+		
+		int (*foo(void))(int) // geri dönüş değeri türü int (*)(int) olan fonksiyon
+		{
+			return square;
+		}
+		
+		int main()
+		{
+			printf("%d\n",foo()(20));
+		}
+		
+		
+
+
 
 
 
