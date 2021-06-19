@@ -10193,6 +10193,9 @@ int main()
 }
 
 ```
+
+
+
  #  Ders 40 Tarih 07 05 2020
  
  - Fonksiyon pointer dizileri:
@@ -10334,13 +10337,455 @@ int main()
 			printf("%d\n",foo()(20));
 		}
 		
+- Bir de yukarıdaki kodu typedef bildirimiyle yazalım:
+
+```
+typedef int (*FPTR)(int);
+
+int square(int x)
+{
+	return x * x;
+}
+
+FPTR foo(void)
+{
+	return square;
+}
+
+int main()
+{
+	printf("%d", foo()(20));
+}
+```
+
+
+- Şimdi ilerde karşımıza sıkça çıkabilecek olan standart fonksiyonlarda 
+kullanılan bir şekli kendimiz yazsak betimleyelim ki ilerde çok daha rahat bir
+şekilde anlayabilelim.
+
+
+```
+/* Buradan belirtilen kısma kadar ki bölümün .h dosyasında saklandığı varsayılsın*/
+typedef void (*FPTR)(void);
+
+// func fonksiyonu default (varsayılan) olarak foo fonksiyonunu cağiracak
+void func(void);
+FPTR set_func(void);
+
+/*.h dosyasında saklanacak olan kısımın bitiş noktası*/
+
+
+//------------------------------------------------------------------------------
+
+/* Buradan belirtilen kısma kadar ki bölümün .c dosyasında saklandığı varsayılsın.*/
+static void foo(void)  // şimdilik static anahtar sözcüğünü görmezden gelelim
+{
+	printf("foo cagrildi \n");
+}
+
+
+static FPTR gfp = &foo;  /*func fonksiyonunda default olarak foo fonksiyonu
+			cağırılması için gerekli olan global değişken tanımlanıp
+			ilk değer olarak default olarak çağırılmasını istediğimiz
+			fonksiyon adresi atandı.*/
+
+void func(void)
+{
+	gfp();  	/* global olarak tanımlanan fonksiyon pointerının 
+			gösterdiği fonksiyon çağırıldı.*/
+}
+
+FPTR set_func(FPTR f)
+{
+	FPTR ret = gfp; 	//Bir önceki default değeri saklandı.
+	gfp = f;// default değerin yerine gönderilen değer gloabal değişkene atandı.
+	return ret;	// Bir önceki tutulan default değer geri dönüş değeri olarak döndürüldü.
+}
+/*.c dosyasında saklanacak olan kısımın bitiş noktası*/
+
+void myfoo(void)
+{
+	printf("myfoo cağirildi\n");
+}
+
+int main()
+{
+	func();  // func burada foo işlevini çağıracak
+
+	FPTR f = set_func(&myfoo);
+	func();   // func burada myfoo fonksiyonunu çağıracak
+
+	set_func(f);   // set_func 'ın geri dönüş değeri kullanılarak default haline geri çevrildi.
+
+	func();   // func burada tekrar foo işlevini çağıracak
+}
+```
+  
+- Şimdi de benzer ama biraz da farklı olan bir çatı tipinden örnek verelim.
+
+```
+/*.h dosyası başlangıç*/
+
+typedef void (*FPTR)(void);
+
+void func(void);
+void fregister(FPTR f);  // func in hangi fonksiyonları çağıracağını belirleyen claim kod
+
+/*.h dosyası bitiş*/
+/*==========================================================*/
+/*.c dosyası başlangıç*/
+
+#define N_MAX_FUNC  10
+static FPTR ga[N_MAX_FUNC];
+static int gcnt = 0;
+
+
+void fregister(FPTR f)
+{
+	
+	ga[gcnt++] = f;
+}
+
+void func(void)
+{
+	for (int i = 0; i < gcnt; ++i) {
+		ga[i]();
+	}
+
+}
+/*.c dosyası bitiş*/
+
+void f1(void)
+{
+	printf("f1 cagirildi\n");
+}
+void f2(void)
+{
+	printf("f2 cagirildi\n");
+}
+void f3(void)
+{
+	printf("f3 cagirildi\n");
+}
+void f4(void)
+{
+	printf("f4 cagirildi\n");
+}
+
+
+
+
+int main()
+{
+	fregister(&f1);
+	//arada farklı kodlar olabilir.
+	fregister(f2);
+	fregister(f3);  //fregister a hangi fonksiyonlar gönderildiyse o fonksiyonlar çağırılacak
+	fregister(f4);
+
+	func(); /* şimdi func çağırıldığında fregister ile 
+			kaydedilen fonksiyonlar çağırılacak  Tabi burada çağırılma sistemi 
+			değişebilir. İlk gönderilen ilk çağırılabilir veya son gönderilen ilk 
+			çağırılıp son giren ilk çıkar prensibi (step sistemi) uygulanmış olabilir.*/
+}
+
+```
+- Bu yapıya benzer ancak (step sistemi) son girilen fonksiyonun ilk çağırıldığı 
+bir standart fonksiyon örneği: (last in first out)
+
+```
+
+void f1(void)
+{
+	printf("f1 cagirildi\n");
+}
+void f2(void)
+{
+	printf("f2 cagirildi\n");
+}
+void f3(void)
+{
+	printf("f3 cagirildi\n");
+}
+void f4(void)
+{
+	printf("f4 cagirildi\n");
+}
+
+
+
+
+int main()
+{
+	atexit(f1);
+	atexit(f2);
+	atexit(f3);
+	atexit(f4);
+	
+	exit(1);
+}
+
+```
+
+  
+# Çok Boyutlu Diziler
+
+- Multi Dimensional Arrays
+
+		int a[10][20];
+
+- C'de çok boyutlu bir dizi yoktur. Yani C'de çok boyutlu diziler 
+elemanları dizi olan dizilerdir.
+
+  - Yani yukarıda a dizisinin elemanları 20 elamanlı int dizilerdir.
+
+
+  		int a[10][20]; 
+		
+		printf("asize(a) = %zu\n", asize(a)); // a 'nın boyutunu 10 olarak görürüz.
+		
+		printf("sizeof(a) = %zu\n", sizeof(a)); // ekrana 4x10x20 = 800 olur.
+		
+		printf("sizeof(a[0]) = %zu\n", sizeof(a[0]));
+		/* yukarıda ise a dizisinin bir elemanının sizeof değeri
+		yazdırılacak yani 4 x 20  = 80 olur.*/
+		printf("sizeof(a[0][0]) = %zu\n", sizeof(a[0][0]));
+		// yukarıda bu sefer a dizisinin ilk elemanının ilk elemanının boyutu olan benim  derleyicime göre 4 boyut bilgisi ekrana yazılır.
+		
 		
 
+- Çok boyutlu dizilerde array decay söz konusu olduğunda dizinin ismi 
+kullanıldığında dizinin ilk elemanına dönüşür lakin dizinin ilk elemanı yukarıda 
+20 boyutlu bir dizi olduğu unutulmamalıdır.
+
+	int a[10][20];
+	// a olarak kullanıldığında &a[0] olarak algınır.
+	
+	int* p = a; // C'de yanlış C++'da sentaks hatasıdır. Çünkü a burada int* bir tür değildir.
+	
+- Peki çok boyutlu diziler nasıl bir pointer da tutulur
+
+		int a[10][4];
+		int(*p)[4] = a;
+		//int(*p)[4] = &a[0];
+  
+  - Elamanları 10 elemanlı double dizi olan boyutu 5 olan a dizisini tanımlayınız:
+
+		double a[5][10];
+		
+
+  - p pointerına a'nın ilk elemanının ilk elemanıyla ilk değer verelim:
+
+		int [10][20];
+		
+		int *p = &a[0][0];
+  		//int* p = a[0]; // ikinci bir yolu array decay ile 
+		int* p =(int*)a; // üçüncü bir yol 
+		
+- Yazım şekillerine örnekler;
+
+		int a[10][20];
+		
+		a[5][3]; // a'nın 5. elemanın 3. indisi
+		(*(a + 5))[3]; // a'nın 5. elemanın 3. indisi
+		
+		
+- Çok boyutlu dizilere ilk değer verilmesi:
+
+		int a[5][4] = {
+				{1, 1, 1, 1},
+				{2, 2, 2, 2},
+				{3, 3, 3, 3},
+				{4, 4, 4, 4},
+				{5, 5, 5, 5},
+				};
+				
+		for (int i = 0; i < 5; ++i) {
+			for (int k = 0; k < 4; ++k) {
+				printf("%d ", a[i][k]);
+			}
+			printf("\n");
+		}
+		
+		
+ - İlk değer verilmesi yapılırken eksik bırakılan elemanlar default olarak 0 değerini alır.
+ 
+		 int a[5][4] = {
+				{1, 1, 1, 1},
+				{2, 2},
+				{3, 3, 3, 3},
+				{4},
+				{5, 5, 5, 5}
+				};
+				
+		for (int i = 0; i < 5; ++i) {
+			for (int k = 0; k < 4; ++k) {
+				printf("%d ", a[i][k]);
+			}
+			printf("\n");
+		}
+  
+  
+  - Yukarıda ilk değer verilmeyen elemanlar sıfır değerini aldı.
+
+
+  - İç küme parantezi kullanılmadığı taktirde girilen elemanlar en baştan 
+  sırasıyla 4 er 4er değer verilir. Bu da bir kullanım şeklidir.
+  
+  
+   				int a[5][4] = {1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 	};
+				
+				for (int i = 0; i < 5; ++i) {
+					for (int k = 0; k < 4; ++k) {
+						printf("%d ", a[i][k]);
+					}
+					printf("\n");
+				}
+  
+  
+  
+  - Designater initializer şeklinde ilk değer verme şekli aşağıdadır.
+  	
+	
+		 int a[5][4] = {
+				[3] = {3, 3, 3, 3}
+				[5] = {5, 5, 5, 5}
+				};
+				
+		for (int i = 0; i < 5; ++i) {
+			for (int k = 0; k < 4; ++k) {
+				printf("%d ", a[i][k]);
+			}
+			printf("\n");
+		}
+  
+  
+ - Bir mülakat sorusu:
+
+		int a[][] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};	
+  		int b[3][] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+		int c[][3] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+		
+- Yukarıdaki dizilerden hangiler geçerlidir.
+ 
+ - Yalnızca c geçerlidir. Dizilere ilk değer verme sentaksı bize diyor ki 
+ dizinin boyutunu vermek zorunda değilsiniz. Yani çok boyutlu dizilerin  boyutu
+ ilk köşeli parantez içidir. İkinci köşeli parantez dizinin türüdür.
+  
+  
+  
+  
+  - Pointer aritmetiğinin çok boyutlu dizilerde kullanımına dair örnek;
+  
+ ```
+ int a[5][4] = {
+				{1, 1, 1, 1},
+				{2, 2, 2, 2},
+				{3, 3, 3, 3},
+				{4, 4, 4, 4},
+				{5, 5, 5, 5}
+	};
+
+	for (int i = 0; i < 5; ++i) {
+		for (int k = 0; k < 4; ++k) {
+			printf("%d ", a[i][k]);
+		}
+		printf("\n");
+	}
+
+	printf("\n\n");
+
+	int* p = a[0];
+	//int * p = &a[0][0];
+	//int *p = (int*)a;
+
+	int n = 5 * 4;
+
+	while (n--) {
+		printf("%d ", *p++);
+	}
+
+ ```
+  
+-  Bir çok boyutlu dizi tanımlayalım
+
+		inta[5][4];
+		
+- Yukarıdaki dizinin elemanlarının türü int değildir. Elemanlarının türü
+
+		int[4] 	olur.
+		
+
+- typedef bildirimiyle nasıl kullanılıra gelecek olursak;
+
+	typedef int INTA10[10];
+	//INTA10 ---> int[10] türünün typedef ismi
+	
+	int main()
+	{
+		INTA10 A[20]; // int[20][10];
+	}
+- Yukarıda int[10] türünü typedef bildirimi ile bildirdik. Ve elemanları
+10 elemanlı diziler olan 20 elemanlı bir dizi oluşturduk.
 
 
 
+  - Bir örnekle pekiştirelim. Bir okul olsun ve her sınıfında 20 öğrenci olsun.
+Sınıftaki öğrencilerin notlarını tutulması için şu şekilde bir dizi kullanılabilir.
+		
+		#define STUDENTS_PER_CLASS 20
+		#define NO_OF_CLASS 10
+		
+		int main()
+		{
+			int grades[NO_OF_CLASS][STUDENTS_PER_CLASS];
+		}
+		
 
+- 
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
