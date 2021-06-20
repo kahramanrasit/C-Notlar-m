@@ -10550,7 +10550,7 @@ elemanları dizi olan dizilerdir.
 		/* yukarıda ise a dizisinin bir elemanının sizeof değeri
 		yazdırılacak yani 4 x 20  = 80 olur.*/
 		printf("sizeof(a[0][0]) = %zu\n", sizeof(a[0][0]));
-		// yukarıda bu sefer a dizisinin ilk elemanının ilk elemanının boyutu olan benim  derleyicime göre 4 boyut bilgisi ekrana yazılır.
+		// yukarıda bu sefer a dizisinin ilk elemanının ilk elemanının boyutu olan benim  derleyicime göre 4 yazısı boyut bilgisi olarak ekrana yazılır.
 		
 		
 
@@ -10580,7 +10580,7 @@ kullanıldığında dizinin ilk elemanına dönüşür lakin dizinin ilk eleman�
 		
 		int *p = &a[0][0];
   		//int* p = a[0]; // ikinci bir yolu array decay ile 
-		int* p =(int*)a; // üçüncü bir yol 
+		//int* p =(int*)a; // üçüncü bir yol 
 		
 - Yazım şekillerine örnekler;
 
@@ -10709,7 +10709,7 @@ kullanıldığında dizinin ilk elemanına dönüşür lakin dizinin ilk eleman�
   
 -  Bir çok boyutlu dizi tanımlayalım
 
-		inta[5][4];
+		int a[5][4];
 		
 - Yukarıdaki dizinin elemanlarının türü int değildir. Elemanlarının türü
 
@@ -10718,13 +10718,14 @@ kullanıldığında dizinin ilk elemanına dönüşür lakin dizinin ilk eleman�
 
 - typedef bildirimiyle nasıl kullanılıra gelecek olursak;
 
-	typedef int INTA10[10];
-	//INTA10 ---> int[10] türünün typedef ismi
+		typedef int INTA10[10];
+		//INTA10 ---> int[10] türünün typedef ismi
 	
-	int main()
-	{
-		INTA10 A[20]; // int[20][10];
-	}
+		int main()
+		{
+			INTA10 A[20]; // int[20][10];
+		}
+	
 - Yukarıda int[10] türünü typedef bildirimi ile bildirdik. Ve elemanları
 10 elemanlı diziler olan 20 elemanlı bir dizi oluşturduk.
 
@@ -10742,28 +10743,524 @@ Sınıftaki öğrencilerin notlarını tutulması için şu şekilde bir dizi ku
 		}
 		
 
-- 
+# Ders 41 Tarih 10 05 2021
+
+- Çok boyutlu diziler üzerinde işlem yapan fonksiyonlar:
+
+- Şimdi aşağıda üç tane çok boyutlu dizi tanımlansın;
+
+		int a[10][20];  // türü -> int[20] 'dir
+		int b[5][8];    // türü -> int[8] 'dir
+		int c[6][4];    // türü -> int[4] 'dür
+		
+- Yukarıda her biri matris olarak kullanılabilir lakin yukarıdaki dizilerin 
+türleri birbirinden farklıdır.
+  
+  - Yani siz bir diziyi fonksiyona göndermek istediğiniz varsayalım:
+
+		void f1(int(*p)[20], size_t size); /* Yukarıdaki a dizisi için
+						    türü int(*)[20] olan bir
+						    pointer parametre olarak 
+						    verilmelidir.*/
+		void f2(int(*p)[8], size_t size); // b dizisi için 
+		void f3(int(*p)[4], size_t size); // c dizisi için
+  		
+		int main()
+		{
+			int a[10][20];  // türü -> int[20] 'dir
+			int b[5][8];    // türü -> int[8] 'dir
+			int c[6][4];    // türü -> int[4] 'dür
+			
+			f1(a, 10);
+			f2(b, 5);
+		}
+  
+  
+- Şimdi bir örnek verelim:
+
+``
+void set_random_20(int(*p)[20], size_t size)
+{
+	for (size_t i = 0; i < size; ++i) {
+		for (size_t k = 0; k < 20; ++k) {
+			p[i][k] = rand() % 10;
+		}
+	}
+}
+void print_array_20(const int(*p)[20], size_t size)
+{
+	for (size_t i = 0; i < size; ++i) {
+		for (size_t k = 0; k < 20; ++k) {
+			printf("%d ", p[i][k]);
+		}
+		printf("\n");
+	}
+}
+
+
+int main()
+{
+	int a[10][20];
+
+	randomize();
+
+	set_random_20(a, 10);
+	print_array_20(a, 10);
+
+}
+``		
+- print_array_20 fonksiyonun farklı bir yazım biçimi:
+
+``
+
+void print_array_20(const int(*p)[20], size_t size)
+{
+	while (size--) {
+		for (int i = 0; i < 20; ++i) {
+			printf("%d ", (*p)[i]);
+		}
+		printf("\n");
+		++p;
+	}
+}
+``
+
+
+- Şimdi öyle bir fonksiyon yazalım ki çok boyutlu dizilerde boyut türü uyuşmasada
+fonksiyon geçerli olsun.
+
+``
+
+void set_matrix(int* p, size_t row, size_t col)
+{
+	for (size_t i = 0; i < row; ++i) {
+		for (size_t k = 0; k < col; ++k) {
+			p[i * col + k] = rand() % 10;
+		}
+	}
+}
+
+void print_matrix(const int* p, size_t row, size_t col)
+{
+	for (size_t i = 0; i < row; ++i) {
+		for (size_t k = 0; k < col; ++k) {
+			printf("%d ", p[i * col + k]);
+		}
+		printf("\n");
+	}
+
+	printf("\n------------------------------\n\n");
+}
+
+int main()
+{
+	int a[5][9];
+	int b[3][8];
+	int c[2][10];
+
+	randomize();
+	
+	set_matrix(a[0], 5, 9);
+	print_matrix((int*)a, 5, 9);
+
+	set_matrix(&b[0][0], 3, 8);
+	print_matrix((int*)b, 3, 8);
+
+	set_matrix(c[0], 2, 10);
+	print_matrix(&c[0][0], 2, 10);
+
+
+}
+``
+
+- Fonksiyonların makrolar ile kullanım şekillerine dair bir örnek:
+
+``
+#define csmf(col)	void set_matrix_##col(int (*p)[col], size_t size) \
+{ \
+	for (size_t i = 0; i < size; ++i) { \
+		for (size_t k = 0; k < col; ++k) { \
+			p[i][k] = rand() % 10; \
+		} \
+	}\
+} \
+
+#define cpmf(col)	void print_matrix_##col(int (*p)[col], size_t size) \
+{ \
+	for (size_t i = 0; i < size; ++i) { \
+		for (size_t k = 0; k < col; ++k) { \
+			printf("%d ", p[i][k]); \
+		} \
+		printf("\n"); \
+	}\
+	printf("\n-----------------------\n"); \
+} \
+
+csmf(9)
+cpmf(9)
+
+csmf(20)
+cpmf(20)
+
+csmf(40)
+cpmf(40)
+
+
+int main()
+{
+	int a[5][9];
+	int b[7][20];
+	int c[12][40];
+
+	randomize();
+
+	set_matrix_9(a, 5);
+	print_matrix_9(a, 5);
+
+	set_matrix_20(b, 7);
+	print_matrix_20(b, 7);
+
+	set_matrix_40(c, 12);
+	print_matrix_40(c, 12);
+}
+
+``
+  
+   - Çok boyutlu dizilerde elemanları char olan dizilere örnekler verelim:
+
+
+  ``
+  char names[][20] = { "ocak", "subat", "mart",
+							"nisan", "mayis", "haziran", "temmuz", "agustos",
+							"eylul", "ekim", "kasim", "aralik" };
+
+	for (size_t i = 0; i < asize(names); ++i) {
+		printf("%s ", names[i]);
+	}
+	
+  ``
+  
+  - Yalnız burada bir şeye dikkat etmemiz gerekiyor artık yukarıdaki örnekte
+  bir çok boyutlu yazı dizisi mevcut pointer değil!
+  
+``
+char names[][20] = { "ocak", "subat", "mart",
+							"nisan", "mayis", "haziran", "temmuz", "agustos",
+							"eylul", "ekim", "kasim", "aralik" };
+
+	for (size_t i = 0; i < asize(names); ++i) {
+		_strrev(names[i]);
+	}
+	for (size_t i = 0; i < asize(names); ++i) {
+		printf("%s ", names[i]);
+	}
+``
+  - Yukarıdaki fonksiyon isimleri kendi içinde ters çevirdi.
+
+- Peki bu yazdırma işlemini bir fonksiyona yaptırmak isteseydik nasıl bir yol
+izlerdik?
+
+``
+void print_names(char(*p)[20], size_t size)
+{
+	for (size_t i = 0; i < size; ++i) {
+		printf("%s ", p[i]);
+	}
+	printf("\n\n");
+
+}
+
+int main()
+{
+	char names[][20] = { "ocak", "subat", "mart",
+							"nisan", "mayis", "haziran", "temmuz", "agustos",
+							"eylul", "ekim", "kasim", "aralik" };
+
+	print_names(names, asize(names));
+	
+}
+
+``
+  
+- Yukarıdaki program parçacığında yazdırma fonksiyonun farklı bir yazım biçimi:
+
+``
+void print_names(char(*p)[20], size_t size)
+{
+	while (size--) {
+		printf("%s ", *p++);
+	}
+
+	printf("\n\n");
+
+}
+
+int main()
+{
+	char names[][20] = { "ocak", "subat", "mart",
+							"nisan", "mayis", "haziran", "temmuz", "agustos",
+							"eylul", "ekim", "kasim", "aralik" };
+
+	print_names(names, asize(names));
+	
+}
+``
+  
+- Şimdi yazıları sıralayalım ama yine dikkat etmeliyiz ki bu bir pointer 
+dizi değil.
+
+``
+void swap_str(char* px, char* py)
+{
+	char temp[20]; // gelecek parametrelerin 20 sınırında olduğu kabul ediliyor
+	strcpy(temp, px);
+	strcpy(px, py);
+	strcpy(py, temp);
+	
+}
+
+void sort_names(char(*p)[20], size_t size)
+{
+	for (size_t i = 0; i < size - 1; ++i) {
+		for (size_t k = 0; k < size - 1 - i; ++k) {
+			if (strcmp(p[k], p[k + 1]) > 0)
+			swap_str(p[k], p[k + 1]);
+		}
+	}
+}
+
+
+void print_names(char (*p)[20], size_t size)
+{
+	for (size_t i = 0; i < size; ++i) {
+		printf("%s ", p[i]);
+	}
+}
+
+int main()
+{
+	char names[][20] = { "ocak", "subat", "mart",
+							"nisan", "mayis", "haziran", "temmuz", "agustos",
+							"eylul", "ekim", "kasim", "aralik" };
+
+	sort_names(names, asize(names));
+	print_names(names, asize(names));
+	
+}
+
+``
+
+- Daha önceki konularda da örnek verilmişti hatırlayalım
+
+		char str[] = "mustafa";
+		char *p = "erdinc";
+		
+- Yukarıdaki iki deyim arasındaki fark pointer'a ilk deger verilen erdinc
+programın sonuna kadar bellekte kalacak olan bir string literalidir.
+Yani siz böyle bir tanımlama yaptığınızda iki farklı varlık oluşturuyorsunuz.
+Birisi p pointer değişkeni diğeri ise erdinc yazısını tutan string literali.
+mustafa ise str dizisinin ilk değeri yani programın sonuna kadar kalacak bir 
+string literali değil. str dizisine ilk değer olarak atanan bir yazı. Ve str 
+dizisi elemanları değiştirildiğinde str mustafa yazısı değişecektir.
+
+- Şimdi aynısı aşağıdada geçerlidir.
+
+		char* p[] = { "ali", "veli", "tan" };
+		
+- Yukarıdaki yazılar yine programın sonuna kadar kalıcak string literalleridir.
+
+-  Ancak aşağıdaki gibi tanımlandığında
+
+		char p[][20] = { "ali", "veli", "tan", };
+		
+- Yukarıdaki tanıma göre tanımlanan yazılar string literalleri değildir. 
+Dizinin elemanlarıdır ve değiştirilebilirler.
+
+
+
+ - Bir konuda daha hatırlatma yapalım:
+
+	 	void foo(int *p, int size);
+		void foo(int p[], int size);
+		
+- Yukarıdaki iki bildirim arasında bir fark yoktu.
+Hatta [] içine herhangi bir sayı yazılsa hata olmaaz ama yazılan sayının da
+bir anlamı yoktu. Ve buna benzer şekilde;
+
+		void foo(int** p, int size);
+		void foo(int* p[], int size);
+		
+- Yukarıdaki iki farklı tanımlamada sentaks olarak derleyiciye aynı anlamı ifade 
+etmektedir.
 
   
+- Şimdi elemanları dizi gösteren(yani çok boyutlu) dizilerde de iki farklı
+notasyon söz konusu:
+
+		int foo(int(*p)[20], int size);
+		int foo(int p[][20], int size);
+		
+
+ 
+ #
+ 
+ # Yazılarla sayılar arasındaki dönüşümler
+  
+  - Yazıdan sayıya dönüşüm:
+
+
+		
+		char str[SIZE];
+
+		printf("bir tam sayi giriniz:\n");
+		scanf("%s ", str);
+  			
+ - Siz şimdi yukarıdaki kod parçacığına bir tam sayı değeri girdiğinizde mesela
+ 34 sayısı girildiğinde bu değer karakter olarak tutulacak. Bunu tam sayıya 
+ nasıl çevireceğimizi yazılar konusunda bahsetmiştik.
+ 
+ 		for (int i = 0; str[i] != '\0'; ++i) {
+			printf("%c %d %d\n", str[i], str[i], str[i] - '0');
+		}
+  - Yukarıdaki kod ile dizi dolaşılıyor. İlk sütunda dizinin ilk elemanının
+  karakter görüntüsü, ikinci sütunda ascıı karakter kodlamasındaki değeri, 
+  üçüncü sütunda ise sayı karşılığı ekrana yazdırılmış oluyor.
   
   
   
+  - Şimdi yukarıdaki kod bir çok olumsuz olabilcek durumlar gözardı edilerek 
+  yazıldı. Mesela siz negatif bir tam sayı yazdığınızda ekranda istediğiniz 
+  değerleri göremeyeceksiniz. Boşluk karakterleri girildiğinde de bu karakterler
+  de rakam karakteri varsayılarak işlem yapılacaktır.
   
   
   
+  - Şimdi yukarıdaki yaptığımız işlevi standart bir fonksiyon yaptığından bahsedeceğiz.
+  stdlib.h başlık dosyasında yer alan atoi fonksiyonu yazıyı rakama çeviriyor.
+  
+  
+  		int atoi(const char* p);
+		
+- İsmi nerden geliyor dersek alphabetic to integer yani yazıdan tam sayıya.
+
+		char str[SIZE];
+
+		printf("bir tam sayi giriniz:\n");
+		sgets(str);
+
+		int ival = atoi(str);
+		printf("ival = %d ", ival);
+  
+  
+  - Tarih konusunda sık kullanılan bir örnek:
+
+
+			char str[SIZE];
+
+			printf("bir tarih (gg-aa-yyyy) giriniz:\n");
+			sgets(str);
+
+			int day, mon, year;
+
+			day = atoi(str);
+			mon = atoi(str + 3);
+			year = atoi(str + 6);
+
+			printf("%02d-%02d-%d\n", day, mon, year);
   
   
   
+  - Şimdi rakamı yazıya nasıl dönüştürebiliyorduk birlikte hatırlayalım:
+
+``
+	int ival;
+	printf("bir tam sayi giriniz\n");
+	scanf("%d", &ival);
+
+	char str[SIZE];
+
+	int temp = ival;
+	int idx = 0;
+
+	while (temp != 0) {
+		str[idx++] = temp % 10 + '0';
+		temp /= 10;
+	}
+	str[idx] = '\0';
+
+	for (int i = 0; i < idx / 2; ++i) {
+		char c = str[i];
+		str[i] = str[idx - 1 - i];
+		str[idx - 1 - i] = c;
+	}
+
+	printf("(%d) (%s)\n", ival, str);
+``
+  
+- Yukarıdaki işlevi yapan stdlib.h başlık dosyasında olan ve standart olmayan 
+bir fonkisyon vardır.
+		
+		char* _itoa(int val, char*buf, int base);
+		
+- Bir örnekler betimleyelim:
+
+``
+	int ival;
+	printf("bir tam sayi giriniz\n");
+	scanf("%d", &ival);
+
+	char str[SIZE];
+
+	_itoa(ival, str, 10);
+	printf("onluk sayi sisteminde (%s)\n", str);
+
+	_itoa(ival, str, 16);
+	printf("on altilik sayi sisteminde (%s)\n", str);
+
+	_itoa(ival, str, 8);
+	printf("sekizlik sayi sisteminde (%s)\n", str);
+
+	_itoa(ival, str, 2);
+	printf("ikilik sayi siteminde (%s)\n", str);
+``
   
   
   
+ - atoi fonksiyonunun kardeşi olan iki fonksiyyon daha mevcuttur.
+
+		long atol(const char* p); // yazıdan long değer çeker
+		double atof(const char* p);  // yazıdan double değer çeker
   
   
+  #
+  
+  ``
+  char str[SIZE];
+
+	printf("bir yazi giriniz.\n");
+	sgets(str); //234.325mehmet
+	
+	printf("(%s)\n", str);
+	int ival = atoi(str);
+	double dval = atof(str);
+
+	printf("ival = %d\n", ival);
+	printf("dval = %f\n", dval);
+	
+
+  ``
   
   
-  
-  
-  
+  - Yeni bir standart fonksiyon
+
+		double strtod(const char* pstr, char** p);
+		
+- İşlevi biraz karışıktır. Fonksiyona pstr olarak bir char* pointer gönderdiğinizi düşünelim. 
+Bu yazı pointerının içerisinde 12.765mehmet olsun. Bu yazı dizisindeki rakamları double formatına
+dönüştürüyor. Ve dizide ilk sayı formatının dışında olan adresi char** p pointerıyla adresini döndürüyor. Eğer adresi kullanmak istemediğinizde fonksiyonun ikinci parametresi olarak NULL pointer
+gönderirseniz adres olayını kullanmamış oluyorsunuz.
+
+
   
   
   
