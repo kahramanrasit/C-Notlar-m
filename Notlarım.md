@@ -10941,7 +10941,7 @@ int main()
   ``
   
   - Yalnız burada bir şeye dikkat etmemiz gerekiyor artık yukarıdaki örnekte
-  bir çok boyutlu yazı dizisi mevcut pointer değil!
+  çok boyutlu yazı dizisi mevcut, pointer değil! Yani siz bu dizideki elemanları yazılara yaptığıız tüm işlemlerde kullanabilirsiniz.
   
 ``
 char names[][20] = { "ocak", "subat", "mart",
@@ -11055,7 +11055,7 @@ int main()
 		char str[] = "mustafa";
 		char *p = "erdinc";
 		
-- Yukarıdaki iki deyim arasındaki fark pointer'a ilk deger verilen erdinc
+- Yukarıdaki iki deyim arasındaki fark pointer'a ilk deger verilen erdinc yazısı
 programın sonuna kadar bellekte kalacak olan bir string literalidir.
 Yani siz böyle bir tanımlama yaptığınızda iki farklı varlık oluşturuyorsunuz.
 Birisi p pointer değişkeni diğeri ise erdinc yazısını tutan string literali.
@@ -11084,7 +11084,7 @@ Dizinin elemanlarıdır ve değiştirilebilirler.
 		void foo(int p[], int size);
 		
 - Yukarıdaki iki bildirim arasında bir fark yoktu.
-Hatta [] içine herhangi bir sayı yazılsa hata olmaaz ama yazılan sayının da
+Hatta [] içine herhangi bir sayı yazılsa hata olmaz ama yazılan sayının da
 bir anlamı yoktu. Ve buna benzer şekilde;
 
 		void foo(int** p, int size);
@@ -11122,13 +11122,14 @@ notasyon söz konusu:
  		for (int i = 0; str[i] != '\0'; ++i) {
 			printf("%c %d %d\n", str[i], str[i], str[i] - '0');
 		}
+		
   - Yukarıdaki kod ile dizi dolaşılıyor. İlk sütunda dizinin ilk elemanının
   karakter görüntüsü, ikinci sütunda ascıı karakter kodlamasındaki değeri, 
   üçüncü sütunda ise sayı karşılığı ekrana yazdırılmış oluyor.
   
   
   
-  - Şimdi yukarıdaki kod bir çok olumsuz olabilcek durumlar gözardı edilerek 
+  - Şimdi yukarıdaki kod bir çok olumsuz olabilecek durumlar göz ardı edilerek 
   yazıldı. Mesela siz negatif bir tam sayı yazdığınızda ekranda istediğiniz 
   değerleri göremeyeceksiniz. Boşluk karakterleri girildiğinde de bu karakterler
   de rakam karakteri varsayılarak işlem yapılacaktır.
@@ -11198,7 +11199,7 @@ notasyon söz konusu:
 ``
   
 - Yukarıdaki işlevi yapan stdlib.h başlık dosyasında olan ve standart olmayan 
-bir fonkisyon vardır.
+bir fonksiyon vardır.
 		
 		char* _itoa(int val, char*buf, int base);
 		
@@ -11226,7 +11227,7 @@ bir fonkisyon vardır.
   
   
   
- - atoi fonksiyonunun kardeşi olan iki fonksiyyon daha mevcuttur.
+ - atoi fonksiyonunun kardeşi olan iki fonksiyon daha mevcuttur.
 
 		long atol(const char* p); // yazıdan long değer çeker
 		double atof(const char* p);  // yazıdan double değer çeker
@@ -11260,33 +11261,196 @@ Bu yazı pointerının içerisinde 12.765mehmet olsun. Bu yazı dizisindeki raka
 dönüştürüyor. Ve dizide ilk sayı formatının dışında olan adresi char** p pointerıyla adresini döndürüyor. Eğer adresi kullanmak istemediğinizde fonksiyonun ikinci parametresi olarak NULL pointer
 gönderirseniz adres olayını kullanmamış oluyorsunuz.
 
+- Null pointer kullanarak fonksiyonuuzu kullanalım:
 
+``
+	char str[SIZE];
+
+	printf("bir yazi girin:   "); // 12.765ahmet
+	sgets(str);
+	printf("(%s) \n", str);
+
+	double dval;
+
+	dval = strtod(str, NULL);
+	
+	printf("dval = %f\n", dval);
+``
+ 
+- Şimdide fonksiyonumuzun ikinci parametresini de kullanarak işlevine göz atalım:
+
+``
+	char str[SIZE];
+
+	printf("bir yazi girin:   "); // 12.765ahmet
+	sgets(str);
+	printf("(%s) \n", str);
+
+	double dval;
+	char* p;
+
+	dval = strtod(str, &p);
+	printf("dval = %f\n", dval);
+	printf("idx = %d\n", p - str);  // hangi indexde format dışında bir değer olduğu yazdırıldı.
+	puts(p); // ahmet
+	
+``
+
+- Şimdi yeni bir fonksiyon daha öğrenelim:
+
+
+		char* strtok(char* p, const char* ptr);
+		
+- Yukarıdaki fonksiyon gönderilen yazıyı tokenlarına ayırıyor.
+	- Birinci parametre tokenlarına ayıracağınız yazıyı gönderiyorsunuz.
+	- İkinci parametreye ise ayıraç karakterleri olarak kullanılacak yani tokenların parçası 
+	olmayan karakterler olarak ele alınacak.
+	- strtok, her çağrıda yazıdaki tokenlardan birinin adresini döndürecek ama ne zaman ki 
+	strtok, NULL pointer döndürürse siz yazıda artık yeni bir token olmadığını anlayacaksınız.
+	Dolayısıyla strtok'u çağırırken NULL pointer döndürene kadar döngüsel bir yapı içerisinde
+	çağıracağız. Yalnız enterasan kısmı şu ki, fonksiyona ilk yapılan çağrıda strtok 
+	fonksiyonuna atomlara ayrılacak olan yazının adresini geçiyorsunuz ama ondan sonraki 
+	çağrılarda NULL pointer geçiyorsunuz. 
+	Dolayısıyla bu döngü aşağıdaki şekilde kuruluyor.
+	
+	
+``
+	char str[SIZE];
+	printf("bir yazi giriniz:\n");
+	sgets(str);
+	printf("(%s)\n", str);
+
+	int cnt = 0;
+	char* p = strtok(str, " .,;!?:"); /*Burada ikinci parametrede ayrıcı tokenlar 
+									  girildi. boşluk karakter, nokta, virgül, 
+									  noktalı virgül, ünlem, soru işareti ve iki 
+									  nokta. Bu karakterleri gördüğünde alınan ilk 
+									  token yazı adresi olarak geri döndürülecek.*/
+
+	while (p) {
+		printf("%d. token : %s\n",++cnt, p);
+		p = strtok(NULL, " .,;!?:"); /*fonksiyon ikinci çağırılışında ilk parametre
+									 NULL pointer olarak gönderildi.*/
+	}
+``
+  
+  - Şimdi de ayıraç karakterlerini rakam yaparak bir örnek oluşturalım.
+
+``
+
+	char str[SIZE];
+	printf("bir yazi giriniz:\n");
+	sgets(str);
+	printf("(%s)\n", str);
+
+	int cnt = 0;
+	char* p = strtok(str, "0123456789");
+
+	while (p) {
+		printf("%d. token : %s\n",++cnt, p);
+		p = strtok(NULL, "0123456789"); 
+	}
+``
   
   
+- Bellek üzerinde formatlı okuma yazma işlemleri
+	- formatlı çıkış işlemleri
+		-  std output 'a yazmak yani ekrana yazdırıyoruz.
+		-  formatlanmış veriyi  bir char dizide tutmak (in memory output operation)
+		-  Bir dosyaya verilmesi
+		
+  - Üç tane formatlı çıkış fonksiyonumuz var.
+  	- printf - std output
+  	- sprintf - çıktıyı belleğe veriyor
+  	- fprintf - çıktısını dosyaya veriyor
+  	
   
   
+  		int sprintf(char* pbuf, const char*, ...);
+
+``
+  
+	int x = 20;
+	double dval = 3.4;
+
+	char str[] = "muratcan";
+	char buffer[SIZE];
+
+	//printf("%d %f %s", x, dval, str);
+	sprintf(buffer, "%d %f %s", x, dval, str); // ekran çıktısını buffer değişkenine yazdı.
+	
+	puts(buffer); // yani biz bu buffer yazı dizisini istediğimiz şekilde kullanabiliriz.
+	
+``
+  
+- Yukarıdaki fonksiyon son derece önemli ve çok sık kullanılan bir fonksiyon.
+
+
+- Bir örnek:
+
+``
+	char name[SIZE] = "rasit";
+	char surname[SIZE] = "kahraman";
+	int birth_year = 1998;
+
+	char file_name[SIZE];
+
+	// yukarıdaki verilerden faydalanılarak bir dosya ismi oluşturmamız gereksin
+	// rasit_kahraman_1998.txt gibi
+
+	sprintf(file_name, "%s_%s_%d.txt", name, surname, birth_year);
+
+	printf("(%s)", file_name);
+
+``
+  
+  - Aşağıdaki örnekte formata uygun bir txt dosyası oluşturulup içerisine yazı yazdırılıyor:
+
+``
+	char name[SIZE] = "rasit";
+	char surname[SIZE] = "kahraman";
+	int birth_year = 1998;
+
+	char file_name[SIZE];
+
+	// yukarıdaki verilerden faydalanılarak bir dosya ismi oluşturmamız gereksin
+	// rasit_kahraman_1998.txt gibi
+
+	sprintf(file_name, "%s_%s_%d.txt", name, surname, birth_year);
+
+	FILE* f = fopen(file_name, "w");
+	fprintf(f, "bugun c dersi yaptik\n");
+	fclose(f);
+
+``
+  
+- Nasıl karşımıza çıkabileceğine dair bir örnek daha verelim:
+
+``
+	char name[SIZE] = "rasit";
+	char surname[SIZE] = "kahraman";
+	int birth_year = 1998;
+
+	char file_name[SIZE];
+
+	//kahraman_rasit_98_001.jpeg
+	//kahraman_rasit_98_002.jpeg
+
+	for (int i = 0; i < 100; ++i) {
+		sprintf(file_name, "%s_%s_%02d_%03d.jpeg", surname, name, birth_year % 100, i + 1);
+		printf("(%s)", file_name);
+		getchar();
+	}
+
+``
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+ - Yukarıdaki çıkış işlemlerinde uygulanan durum giriş fonksiyonlarında da söz konusu
+
+
+# Ders 42 Tarih 12 05 2021
+
+
   
   
   
