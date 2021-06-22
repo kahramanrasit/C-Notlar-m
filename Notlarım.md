@@ -11450,15 +11450,324 @@ gönderirseniz adres olayını kullanmamış oluyorsunuz.
 
 # Ders 42 Tarih 12 05 2021
 
+- scanf'in kardeşlerini görmeden önce scanf fonksiyonunu hatırlayalım:
+
+			int scanf(const char*, ...);
+- scanf fonksiyonun geri dönüş değeri kaç adet nesneye yazdıysa o sayıyı döndürüyordu.
+eğer yazma esnasında herhangi bir problem durumunda - 1 sayısını hata mesajı olarak döndürüyordu.
+
+- Şimdi diğer alternatif fonksiyonlara gelelim.
+
+			int sscanf(const char* p, const char*, ...);
+			
+- sscanf fonksiyonunun scanf'den farkı karakterleri, fonksiyon çağrısında gönderdiğiniz birinci 
+parametredeki diziden alıyor.
+  
+``
+	char str[] = "234  567  890";
+	int x, y, z;
+
+	sscanf(str, "%d%d%d", &x, &y, &z);
+
+	printf("x = %d, y = %d, z = %d\n", x, y, z);
+
+``
+- Bir örnek daha verelim:
+
+
+``
+	char str[] = "12334ahmet";
+
+	int x;
+	char s[40];
+
+	sscanf(str, "%d%s", &x, s);
+
+	printf("%d (%s)", x, s);
+``
+  	
+  
+  
+  - Bir de snprintf fonksiyonu var.
+  
+  			int snprintf(char* restrict buffer, size_t bufsize, const char* restrict format, ...);
+			
+- sprintf'den farkı ise dizi boyutu istiyor olmasıdır.
+- Birinci parametresi çıkışı yapacağı dizi adresi.
+- İkinci parametresi, birinci parametrede istenilen dizinin boyutudur.
+- Üçüncü parametresi yine formatlama string literali.
+- Dördüncü parametresi ise variadic.
+
+
+
+
+# Programı Sonlandıran Programlar
+
+- exit
+- atexit
+- abort
+
+- Bir C programı çalıştığında (process), main fonksiyonu çalışıp sonlandığında program da sonlanıyor
+- stdlib.h başlık dosyasında bildirilen fonksiyonlardır.
+	- Programın iki tane sonlanma biçimi var. 
+		- normal termination  (exit fonksiyonuna yapılan çağrıyla programın sonlanması)
+		Aslında zaten main fonksiyonu return deyimiyle bittiğinde yine default olarak
+		exit fonksiyonu çağırılarak program sonlanıyor.
+		- abnormal temination (abort fonksiyonuna yapılan çağrıyla programın sonlanması)
+
+- exit fonksiyonunu bildirimini inceleyelim:
+
+			void exit(int status);
+			
+	- Fonksiyonun geri dönüş değeri yok.
+	- int parametresi var ve çağırıldığında process'in sonlanmasını sağlıyor. Ve int argüman
+	programın ne nedenle sonlandırıldığı hakkıdna bilgi veriyor.
+		- non zero değerler başarısızlık (failure)
+		- zero ise başarı (success) bilgisini iletiyor.
+	- Bu başarı bilgisi okuyana ve işletim sistemine verilen bilgidir.
+  
+  
+  			exit(0); // başarılı
+			exit(1); // başarısız
+  
+  - Okumayı kolaylaştırılması için stdlib.h başlık dosyasında 2 adet sembolik sabit var.
+ 	
+		EXİT_SUCCESS =>  0
+		EXİT_FAILURE => 1
+  
+  
+  - Şimdi bu exit fonksiyonuna yapılan çağrıda verilen bazı garantiler var. Yani program aniden
+  sonlandırılmıyor. 
+  	- Bu garantilerin en önemlisi: açık olan dosyaların buffer'larının flush ediliyor olması.
+  		- Flush işlemi nedir dersek: Normal olarak dosyaya yazma işlemleri
+  		fiziksel olarak doğrudan dosyaya yazılmıyor çoğunlukla, o dosya için bellekte 
+		ayrılan bir alana (buffera) yazılıyor. Fakat belirli etmenler tetiklendiğinde 
+		mesela o buffer dolduğunda, bufferdaki byte'lar fiziksel olarak dosyaya yazılıyor.
+		İşte bu işleme flush(flushing) deniyor. 
+		Şimdi mesela örnek olarak siz programda bir dosyaya yazmaya başladınız. Yazdığınız
+		bilgiler buffer'da depolandı ve o buffer dolmadığı için de dosyaya aktarılma işlemi
+		gerçekleşmediği için halen dosyaya veriler yazılmamış olarak bufferda tutuluyor.
+		Siz programı sonlandırdığınızda o bufferdaki bilgiler dosyaya yazılmadı ve veri 
+		kaybı söz konusu oluyor. Ama işte exit fonksiyonu programı sonlandırıyorsa, 
+		buffer'ların flush edilmesi garantisi vardır. En azından açık olan dosyalarda 
+		yazılmamış veriler bırakılmıyor. 
+		Ancak abort fonksiyonun  böyle bir garanti vermesi söz konusu değildir.
+	
+
+- Bir de exit fonksiyonuna yardımcı fonksiyon:
+
+			int atexit(void (*fp)(void));
+			
+- Bu fonksiyonla siz bir fonksiyonu kayda alıyorsunuz ve exit fonksiyonunu çağırdığınızda,
+atexit'le kayıt edilen fonksiyonlar kayıt edildikleri sırayla çağırılıyor. Yani exit 
+programı sonlandırmadan önce atexitle kayıt edilmiş fonksiyonları çağırıp sonlandırıyor.
+
+
+  - Biz şimdiye kadar bütün programların sonlanmasını main fonksiyonu içerisinde gerçekleştirdik.
+  - Oysa çok doğal durumlardan birisi de bir fonksiyonun kodunun çalışması sırasında  programın
+  akışının o fonksiyondan onu çağıran fonksiyona geri dönüş yapılmadan  doğrudan o fonksiyon 
+  içerisinde sonlanması yani programlar illa main fonksiyonu içerisinde sonlanmak zorunda değildir.
+  
+ ``
+ void f3(void)
+{
+	printf("f3 basladi\n");
+	exit(EXIT_FAILURE);
+	printf("f3 sona eriyor\n");
+}
+
+void f2(void)
+{
+	printf("f2 basladi \n");
+	f3();
+	printf("f2 sona eriyor\n");
+}
+void f1(void)
+{
+	printf("f1 basladi\n");
+	f2();
+	printf("f1 sona eriyor\n");
+}
+
+int main()
+{		
+	printf("main basladi\n");
+
+	f1();
+	printf("main sona eriyor.\n");
+
+}
+
+ ``
+  
+  
+ - Biz bir fonksiyonun içerisinde fonksiyonu neden sonlandıralım?
+ 	- Çoğunlukla başarısızlık sebebiyle ancak her zaman değil.
+ 
+ 
+ - Şimdi atexit fonksiyonun işlevine geri dönelim.
+ 	- atexit aldığı fonksiyon adreslerini kaydediyor. atexit'in geri dönüş bilgisi başarı 
+ 	bilgisidir. 0 döndürdüğünde başarılı olmuş non-zero değer döndürmesi durumunda başarızlık
+	söz konusudur.  Yani 0 döndüğünde fonksiyon adresi kaydedilmiş, 1 döndürüldüğünde ise 
+	kaydedilmediği anlamına geliyor. 
+  - Peki biz bu fonksiyonları kayıt ediyoruz da noluyor?
+   	- Aslında bu fonksiyonların adreslerini, daha önceden öğrendiğimiz bir temaya paralel 
+   	olarak, atexit fonksiyonu sizden gizlenen, elemanları function pointer olan bir diziye 
+	yazıyor. Kayıttan kastımız budur. exit çağırıldığında ise exit fonksiyonu programı 
+	sonlandırmadan önce atexit'in bu adresleri yazdığı fonksiyon pointerı dizisine erişiyor,
+	ve oraya adresleri yazılan fonksiyonları çağırıyor. Ama dikkat edilmesi gereken nokta 
+	fonksiyonları çağırırken en son kaydedilen ilk çağırılıyor (last in first out)
+  
+  
+  - Bir örnekle inceleyelim:
+
+``
+void f3(void)
+{
+	printf("f3 cagirildi\n");
+}
+
+void f2(void)
+{
+	printf("f2 cagirildi \n");
+}
+void f1(void)
+{
+	printf("f1 cagirildi\n");
+}
+
+int main()
+{		
+	atexit(&f1);
+	atexit(f2);
+	atexit(f3);
+
+
+	exit(EXIT_FAILURE);
+
+}
+``
+- Yukarıdaki örnekteki gibi atexit fonksiyonu ile 32 adet fonksiyon adresi kesin olarak 
+edebilirsiniz. Ancak 32 den fazla olup olmaması derleyiciye bağlıdır. 
+
 
   
+- main fonksiyonunda return statement kullanırsanız aslında default olarak exit fonksiyonunu
+çağırmış oluyorsunuz.
+
+		return 0; /--> exit(0)  başarılı (success)
+		return 1; /--> exit(1)  başarısız (failure)
+		
+
+  - C99 standartlarından önce main fonksiyonun içerisine return statement yazmadığınızda çöp
+  değer kabul ediliyordu. Ancak C99 standartlarından sonra artık siz yazmasanız dahi default 
+  olarak yazmışsınız kabul ediliyor.
+  
+  
+  - Peki neden böyle bir mekanizmaya ihtiyacımız var bunu birlikte inceleyelim:
+
+	- Henüz hiç karşılaşmadık ama kulanacağımız kütüphanelerde çok sık karşımıza çıkacak.
+	Programlamada bazı işlemler, bunlar tipik olarak fonksiyon çağrısıyla gerçekleşiyor.
+	Bu hizmetleri aldıktan sonra bazı operasyonları yapmanız gerekiyor. Bunlar tipik olarak
+	kullanılan kaynakların geri verilmesini sağlayan işlemler.
+	Mesela diyelim ki bir kütüphane var siz bu kütüphanede siz bir fonksiyonu çağırıyorsunuz
+	fakat işiniz bittiğinde bu fonksiyonun edindiği kaynakları geri vermek için bir başka 
+	fonksiyonu çağırmanız gerekiyor. İşte bu kaynakları geri veren veya bir takım temizlik
+	işlemleri yapan fonksiyonlara popüler olarak cleanup fonksiyonları deniliyor. 
+	Mesela birçok kütüphanede ismi Create (ya da open) ile başlayan fonksiyonlar kaynakları ediniyor, ismi
+	destroy (ya da close) ile başlayan fonksiyonlar da kaynakları geri veriyor. 
+  
+  
+  - Bir de şöyle bir risk var, diyelim ki kaynakları edindiniz bir şekilde, belirli bir noktada
+  kaynakları geri vericeksiniz. Ya bu aralıkta siz kaynakları geri veremeden program sonlanırsa?
+  Bu durumda kaynakları geri göndereceğiniz noktaya program gelmediği için kaynakları gönderememiş
+  olacaksınız. Böylece belki tahmini mümkün olmayan hasar/zarar oluşmuş olucak. O zaman öyle bir 
+  mekanizma kullanılmalı ki kaynakların geri verildiğinde emin olunmalıdır. Peki nasıl emin 
+  olabiliriz?  Madem atexit ile gönderilen fonksiyonlar program sonlandığında exit fonksiyonları
+  programı sonlandırmadan bunları çağırıyor. O zaman biz de cleanup işlemlerini fonksiyonlara 
+  yaptırırız ve bu fonksiyonların adreslerini atexit'e argüman olarak göndeririz ve program her ne 
+  zaman sonlanırsa sonlansın cleanup işlemlerinin yapılacağından emin oluruz. 
+  
+  - Tabi bu illa kullanılması gereken bir mekanizma olarak algılanmamalı ancak bazı durumlarda 
+  kullanılması gerekiyor.
+  
+ - Bir noktada daha hatırlatma yapmak gerekirse aynı fonksiyonu birden fazla kez çağırabilir. 
+ Bu durumda iki kez veya istenilen sayı kadar program sonlanmadan önce gönderilen fonksiyonlar 
+ çağırılacaktır. 
+  
+  
+  - abort fonksiyonuna geldiğimizde yine stdlib.h başlık dosyasında bildirilen bir sonlandırma 
+  fonksiyonu. 
+  
+  		void abort(void);
+		
+- abort fonksiyonunun garanti ettiği hiçbir şey yok ve ani bir şekilde programı sonlandırıyor. 
+- Ancak abort'un da şöyle bir özelliği var. abort programı sonlandırdığı zaman, hata ekranına,
+bu da tipik olarak std output'a bağlı, programın sonlanmasının abort'a yapılan çağrıyla 
+gerçekleştiğini bir şekilde yazıyor. Böylece siz örneğin bir programı debug ederken, eğer program 
+abort'a yapılan çağrıyla sonlanmışsa siz bunu abort çağırıldığı için sonlandığını anlıyorsunuz
+çünkü hata ekranında öyle bir yazı görüyorsunuz. 
+  
+- Peki neden böyle birşeye ihtiyaç var? nedeni ya biz programı debug ediyoruz, ve bir hata
+durumuyla karşılaştığımızda hatayı o anda görmek istiyoruz. Çünkü eğer bir takım işlemlerin 
+yapılmasına izin verirsek o hata durumunu yeterince iyi bir şekilde gözlemleyemeden kaçırabilirz.
+bu sebeple bahsettiğimiz hata durumu oluştuğunda programın direk sonlanmasını istiyoruz. 
+  
+  
+# Dinamik Bellek Yönetimi (Dynamic Memory Management)
+
+- Programlamanın en önemli araçlarından biriyle tanışıyoruz.
+  
+  - Biz Ömür (storage duration) 'dan bahsettiğimizde ömürleri üçe ayırmıştık.
+  	- automatic  (fonksiyonların içerisinde static anahtar sözcüğü kullanılmadan tanımlanan
+  	- static   ( static anahtar sözcüğüyle veya global alanda tanımlanan , string literaller) 
+  		- Bellekte bir yer edinmesi ve programın sonuna kadar o yerini korumasıdır. 
+  	- dynamic duration
+
+- Dinamik ömürden bahsetmemiştik.
+  
+  - Dinamik ömür ise programın çalışma zamanında programcı olarak, istenilen herhangi bir zaman 
+  noktasında nesneyi hayata getirebileceğiz ve istediğimiz herhangi bir zaman noktasında da 
+  nesnenin hayatını bitirebileceğiz.  Yani nesnenin hayatı ne bloklarla sınırlı, ne de programın
+  sonuna kadar hayatı devam etmek zorunda. 
+  - Bir çok işi gerçekleştirebilmemiz için dinamik ömürlü nesnelere ihtiyacımız var. 
   
   
   
   
+  - Bir func fonksiyonu olsun. Kendisini çağıran koda kendisinin oluşturduğu bir nesneyi iletmesini
+  sağlamak istiyoruz. 
   
   
+  		func(??)
+		{
+			nesne oluşturuyor
+			ve bu nesnenin adresini çağıran koda iletiyor. 
+		}
   
+  - Yukarıdaki senaryoda automatic ömürlü nesne adresi döndüremeyiz çünkü zaten o nesnenin ömrü 
+  fonksiyonun dışına çıkıldığında bitiyor. Eğer static ömürlü bir nesne tanımlayıp göndersek 
+  bu sefer de fonksiyon her çağırıldığında hep aynı nesnenin adresi döndürülecektir. Ama biz burada
+  fonksiyon her çağırıldığında yeni bir nesne tanımlansın ve o nesnenin adresi döndürülsün 
+  istiyoruz. 
+  
+  - Mesela başka bir senaryo ile örnek verelim. Siz bir dizi oluşturmak istiyorsunuz ama dizinin 
+  boyutu programın çalışma esnasında belli oluyor. Yani siz dizide kaç eleman bulunacağı bilgisini
+  kullanıcıdan aldığınızı varsayarsak o zaman bu görevi tanımlayamayız. Çünkü dizinin boyutu bir 
+  değişken ifadesi olamaz. Ama bu da çok sık duyulan bir ihtiyaçtır.  Yani dizinin boyut bilgisi
+  çalışma zamanında elde ediliyor. Kodu yazan kişi bu bilgiye sahip değil. 
+  Mesela bir dosyanın içeriğindeki bir yazıyı bir char diziye alacaksınız. Ve dosyaya o an sahip 
+  değilsiniz. Dosyanın ne olduğu da çalışma zamanında belli olacak. 
+  
+  - Dinamik ömürlü nesne ile dinamik bellek yönetimi arasındaki ilişkiye de bir göz atalım. 
+  	- Dinamik ömürlü nesne, programın çalışma esnasında herhangi bir noktada nesneyi meydana
+  	getirip istenilen herhangi bir noktada da sonlandırabilmektir. Bu dinamik ömürlü nesnelerin
+	bir yere sahip olması gerekiyor.  İşte programın çalışma zamanında bu bellek alanının elde 
+	edilmesi gerekiyor. Dinamik bellek yönetimi derken, programın çalışma zamanı içinde 
+	programın kullanacağı bir bellek alanının elde edilmesi sürecidir.
+	- Yani dinamik bellek yönetimi, program çalışırken ortaya çıkan bir storage ihtiyacının
+	programın çalışma zamanında çalıştırılan bir kodla elde edilmesi.
+  	
   
   
   
