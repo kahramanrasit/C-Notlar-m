@@ -12008,15 +12008,39 @@ int get_median(const int* p, size_t size)
 olmalıdır. 
   
   
+  - Dikkat ! -> free fonksiyonuna NULL pointer gönderilmesi UB değildir. Ama herhangi bir işlev de
+  yapmaz.
   
   
+  - Bir de free fonksiyonunun kullanılmasında güvenlik söz konusu. Mesela siz diyelim malloc 
+  fonksiyonu ile bir bellek bloğunu ayırt ettiniz, kullandınız ve işiniz bittiğinde free ettiniz.
+  free ettiğinizde o adresteki veriler silinmiyor. Yani o bellek bloğunda başkalarının eline 
+  geçmesini istemediğiniz bilgileri işliyorsanız o bellek bloğunu temizlemelisiniz. 
+  Çünkü orası garbage value iken o bellek bloğundan okuma gerçekleştiğinde eski verilere 
+  ulaşılabiliyor. Yani siz bu bilgilere başkasının erişmesini istemediğiniz taktirde o bellek 
+  bloğunu free etmeden önce clear da etmelisiniz.  (memset fonksiyonu ile)
+
+		pd = malloc(n * sizeof(int));
+		
+		// bellek kulanıldı ve iş bitti
+		
+		memset(pd, 0, n * sizeof(int));
+		free(pd);
   
   
+  - 20 tane bellek bloğu allocate ediyorsunuz ve her birinin büyüklüğü 1000 byte
+  - 1000 tane bellek bloğu allocate ediyorsunuz ve her birinin büyüklüğü 20 byte	
+  	- Yukarıdaki her iki durumda da toplam açısından bir fark yoktur. Nedeni şu ki
+  	Bu heap alanını kontrol eden bir algoritma var. O algoritmanın da kullandığı bir veri 
+	yapısı var. Sonuçta onun da bir veri yapısı var kaydedilen bellek bloklarının adreslerini
+	kaydedeceği bir alana ihtiyaç var. Dolayısıyla her malloc çağrısı bu veri yapısına bir giriş
+	yapmak demek. Yani siz her bellek bloğunun adresini kaydetmek için ektra bir bellek alanı 
+	kullanıyorsunuz. Yukarıdaki iki durumdaki fark burada oluşuyor. Yani siz her tahsisat için
+	bir ek bellek alanı kullandığınız için tahsisat sayısı ek kullanılan bellek alanını 
+	arka planda etkiliyor. 
+  	
   
-  
-  
-  
-  
+ 
   
   
   
