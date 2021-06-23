@@ -11769,6 +11769,314 @@ bu sebeple bahsettiğimiz hata durumu oluştuğunda programın direk sonlanması
 	programın çalışma zamanında çalıştırılan bir kodla elde edilmesi.
   	
   
+  - Programın çalışma zamanında bir bellek alanını kullanılır hale getirmek tipik olarak 
+  işletim sisteminin fonksiyonları ile yapılıyor. Fakat bunu standart hale getirmek için, 
+  yani işletim sisteminde kullanılan ortamdan bağımsız bir şekilde bunu çalıştırıcak bir kod 
+  oluşturma fikri bizi standart kütüphaneye götürüyor. Şimdi biz de programın çalışma zamanında 
+  bir bellek alanının elde edilmesi ve ihtiyaç duyulan koda bu bellek alanının sunulmasına yönelik
+  C'nin standart bazı fonksiyonlarını öğreneceğiz. 
+  
+  	- malloc 
+  	- calloc
+  	- realloc
+  	- free fonksiyonları.
+  	
+- Derleme zamanında oluşturulan bellk yönetimine statik(compile-time) bellek yönetimi
+- Çalışma zamanında oluşturulan bellek yönetimine dinamik(run-time) bellek yönetimi denir
+	- statik (compile-time) bellek yönetimi
+	- dinamik (run-time) bellek yönetimi
+
+- Yukarıdaki iki bellek yönetiminde dinamik bellek yönetiminin maliyeti kat be kat daha yüksektir. 
+Buradaki maliyetten kasıt çalışma zamanındaki maliyettir. 
+Yani verim açısından dinamik bellek yönetimi mecburiyet içermeyen temalarda kullanılmamalı.
+
+- Programın çalışma esnasında dinamik bellek için ayrılan bellekte bir kısım var. Heap (free store) 
+olarak adlandırılıyor. 
+- Otomatik ömürlü nesnelerin tutulduğu bellek alanına stack (yığın) segment deniyor. 
+
+- Dinamik bellek yönetiminde bir (heap) alanın bir nesne için belli bir süreliğine yer ayırılması 
+(allocate), nesnenin ömrü bittiğinde o bellek alanının tekrar serbest hale gelmesine (free, deallocate) deniliyor.
+
+  	
+- malloc -> programın çalışma (process) esnasında bir bellek alanı ihtiyacı olduğunda kullanılan 
+fonksiyon.
+- calloc -> malloc la benzer işi yapıyor ancak farkı, calloc'un parametrik yapısı biraz daha farklı
+malloc bellek bloğunun kullanımı bittikten sonra bellek bloğunu garbage value haliyle bırakırken
+calloc bellek bloğunun kullanımı bittiğinde o bellek bloğunu sıfırlayarak veriyor.
+- realloc -> malloc veya calloc ile yer ayırılan bir bellek bloğunu kimi zaman yeterli olmadığını
+öngörerek büyütmek istiyoruz. Ancak tuhaf olsada ayrılan bellek bloğunun fazla gelmesi durumunda
+kullanılmayan kısmını geri vermek için de realloc kullanıyoruz. 
+- free -> bellek bloğunun kullanılma durumu bittiğinde geri iade edilmesi için kullanılan fonksiyon
+  
+  
+  	void* malloc(size_t n);
+	
+  - Birinci parametre kaç byte'lık bir bellek bloğuna ihtiyacınız olduğunu giriyorsunuz.
+  - Geri dönüş değeri de bu bellek bloğunun adresi. Elde edilememesi durumunda NULL pointer dönüyor.
+  - Yani sonuçla dinamik bellek bloğunun da bir sınırı olduğu unutulmamalı. Yer kalmaması durumunda
+  NULL pointer döndürüyor. Ve malloc' a bir çağrı yapıldığında mutlaka geri dönüş değeriyle test
+  edilmelidir.
+  
+  
+ ``
+  	size_t n;
+	
+	printf("kac elemanli bir dizi\n");
+	scanf("%zu", &n);
+
+	int* pd = (int*)malloc(n * sizeof(int));
+
+	if (pd == NULL) {
+		fprintf(stderr, "bellek yetersiz\n");
+		exit(EXIT_FAILURE);
+	}
+	set_array_random(pd, n);
+	print_array(pd, n);
+
+	free(pd);
+
+``
+- Daha idiyomatik bir yazım biçimi:
+
+``
+	size_t n;
+	int* pd;
+
+	printf("kac elemanli bir dizi\n");
+	scanf("%zu", &n);
+
+	
+
+	if ((pd = (int*)malloc(n * sizeof(int))) == NULL) {
+		fprintf(stderr, "bellek yetersiz\n");
+		exit(EXIT_FAILURE);
+	}
+	set_array_random(pd, n);
+	print_array(pd, n);
+
+	free(pd);
+``
+
+- Burada bellek bloğunu malloc ile ayırdığımızda çöp değerden kurtarmamız gerektiği unutulmamalıdır.
+- memset ile belleği çöp değerden temizleme işlemi:
+
+``
+	size_t n;
+	int* pd;
+
+	printf("kac elemanli bir dizi\n");
+	scanf("%zu", &n);
+
+	
+
+	if ((pd = (int*)malloc(n * sizeof(int))) == NULL) {
+		fprintf(stderr, "bellek yetersiz\n");
+		exit(EXIT_FAILURE);
+	}
+	
+	memset(pd, 0, n * sizeof(int));
+	print_array(pd, n);
+
+	free(pd);
+``
+
+ 
+- Dikkat!   ardışık yapılan malloc çağrıları edinilmiş bellek bloklarını büyütmek zorunda değildir.
+asla daha önce edinilmiş bir bellek bloğunu büyütmek için malloc işlevini çağırmayın.
+
+
+  
+  	void free(void *vp);
+	
+- Daha önce edinilmiş bellek bloğunun adresini, free fonksiyonuna parametre olarak gönderirseniz.
+ free fonksiyonu o bellek bloğunu geri veriyor. Yani o bellek bloğunu kullanılma potansiyeline 
+ sokuyor.
+ - Dinamik belleği kullanacağınız işlem bittiğinde free fonksiyonu çağırılmadan devam edilmesi
+ sık yapılan hatalardan biridir. Yani orası sizin kullanımınızdan çıksa dahi hala bloke edilmiş 
+ durumda kalır. Dolayısıyla bellek bloğunu geri vermemek yapılabilecek en kaba hatalardan birisidir.
+ - memory leakage (bellek sızıntısı)  bellek bloklarının gereksiz yere yer tutularak doldurulması.
+
+- Şimdi şöyle bir soru geliyor akla. Peki dinamik bellekte yer ayırt edip programın sonuna kadar
+kullanıcaksam ben yine de programın sonunda free ile bellek bloğunu geri iade etmeme gerek var mı?
+Böyle bir gereklilik söz konusu değil ancak kodlama disiplini açısından free edilmesi daha elzemdir.
+
+- Dangling pointer: Siz bellek bloğunu tuttuğunuz adresi atamış olduğunu pointerı, bellek bloğunu
+free ettiğinizde, bu kullanılan pointer garbage value'de kalır. Yani sizin o pointer'ı içerik olarak
+kullanmamanız gerekir. Ancak içerisine başka bir atama yaptığınızda kullanım söz konusudur.
+
+
+- free fonksiyonuna dair yapılan hatalar:
+	- Asla dinamik bellek fonksiyonlarıyla elde edilmemiş olan bellek bloklarını free etme 
+	girişiminde bulunmayını. (UB)
+			
+			char str[100];
+			
+			char *p = str;
+			
+			//
+			free(p); // UB
+	
+	- free işleviyle dinamik bellek bloğunu küçültemezsiniz (UB)
+			
+			size_t n;
+			int* pd;
+
+			printf("kac elemanli bir dizi\n");
+			scanf("%zu", &n);
+
+	
+
+			if ((pd = (int*)malloc(n * sizeof(int))) == NULL) {
+				fprintf(stderr, "bellek yetersiz\n");
+				exit(EXIT_FAILURE);
+			}
+			
+			free(pd + n / 2);  // UB
+	
+	- free çağrısından sonra bellek bloğunun adresini tutmakta olan pointer geçersiz(invalid)
+	pointer olur. pd'nin değeri NULL pointer olmaz. 
+	- free edilmiş bir bellek bloğunun tekrar free edilmesi (UB)
+  	- Dinamik bellek bloğunun free edilmemesi (memory leakage)
+
+  
+  
+  - Şimdi bir örnek yapalım.
+
+``
+int icmp(const void* vp1, const void* vp2)
+{
+	return *(const int*)vp1 - *(const int*)vp2;
+}
+
+int get_median(const int* p, size_t size)
+{
+	int* pd = malloc(size * sizeof(int));
+	if (!pd) {
+		printf("bellek yetersiz\n");
+		exit(EXIT_FAILURE);
+	}
+	memcpy(pd, p, size * sizeof(int));
+	qsort(pd, size, sizeof(*pd), &icmp);
+	return pd[size / 2];
+}
+
+
+int main()
+{			
+	int a[SIZE];
+
+	randomize();
+	set_array_random(a, SIZE);
+	print_array(a, SIZE);
+
+	printf("median = %d", get_median(a, SIZE));
+
+}
+
+``
+- Şimdi siz yukardaki get_median fonksiyonunu bu şekilde tanımladığınızda free fonksiyonu ile 
+kullandığınız belleği sonlandırmıyorsunuz. Ve siz bu fonksiyonu her çağırdığınızda yeni bir bellek
+alanı açılıyor. Bu fonksiyonu belli bir sayıda çağırdıktan sonra belleğinizde yer kalmayacak
+ve dinamik bellek kullanamayacaksınız.
+
+  
+  - Fonksiyonun doğru kullanımı:
+
+``
+
+int icmp(const void* vp1, const void* vp2)
+{
+	return *(const int*)vp1 - *(const int*)vp2;
+}
+
+int get_median(const int* p, size_t size)
+{
+	int* pd = malloc(size * sizeof(int));
+	if (!pd) {
+		printf("bellek yetersiz\n");
+		exit(EXIT_FAILURE);
+	}
+	memcpy(pd, p, size * sizeof(int));
+	qsort(pd, size, sizeof(*pd), &icmp);
+
+	int retval = pd[size / 2];
+	free(pd);
+	return retval;
+}
+``
+
+olmalıdır. 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
