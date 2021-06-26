@@ -11460,7 +11460,7 @@ eğer yazma esnasında herhangi bir problem durumunda - 1 sayısını hata mesaj
 
 			int sscanf(const char* p, const char*, ...);
 			
-- sscanf fonksiyonunun scanf'den farkı karakterleri, fonksiyon çağrısında gönderdiğiniz birinci 
+- sscanf fonksiyonunun scanf'den farkı: karakterleri, fonksiyon çağrısında gönderdiğiniz birinci 
 parametredeki diziden alıyor.
   
 ``
@@ -11512,8 +11512,9 @@ parametredeki diziden alıyor.
 	- Programın iki tane sonlanma biçimi var. 
 		- normal termination  (exit fonksiyonuna yapılan çağrıyla programın sonlanması)
 		Aslında zaten main fonksiyonu return deyimiyle bittiğinde yine default olarak
-		exit fonksiyonu çağırılarak program sonlanıyor.
+		exit fonksiyonu çağırılarak program sonlanmış oluyor
 		- abnormal temination (abort fonksiyonuna yapılan çağrıyla programın sonlanması)
+
 
 - exit fonksiyonunu bildirimini inceleyelim:
 
@@ -11521,8 +11522,8 @@ parametredeki diziden alıyor.
 			
 	- Fonksiyonun geri dönüş değeri yok.
 	- int parametresi var ve çağırıldığında process'in sonlanmasını sağlıyor. Ve int argüman
-	programın ne nedenle sonlandırıldığı hakkıdna bilgi veriyor.
-		- non zero değerler başarısızlık (failure)
+	programın ne nedenle sonlandırıldığı hakkında bilgi veriyor.
+		- non-zero değerler başarısızlık (failure)
 		- zero ise başarı (success) bilgisini iletiyor.
 	- Bu başarı bilgisi okuyana ve işletim sistemine verilen bilgidir.
   
@@ -11530,10 +11531,10 @@ parametredeki diziden alıyor.
   			exit(0); // başarılı
 			exit(1); // başarısız
   
-  - Okumayı kolaylaştırılması için stdlib.h başlık dosyasında 2 adet sembolik sabit var.
+  - Okumayı kolaylaştırması açısından stdlib.h başlık dosyasında 2 adet sembolik sabit var.
  	
 		EXİT_SUCCESS =>  0
-		EXİT_FAILURE => 1
+		EXİT_FAILURE =>  1
   
   
   - Şimdi bu exit fonksiyonuna yapılan çağrıda verilen bazı garantiler var. Yani program aniden
@@ -11584,7 +11585,7 @@ void f2(void)
 }
 void f1(void)
 {
-	printf("f1 basladi\n");
+	printf("f1 basladi\n");ç
 	f2();
 	printf("f1 sona eriyor\n");
 }
@@ -11610,6 +11611,7 @@ int main()
  	bilgisidir. 0 döndürdüğünde başarılı olmuş non-zero değer döndürmesi durumunda başarızlık
 	söz konusudur.  Yani 0 döndüğünde fonksiyon adresi kaydedilmiş, 1 döndürüldüğünde ise 
 	kaydedilmediği anlamına geliyor. 
+	
   - Peki biz bu fonksiyonları kayıt ediyoruz da noluyor?
    	- Aslında bu fonksiyonların adreslerini, daha önceden öğrendiğimiz bir temaya paralel 
    	olarak, atexit fonksiyonu sizden gizlenen, elemanları function pointer olan bir diziye 
@@ -11670,7 +11672,7 @@ edebilirsiniz. Ancak 32 den fazla olup olmaması derleyiciye bağlıdır.
 	Programlamada bazı işlemler, bunlar tipik olarak fonksiyon çağrısıyla gerçekleşiyor.
 	Bu hizmetleri aldıktan sonra bazı operasyonları yapmanız gerekiyor. Bunlar tipik olarak
 	kullanılan kaynakların geri verilmesini sağlayan işlemler.
-	Mesela diyelim ki bir kütüphane var siz bu kütüphanede siz bir fonksiyonu çağırıyorsunuz
+	Mesela diyelim ki bir kütüphane var siz bu kütüphanede  bir fonksiyonu çağırıyorsunuz
 	fakat işiniz bittiğinde bu fonksiyonun edindiği kaynakları geri vermek için bir başka 
 	fonksiyonu çağırmanız gerekiyor. İşte bu kaynakları geri veren veya bir takım temizlik
 	işlemleri yapan fonksiyonlara popüler olarak cleanup fonksiyonları deniliyor. 
@@ -11781,7 +11783,7 @@ bu sebeple bahsettiğimiz hata durumu oluştuğunda programın direk sonlanması
   	- realloc
   	- free fonksiyonları.
   	
-- Derleme zamanında oluşturulan bellk yönetimine statik(compile-time) bellek yönetimi
+- Derleme zamanında oluşturulan bellek yönetimine statik(compile-time) bellek yönetimi
 - Çalışma zamanında oluşturulan bellek yönetimine dinamik(run-time) bellek yönetimi denir
 	- statik (compile-time) bellek yönetimi
 	- dinamik (run-time) bellek yönetimi
@@ -11819,7 +11821,7 @@ kullanılmayan kısmını geri vermek için de realloc kullanıyoruz.
   
   
  ``
-  	size_t n;
+  	size_t n;  // malloc'un parametrik yapısı size_t olduğu için n nesnesi size_t türünde bildirildi.
 	
 	printf("kac elemanli bir dizi\n");
 	scanf("%zu", &n);
@@ -11897,7 +11899,7 @@ asla daha önce edinilmiş bir bellek bloğunu büyütmek için malloc işlevini
  - memory leakage (bellek sızıntısı)  bellek bloklarının gereksiz yere yer tutularak doldurulması.
 
 - Şimdi şöyle bir soru geliyor akla. Peki dinamik bellekte yer ayırt edip programın sonuna kadar
-kullanıcaksam ben yine de programın sonunda free ile bellek bloğunu geri iade etmeme gerek var mı?
+kullanacaksam ben yine de programın sonunda free ile bellek bloğunu geri iade etmeme gerek var mı?
 Böyle bir gereklilik söz konusu değil ancak kodlama disiplini açısından free edilmesi daha elzemdir.
 
 - Dangling pointer: Siz bellek bloğunu tuttuğunuz adresi atamış olduğunu pointerı, bellek bloğunu
@@ -11906,7 +11908,7 @@ kullanmamanız gerekir. Ancak içerisine başka bir atama yaptığınızda kulla
 
 
 - free fonksiyonuna dair yapılan hatalar:
-	- Asla dinamik bellek fonksiyonlarıyla elde edilmemiş olan bellek bloklarını free etme 
+	- Asla dinamik bellek fonksiyonlarıyla elde *edilmemiş* olan bellek bloklarını free etme 
 	girişiminde bulunmayını. (UB)
 			
 			char str[100];
@@ -12030,11 +12032,11 @@ olmalıdır.
   
   - 20 tane bellek bloğu allocate ediyorsunuz ve her birinin büyüklüğü 1000 byte
   - 1000 tane bellek bloğu allocate ediyorsunuz ve her birinin büyüklüğü 20 byte	
-  	- Yukarıdaki her iki durumda da toplam açısından bir fark yoktur. Nedeni şu ki
+  	- Yukarıdaki her iki durumda da toplam açısından bir fark yoktur ancak bir farkı arka planda oluşmaktadır da. Nedeni şu ki
   	Bu heap alanını kontrol eden bir algoritma var. O algoritmanın da kullandığı bir veri 
 	yapısı var. Sonuçta onun da bir veri yapısı var kaydedilen bellek bloklarının adreslerini
 	kaydedeceği bir alana ihtiyaç var. Dolayısıyla her malloc çağrısı bu veri yapısına bir giriş
-	yapmak demek. Yani siz her bellek bloğunun adresini kaydetmek için ektra bir bellek alanı 
+	yapmak demek. Yani siz her bellek bloğunun adresini kaydetmek için ekstra bir bellek alanı 
 	kullanıyorsunuz. Yukarıdaki iki durumdaki fark burada oluşuyor. Yani siz her tahsisat için
 	bir ek bellek alanı kullandığınız için tahsisat sayısı ek kullanılan bellek alanını 
 	arka planda etkiliyor. 
