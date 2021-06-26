@@ -12042,13 +12042,133 @@ olmalıdır.
 	arka planda etkiliyor. 
   	
   
+ # Ders 43 Tarih 17 05 2021
  
+ 
+  - Eğer bir pointer kullanılarak bir bellek bloğu kullanıldığında ve o bellek
+  bloğuyla işimiz tamamlandığında o bellek bloğunu, kullanılan pointer aracılığı
+  ile free ettiğimizde o pointerın artık bir nesne göstermediğini belirtmek
+  için o pointera NULL pointer atanması programcılar tarafından güzel bir 
+  alışkanlık olduğu söylenebilir.
   
+  		free(pd); /*pd allocate edilmiş ve kullanımı tamamlanıp free 
+				edilen bir bellek bloğu adresi*/
+  		pd = NULL;
+		
+
   
-  
-  
-  
-  
+  - function wrapper (fonksiyon sarmalayıcısı)
+		- Bir fonksiyonu doğrudan çağırmak yerine o fonksiyonu
+		çağıran bir fonksiyon oluşturuyoruz ve oluşturulan fonksiyon
+		ile çağırıyoruz. 
+
+  	- Yukarıdaki kullanımda birden fazla tema mevcut.
+  		- Augmentation --> arttırmak, çoğaltmak
+  			- Yani fonksiyonun yaptığı işi yapan ama üzerine
+  			ilave bir iş daha yapan bir fonksiyon tanımlanıyor.
+		- Mesela malloc fonksiyonunu çağıran ama geri dönüş değerinin 
+		NULL pointer olup olmadığını da kontrol eden bir fonksiyon 
+		tanımlayalım.
+		
+``
+void* checked_malloc(size_t n)
+{
+	void* pd;
+	if ((pd = malloc(n)) == NULL) {
+		fprintf(stderr, "bellek yetersiz\n");
+		exit(EXIT_FAILURE);
+	}
+	return pd;
+}
+
+int main()
+{
+	printf("Bir dizi boyutu giriniz:\n");
+	size_t n;
+	scanf("%zu", &n);
+
+	int* pd = (int*)checked_malloc(n * sizeof(int));
+
+	randomize();
+	set_array_random(pd, n);
+	print_array(pd, n);
+
+	free(pd);
+
+	pd = NULL;
+
+}
+``
+
+
+- Fonksiyon Wrapper'a bir örnek daha vermek gerekirse,
+Diyelim ki _itoa() fonksiyonunun parametrik yapısını daha farklı şekilde 
+kullanmak istiyoruz.
+Mesela alışılmış fonksiyonlardan farklı olarak pointer parametre ikinci 
+parametre olarak bildirilmiş. Biz bu parametrenin yerini değiştirelim.
+Bir de diyelim ki bu fonksiyonu hep 10'luk sayı sistemi için kullanacağız.
+Her fonksiyon çağrısında belirtmek istemiyoruz.
+Hadi birlikte bir wrapper yazalım.
+
+		char* itostr(char* pbuf, int val)
+		{
+			return _itoa(val, pbuf, 10);
+		}
+		
+- Yukarıda gördüğünüz gibi function wrapper yapısını kullanarak istediğimiz 
+parametrik yapıda çağırabileceğimiz hale getirdik.
+
+
+#
+
+ 
+- Bir fonksiyon düşünün, bu fonksiyon yaptığı işle ilgili bir dinamik nesne
+oluşturuyor. Yani malloc la nesnenin yerini ayırıyor. Nesneye set ediyor ve bu 
+nesnenin adresini döndürüyor. Sonuçta bir nesnenin adresini döndürüyor ama 
+şimdiye kadar gördüğümüz fonksiyonlardan farklı olarak dinamik ömürlü bir
+nesne adresi döndürüyor. 
+Neden bu yapı önemli?
+Çünkü böyle bir fonksiyonu çağıran kod şimdiye kadar hiç karşılaşmadığımız bir 
+senaryo, bir nesne adresi alacak ama bunun dinamik ömürlü nesne olduğunu bilecek,
+ve bu nesneyi kullandıktan sonra free edecek. Yani aslında fonksiyon bunu 
+dökümantasyonda bunu bir şekilde belli edecek. 
+
+- Yukarıdaki fonksiyonun en tipik örneği:
+- string.h başlık dosyasında
+		
+		char* _strdup(const char* pstr);
+
+- Verdiğiniz adresteki yazının bir kopyasını çıkartıyor ve kopya yazının adresini
+döndürüyor. Ama kopyasını dinamik bir bellek bloğuyla oluşturuyor. Size gelen
+bellek bloğunu işiniz bittiğinde free etmeniz gerekiyor. 
+Bu ihtiyaç duyulan bir fonksiyon çünkü bazı durumlarda bir yazı üzerinde belli 
+değişiklikler yapmamız gerekiyor ama yazının orjinalini bozmamak gibi de bir 
+durum söz konusu olduğunda yazının kopyası üzerinde işlem yapabiliyoruz.
+		
+- Bir örnek verelim;
+
+``
+	
+	char str[SIZE];
+
+	printf("bir yazi girin: \n");
+	sgets(str);
+
+	// bu yazinin tersine ihtiyacımız var
+	// ve bu yazının orijinalini de korumamız gerekiyor.
+
+	char* pd = _strdup(str);
+
+	_strrev(pd);
+	
+	printf("(%s) (%s)\n", str, pd);
+
+	free(pd);
+``
+- Şimdi konuyu daha iyi anlayabilmek için _strdup fonksiyonunu kendimiz yazalım.
+
+
+
   
   
   
