@@ -12167,19 +12167,201 @@ durum söz konusu olduğunda yazının kopyası üzerinde işlem yapabiliyoruz.
 ``
 - Şimdi konuyu daha iyi anlayabilmek için _strdup fonksiyonunu kendimiz yazalım.
 
+``
+char* mystrdup(const char* p)
+{
+	char* pd = (char*)malloc(strlen(p) + 1);
+	if (!pd) {
+		fprintf(stderr, "bellek yetersiz\n");
+		exit(EXIT_FAILURE);
+	}
+	
+	return strcpy(pd, p);  // idiyomatik olarak
+}
+``
 
 
+- Bir örnek yapalım. Bir fonksiyon aldığı iki adresteki yazıları, oluşturduğu dinamik bir bellek
+bloğunda birleştirsin. 
+
+
+``
+
+char* strconcat(const char* p1, const char* p2)
+{
+	char* pd = (char*)malloc(strlen(p1) + strlen(p2) + 1);
+	
+	if (pd == NULL) {
+		fprintf(stderr, "bellek yetersiz\n");
+		exit(EXIT_FAILURE);
+	}
+	strcpy(pd, p1);
+	strcat(pd, p2);
+	
+	return pd;
+	// idiyomatik yazımı:
+
+	//return strcat(strcpy(pd, p1), p2);
+}
+
+int main()
+{
+
+	char s1[SIZE];
+	char s2[SIZE];
+
+	printf("Birinci yaziyi giriniz: ");
+	sgets(s1);
+	printf("Ikinci yaziyi giriniz:  ");
+	sgets(s2);
+
+	char* pd = strconcat(s1, s2);
+
+	printf("(%s) + (%s) = (%s)", s1, s2, pd);
+
+	free(pd);
+}
+``
+  
+  
+- Yukarıdaki örneklerde gördüğünüz üzere fonksiyonun geri dönüş değerinin dinamik bir bellek
+bloğu olması sıklıkla kullanılabiliyor.
+
+- Bir fonksiyonun geri dönüş değerinin dinamik bellek bloğu olup olmadığını nerden anlayabiliriz?
+	- Fonksiyonun dökümantasyonundan. Eğer sizde böyle bir fonksiyon yazarsanız mutlak 
+	dökümante etmelisiniz.
+	
+
+  
+  - Mesela bir static oluşturulmuş fonksiyonumuz olsun. (sık yapılan bir hatadır.)
+	**dikkat örnekten sonraki açıklamaya bak
+
+``
+char* get_name(void)
+{
+	static char buffer[SIZE];
+
+	printf("Bir isim girin: ");
+	sgets(buffer);
+
+	return buffer;
+}
+
+int main()
+{
+	char* p[3];
+
+	for (int i = 0; i < 3; ++i) {
+		p[i] = get_name();
+	}
+
+	for (int i = 0; i < 3; ++i) {
+		puts(p[i]);
+	}
+}
+
+``
+- Yukarıdaki fonksiyonda ekrana hep son girilen değer yazılır. Çünkü burada adres tutulduğu için
+siz hep static bir dizinin adresini tutuyorsunuz ve static dizi en son ne yazıldıysa belleğinde 
+o yazıyı tutuyor. Ekrana o static diziyi yazdırmaya kalktığınızda ise hep aynı yazılıyor.
+
+
+``
+char* get_name(void)
+{
+	static char buffer[SIZE];
+
+	printf("Bir isim girin: ");
+	sgets(buffer);
+
+	char* pd = (char*)malloc(strlen(buffer) + 1);
+	if (!pd)
+		return NULL;  // dinamik bellek bloğu döndürüldü
+
+	return strcpy(pd, buffer);
+}
+
+int main()
+{
+	char* p[3];
+
+	for (int i = 0; i < 3; ++i) {
+		p[i] = get_name();
+	}
+
+	for (int i = 0; i < 3; ++i) {
+		puts(p[i]);
+	}
+
+	for (int i = 0; i < 3; ++i) {  // Burada da elde edilen her yazı için
+									// free fonksiyonuyla bellek iadesi söz konusu
+		free(p[i]);
+	}
+}
+
+``
+  
+  
+- Bir pointer dizi allocate nasıl edebiliriz.
+		
+		int n;
+		
+		// code
+		
+		int** pd = (int**)malloc(n * sizeof(int*)); // türler değişti.
+		
+
+- Bir örnek:
+
+- Mülakatta sorulabilecek sorulardan biri:
+- Çok boyutlu dinamik dizi oluşturmaya dair
+
+``
+// dinamik bir matris oluşturmak
+	size_t row, col;
+
+	printf("matrisin sutun ve satir sayisini giriniz:\n");
+	scanf("%zu%zu", &row, &col);
+
+	int** pd = (int**)malloc(row * sizeof(int*));
+	if (!pd) {
+		printf("bellek yetersiz\n");
+		exit(EXIT_FAILURE);
+	}
+
+	for (size_t i = 0; i < row; ++i) {
+		pd[i] = (int*)malloc(col * sizeof(int));
+		if (!pd[i]) {
+			fprintf(stderr, "bellek yetersiz\n");
+			return 1;
+		}
+	}
+
+	randomize();
+
+	for (size_t i = 0; i < row; ++i) {
+		for (size_t k = 0; k < col; ++k) {
+			pd[i][k] = rand() % 10;
+		}
+	}
+
+	for (size_t i = 0; i < row; ++i) {
+		for (size_t k = 0; k < col; ++k) {
+			printf("%d ",pd[i][k]);
+		}
+		printf("\n");
+	}
+
+	for (size_t i = 0; i < row; ++i) {
+		free(pd[i]);
+	}
+
+	free(pd);
+``
   
   
   
-  
-  
-  
-  
-  
-  
-  
-  
+  # 1:05:01
   
   
   
