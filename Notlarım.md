@@ -12358,28 +12358,314 @@ int main()
 
 	free(pd);
 ``
+- Yukarıdaki yapı için dezavantaj olarak, normal pointerla yapılan çok boyutlu diziye göre,
+bellekte daha fazla boyut alıyor.
+- Bu gerçek anlamda bir çok boyutlu dizi değil. 
+Mesela birinci dizinin içerisindeki;
+		- son eleman, 
+		- bir sonraki dizinin ilk elemanını göstermiyor.
+ - Aşağıdaki kodu çalıştırdığınızda pointerın gösterdiği noktaya ilerleyerek bakarsanız eğer,
+ pointer ikinci satıra geçtiğinde gösterdiği değerler UB oluyor.
+ ``
+ 	size_t row, col;
+
+	printf("Satir ve sutun sayisi giriniz: ");
+	scanf("%zu%zu", &row, &col);
+
+	int** pd = (int**)malloc(row * sizeof(int*));
+
+	if (!pd) {
+		fprintf(stderr, "bellek yetersiz\n");
+		exit(EXIT_FAILURE);
+	}
+
+	for (size_t i = 0; i < row; ++i) {
+		pd[i] = (int*)malloc(col * sizeof(int));
+		if (!pd[i]) {
+			fprintf(stderr, "bellek yetersiz\n");
+			exit(EXIT_FAILURE);
+		}
+	}
+
+	randomize();
+
+	for (size_t i = 0; i < row; ++i) {
+		for (size_t k = 0; k < col; ++k) {
+			pd[i][k] = rand() % 10;
+		}
+	}
+
+	for (size_t i = 0; i < row; ++i) {
+		for (size_t k = 0; k < col; ++k) {
+			printf("%d ", pd[i][k]);
+		}
+		printf("\n");
+	}
+
+
+	int* ptr = pd[0];
+	int n = row * col;
+
+	while (n--) {
+		printf("%d", *ptr++);
+		_getch();
+	}
+
+	for (size_t i = 0; i < row; ++i) {
+		free(pd[i]);
+	}
+
+
+	free(pd);
+
+	
+ ``
+  
+ - Aşağıda ise farklı bir yapıda dizi tanımlıyoruz.
+
+``
+	size_t row, col;
+
+	printf("matrisin satir ve sutun sayisini giriniz:\n");
+	scanf("%zu%zu", &row, &col);
+
+	randomize();
+
+	int* pd = (int*)malloc(row * col * sizeof(int));
+	if (!pd) {
+		fprintf(stderr, "bellek yetersiz\n");
+		exit(EXIT_FAILURE);
+	}
+
+	// şimdi matrisin bir elemanına erişmek için aritmetik hesaplama gerekiyor.
+	// Yani siz pd[0][0] diye bir erişim sağlayamazsınız.
+	// Yani aşağıda siz tek bir dinamik dizi oluşturup sonrasında elemanlarına ulaşıyorsunuz.
+	for (size_t i = 0; i < row; ++i) {
+		for (size_t k = 0; k < col; ++k) {
+			pd[i * col + k] = rand() % 10;
+
+		}
+	}
+	for (size_t i = 0; i < row; ++i) {
+		for (size_t k = 0; k < col; ++k) {
+			printf("%d", pd[i * col + k]);
+		}
+		printf("\n");
+	}
+	printf("-------------------------------------");
+	free(pd);
+	
+``
+ 
+- Yukarıdaki yapının ise bir öncekine göre avantajı daha az bir bellek bloğu kullanmamız oldu.
+
+
+
+- Dinamik bellek ile bir başka çok boyutlu dizi oluşturulması:
+
+``
+	size_t row, col;
+	printf("satir ve sutun sayisi giriniz:\n");
+	scanf("%zu%zu", &row, &col);
+
+	int* pd = (int*)malloc(row * col * sizeof(int));
+
+	if (pd == NULL) {
+		fprintf(stderr, "bellek yetersiz\n");
+		exit(EXIT_FAILURE);
+	}
+
+	randomize();
+
+	int** pp = (int**)malloc(row * sizeof(int*));
+	if (pp == NULL) {
+		fprintf(stderr, "bellek yetersiz\n");
+		exit(EXIT_FAILURE);
+	}
+	
+	for (size_t i = 0; i < row; ++i) {
+		pp[i] = pd + col * i;
+	}
+
+	for (size_t i = 0; i < row; ++i) {
+		for (size_t k = 0; k < col; ++k) {
+			pp[i][k] = rand() % 10;
+		}
+	}
+
+
+	for (size_t i = 0; i < row; ++i) {
+		for (size_t k = 0; k < col; ++k) {
+			printf("%d", pp[i][k]);
+		}
+		printf("\n");
+	}
+	printf("----------------------------------\n");
+
+	free(pd);
+	free(pp);
+``
+
+- Bir mülakat sorusu:
+	- Ekrana dinamik bellek bloğu için ayrılacak int  boyut giriliyor.
+	- Ya ekrana 0 değeri girilirse ne olur?
+	
+	
+			a) NULL pointer döndürür.
+			b) NULL pointer olmayan bir adres olabilir.
+			// yukarıdaki a ve b seçeneklerinin dereference edilmesi UB olur.
+			// a ve b seçeneklerinde adreslerin free işlevine gönderilmesi tanımlıdır.
+
+
+- calloc fonksiyonu:
+
+			void *  calloc(size_t n, size_t sz);
+			
+- malloc'un tek bir parametresi vardı. 
+- Oysa Callocta birinci parametre kaç tane nesne için yer ayırdığım,
+- ikinci parametre ise sizeof değerinin ne olduğu oluyor. 
+
+	- Yani 100 elemanlı bir int dizi için malloc çağrısı;
+			
+			int* p = (int*) malloc(100 * sizeof(int));
+	- iken calloc için;
+
+			int* p = (int*)calloc(100, sizeof(int));
+	- oluyor.
+	- 
+- malloc ile calloc'un ikinci farklılığı ise elde ettiği bellek bloğunu sıfırlıyor oluşudur.
+	- Yani malloc bellek bloğunu çöp değeriyle alırken calloc sıfırlayarak alıyor.
+  
+  
+``
+	size_t n;
+	scanf("%zu", &n);
+
+	int* pd = (int*)malloc(n * sizeof(int));
+
+	if (!pd) {
+		printf("bellek yetersiz\n");
+		return 1;
+	}
+
+	int* pp = (int*)calloc(n, sizeof(int));
+
+	if (!pp) {
+		printf("bellek yetersiz\n");
+		return 1;
+	}
+
+	printf("malloc cagrisi\n");
+	print_array(pd, n);
+
+	printf("calloc cagrisi\n");
+	print_array(pp, n);
+``
   
   
   
-  # 1:05:01
+  - realloc fonksiyonunu inceleyelim:
+  	
+		void* realloc(void *vp, size_t newsize);
+		
+- Birinci parametresi büyütme/küçültme işleminin yapılacağı bellek bloğunun adresi,
+- İkinci parametresi bellek bloğunun yeni boyutu (yani büyütme miktarı değil)
+- Geri dönüş değeri yine başarısızlık durumunda NULL pointer, başarılı olursa 
+bellek bloğunun adresi döndürülür. Ancak burda malloc ve calloc'dan farklı bir durum söz konusu.
+Geri dönüş değerindeki adres çağrının yapıldığı adres olabildiği gibi olmayadabilir. Bu durum bellek
+müsaitliğine göre değişir. Yani bellek müsaitsen aynı adresin sonuna ekleme yapıp aynı adresi 
+döndürebilir. Ama bellek çok da müsait değilse bellek bloğunun adresini değiştirerek yeni bir 
+adres de döndürebilir.
+
+- realloc için bir örnek:
+
+
+``
+	size_t n, n_add;
+	randomize();
+	printf("kac tam sayi: ");
+	scanf("%zu", &n);
+	int* pd = (int*)malloc(n * sizeof(int));
+	if (!pd) {
+		printf("bellek yetersiz\n");
+		return 1;
+	}
+	set_array_random(pd, n);
+	print_array(pd, n);
+	printf("kac tam sayi daha ilave edilmesini istiyorsun?\n");
+
+	scanf("%zu", &n_add);
+	pd = (int*)realloc(pd, (n + n_add) * sizeof(int));
+	if (!pd) {
+		printf("bellek yetersiz\n");
+		return 1;
+	}
+	
+	set_array_random(pd + n, n_add); /*set_array fonksiyonunu bu şekilde 
+									 çağırmamın sebebi baştaki kısıma zaten 
+									 değer atanmıştı tekrar o değerleri 
+									  değiştirmemem gerekiyor.*/
+	print_array(pd, n + n_add); 
+
+	free(pd);
+``
   
   
   
+- Realloc takes time!! 
+	- realloc çağrısı yeni bir bellek biloğu allocate ettiği takdirde normale göre daha
+	fazla zaman alır.
+- Reallocation invalidates pointers!!!
+	- pointerların gösterdiği adres boşta kalabilir yani realloc fonksiyonu bellek adresini
+	taşımış olabilir.
+	
+
+- realloc çağrılarında 1. parametreye NULL pointer geçilirse realloc, malloc gibi davranır.
+
+
+  
+  - Bir örnek:
+
+``
+int ch;
+	int ival;
+	int* pd = NULL;
+	int cnt = 0;
+
+	randomize();
+
+	for (;;) {
+		printf("tam sayi girecek misiniz (e) (h) : ");
+		while ((ch = _getch()) != 'e' && ch != 'h')
+			; // null statement
+		printf("%c\n", ch);
+		if (ch == 'h')
+			break;
+		printf("tam sayiyi girin:   ");
+		ival = rand() % 1000;
+		printf("%d\n", ival);
+
+		pd = (int*)realloc(pd, (cnt + 1) * sizeof(int)); // ilk değer de malloc gibi 
+													// davranıyor.
+
+		if (!pd) {
+			printf("bellek yetersiz\n");
+			return 1;
+		}
+		pd[cnt++] = ival;
+	}
+	if (!pd) {
+		printf("tam sayi girmediniz\n");
+	}
+	else {
+		printf("toplam %d sayi girdiniz\n", cnt);
+		print_array(pd, cnt);
+		free(pd);
+	}
+``
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  # Ders 44 - 24.05.2021
   
   
   
