@@ -12672,7 +12672,7 @@ int ch;
   bağlı liste, ikili arama ağacı, graph. 
   - Fakat bunlardan en fazla kullanılan dinamik dizi. 
   
-  - amotised constant time: normalde constant time ama arada öngörülemeyecek şekilde
+  - amortised constant time: normalde constant time ama arada öngörülemeyecek şekilde
    ek olarak bir maliyet daha çıkıyor.
   
   - Dinamik dizi veri yapısı, ögelerin dinamik olarak allocate edilmiş bir bellek alanında ardışık 
@@ -12682,7 +12682,7 @@ int ch;
   - size, kapasiteye eşitken, eklenecek yeni bir öge için yer yok demektir. Bu durumda bir ekleme 
   talebinde reallocation (yani bellek bir yerden bir yere taşınıyor) gerçekleşiyor. Ama yeni 
   kapasite, eski kapasiteden bir buçuk veya iki kat gibi bir kat olarak daha büyük bir şekilde
-  elde ediliyor. reallocation'un ciddi bir maliyeti olduğu için realllocation'dan kaçınmak gerekiyor
+  elde ediliyor. reallocation'ın ciddi bir maliyeti olduğu için realllocation'dan kaçınmak gerekiyor
   Çünkü reallocation zaman alıcı bir işlemdir. Hemde pointerlar geçersiz hale gelebiliyor.
   - Nasıl bundan kaçınabiliriz?
   	- Dinamik dizide örneğin maks 500 öge tutacağınızı önceden öngörüyorsak, baştan 500 tane 
@@ -12736,17 +12736,17 @@ Type qualifiers (modifiers) (tür niteleyicileri)
   
   
 - register: özetle modu kullanımdan düşmüş anahtar sözcük.
-	- derleyiciye bu değişkenin register'da (yazmaçta) tutulması ricasını istiyorsunuz.
+	- Derleyiciye bu değişkenin register'da (yazmaçta) tutulması ricasını istiyorsunuz.
 	- register, işlemci de fiilen işlemi yapıldığı bellek alanı. 
-	- programın daha hızlı çalışması için ön bellek alanında tutulmasını istediğimizde 
+	- Programın daha hızlı çalışması için ön bellek alanında tutulmasını istediğimizde 
 	kullanıyoruz.
-	- neden kullanımı azaldı? Artık derleyiciler optimizasyonu çok iyi yaptığı için zaten 
+	- Neden kullanımı azaldı? Artık derleyiciler optimizasyonu çok iyi yaptığı için zaten 
 	registerda tutulacak nesneleri belirleyip default olarak yapıyor.
 	
 	- register anahtar sözcüğü :
-		- yerel ve parametre değişkenleri için kullanılabilir.
-		- global değişkenler için kullanımı söz konusu değildir.
-	- register değişkenleri adres operatörünün (&) operantı olması geçersizdir.
+		- Yerel ve parametre değişkenleri için kullanılabilir.
+		- Global değişkenler için kullanımı söz konusu değildir.
+	- Register değişkenleri adres operatörünün (&) operantı olması geçersizdir.
 
 			register int x = 10;
 			int* p = &x; // hata
@@ -12881,7 +12881,7 @@ kullanıyor.
   
 - Bir mülakat sorusu:
 
-	- Bir fonksiyon çağırın ve ekrana o fonksiyon kaçıncı ken çağırıldığını yazdırsın.
+	- Bir fonksiyon çağırın ve ekrana o fonksiyon kaçıncı kez çağırıldığını yazdırsın.
 
 			void func(void)
 			{
@@ -12898,32 +12898,114 @@ kullanıyor.
 
 - İsimlerin bağlantı (linkage) kavramı:
 
-	-Bir isim farklı kaynak dosyalarda aynı isimler kullanıldığında,
+	- Bir isim farklı kaynak dosyalarda aynı isimler kullanıldığında,
 			    bu ismin aynı varlığı mı, yoksa farklı varlığı mı gösterdiğini 
 			    belirleyen özelliğine isimlerin bağlantı özelliği denir.
-		- external linkage: farklı kaynak dosyalardaki iki aynı isim aynı varlığa işaret
-				   ediyorsa external linkage  denir.
-		- internal linkage: ama aynı isim farklı dosyalarda kullanılmasıyla birlikte, 
+		- external linkage: Farklı kaynak dosyalardaki iki aynı isim aynı varlığa işaret
+				   ediyorsa external linkage denir.
+		- internal linkage: Ama aynı isim farklı dosyalarda kullanılmasıyla birlikte, 
 				    farklı varlıkları gösteriyorsa (fonksiyon ismi,değişken ismi vs)
 				    internal linkage deniyor.
-		- no linkage: aynı dosyada bile her yerde bilinmeyen kullanılamayan isimlerin
+		- no linkage: Aynı dosyada bile her yerde bilinmeyen kullanılamayan isimlerin
 		 bağlantı özelliğine de no linkage deniyor.
 		 
   
-  # 2.06.32
+ - Tanımlanan isimlerin, yani değişken veya fonksiyon ismi gibi, iki şekilde tanımlayabilirsiniz.
+ 	- Birincisi sadece tanımlanan dosyadan erişim sağlanacak şekilde. (iç bağlantı)
+ 	- İkincisi ise tüm kaynak dosyalardan erişim sağlanabilecek şekilde. (dış bağlantı)
 
+
+			//global alanda
+			int x = 10; // external linkage (dış bağlantıı)
+			//Yani diğer kaynak dosyalarda da x ismi kullanıldığında 
+			// yukarıdaki varlığı işaret edicek
+			
+			// aynı şekilde herhangi bir keyword kullanmadan tanımlanan fonksiyonlar
+			// da external linkage oluyor.
+			
+			void func(int x)
+			{
+				
+			}
+			
+- Eğer bir kaynak dosyada(.c) tanımı yapılmış bir değişkeni farklı kaynak dosyalarda
+kullanmak istiyorsak;
+		- O kaynak dosyada tanımı yapılır ve o kaynak dosyaya ilişkin başlık (.h) dosyasında
+		da extern anahtar kelimesi ile bildirimi yapılmalı. Bu nesneye erişimin sağlanacağı
+		kaynak dosyaya da ilgili başlık dosyası(.h) include edilmelidir.
+		
+		//nutility.c kaynak dosyasında yazılıyor.
+		int g = 10;
+		
+		// nutility.h 
+		extern g;
+		
+		// main.c 
+		
+		#include "nutility.h"
+		
+		int main()
+		{
+			printf("%d", g);
+			g = 20;
+			printf("%d", g);
+		}
+			
+- Burada fonksiyon da extern anahtar kelimesi kullanılmasına gerek yoktur.
+- Asla ve asla global bir değişkenin tanımı başlık dosyası içerisinde yapmayınız.
+  
+ 
+- Peki biz bir değişkenin sadece o kaynak dosyada kullanılması için nasıl bir tanımlama yapmalıyız?
+	- Siz global alanda static değişkeni kullandığınızda bu değişken (iç bağlantı- internal 
+	linkage) ait demek.
+	
+			static int g = 20; // internal linkage
+			
+			int main()
+			{
+				
+			}
+  
+  - Yukarıdaki durum fonksiyonlar içinde geçerli. Yani siz bir fonksiyonu static anahtar kelimesiyle
+  tanımlarsanız, o fonksiyon sadece o kaynak dosya içerisinde erişime olanak sağlıyor.
   
   
   
+  - Global bir değişkenin birden fazla kaynak dosyada ismi ile kullanılmasını istiyorum.
+  	- Bir kaynak dosyada tanımlayacaksınız.
+  	- Başlık dosyasında extern bildirimini yapacaksınız.
+
+  - Global bir değişkeni tek bir kaynak dosyada ismi ile kullanılmasını istiyorsak, diğer kaynak
+  dosyalarda kullanılmamasını istemiyorsak;
+  	- O kaynak dosya içerisinde 
+  	
+			static int g = 10; 
+			// şeklidne tanımlama yapılır.
+  	- Başlık dosyasına bir bildirim konulmaz.
+
+	
   
   
-  
-  
-  
-  
-  
-  
-  
+  - Bir fonksiyonun birden fazla kaynak dosyada ismi ile çağırılabilmesini istiyorum.
+  	- Bir kaynak dosyada tanımlanacak. Başlık dosyasında "extern" kelimesi kullanılması zorunlu
+  	olmadan bildirimi yapılmalı.
+	
+  - Bir fonksiyonu tek bir kaynak dosyada çağırılmasını istiyorsak (diger kaynak dosyalarda 
+  kullanılmasını istemiyorsak);
+  		
+		static void func(void)
+		{
+			
+		}
+	- Başlık dosyasına bildirim konulmayacak.
+ - Yukarıdaki yapılara private function deniyor. Yani o fonksiyon sadece o kaynak dosyaya özgü.
+
+# Ders 45 28.05.2021
+
+
+
+
+
   
   
   
