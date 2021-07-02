@@ -12667,6 +12667,277 @@ int ch;
   
   # Ders 44 - 24.05.2021
   
+  - Veri yapısı: Mantıksal bir ilişki içindeki verileri erişilebilir şekilde belirli bir mantık 
+  altında bir arada tutan düzeneklere veri yapısı diyoruz. hash table(içerik tablosu), dinamik dizi,
+  bağlı liste, ikili arama ağacı, graph. 
+  - Fakat bunlardan en fazla kullanılan dinamik dizi. 
+  
+  - amotised constant time: normalde constant time ama arada öngörülemeyecek şekilde
+   ek olarak bir maliyet daha çıkıyor.
+  
+  - Dinamik dizi veri yapısı, ögelerin dinamik olarak allocate edilmiş bir bellek alanında ardışık 
+  olarak tutulduğu veri yapısı, Burada kapasite(capacity) ve size kavramı var.
+  *allocate* edilen bellek blogunun öge cinsinden sayısına kapasite deniyor.
+  *Fiilen* tutulmakta olan öge sayısına size deniyor. 
+  - size, kapasiteye eşitken, eklenecek yeni bir öge için yer yok demektir. Bu durumda bir ekleme 
+  talebinde reallocation (yani bellek bir yerden bir yere taşınıyor) gerçekleşiyor. Ama yeni 
+  kapasite, eski kapasiteden bir buçuk veya iki kat gibi bir kat olarak daha büyük bir şekilde
+  elde ediliyor. reallocation'un ciddi bir maliyeti olduğu için realllocation'dan kaçınmak gerekiyor
+  Çünkü reallocation zaman alıcı bir işlemdir. Hemde pointerlar geçersiz hale gelebiliyor.
+  - Nasıl bundan kaçınabiliriz?
+  	- Dinamik dizide örneğin maks 500 öge tutacağınızı önceden öngörüyorsak, baştan 500 tane 
+  	ögeyi tutabilecek kapasiteyi baştan ayırma şansınız var. 
+		- Bu işleme *reserve* adı veriliyor tipik olarak. 
+
+- ödev: 
+  		
+			isim girecek misiniz (e) (h) 
+			e
+			ismi girin : mustafa
+			isim girecek misiniz (e) (h) 
+			e
+			ismi girin : ezgi
+			isim girecek misiniz (e) (h) 
+			e
+			ismi girin : ezgi // aynı isim girince uyarı verecek
+			bu isim daha önce girildi.
+			yeni isim girin: hakan
+			
+			ismi girin: name
+			
+			h yanıtı verildiğinde
+			toplam 34 isim girildi. isimler alfabetik olarak ekran yazılcak
+			programda (memory leak ) olmayacak.
+			
+
+Storage Class Specifiers (Yer Belirleyicileri)
+
+- auto  -> çok az kullanılıyor artık yok sayabiliriz. 
+- register
+- extern
+- static
+
+Type qualifiers (modifiers) (tür niteleyicileri)
+
+- const
+- volatile
+- restrict (C99)
+
+# Storage Class Specifiers (Yer Belirleyicileri)
+  
+  - linkage (bağlantı)
+ 
+ 
+		auto int x = 5; // bir değişkenin otomatik ömürlü olduğunu anlatır.
+		
+- auto anahtar sözcüğünü global alanda kullanımı sentaks hatası.
+- auto keyword, parametre değişkeni olarak da kullanılamaz.  
+  
+  
+  
+- register: özetle modu kullanımdan düşmüş anahtar sözcük.
+	- derleyiciye bu değişkenin register'da (yazmaçta) tutulması ricasını istiyorsunuz.
+	- register, işlemci de fiilen işlemi yapıldığı bellek alanı. 
+	- programın daha hızlı çalışması için ön bellek alanında tutulmasını istediğimizde 
+	kullanıyoruz.
+	- neden kullanımı azaldı? Artık derleyiciler optimizasyonu çok iyi yaptığı için zaten 
+	registerda tutulacak nesneleri belirleyip default olarak yapıyor.
+	
+	- register anahtar sözcüğü :
+		- yerel ve parametre değişkenleri için kullanılabilir.
+		- global değişkenler için kullanımı söz konusu değildir.
+	- register değişkenleri adres operatörünün (&) operantı olması geçersizdir.
+
+			register int x = 10;
+			int* p = &x; // hata
+			
+
+  - static anahtar sözcüğünün iki anlamı var:
+	- global isim alanında kullanılması
+	- blok içerisinde ayrı bir anlama sahip.
+
+- Blok içerisinde kullanılan static keyword'un ne anlama geldiğini daha önce gördük.
+
+		void func()
+		{
+			static int y = 20; // static yerel değişken
+			int x = 10; // otomatik yerel değişken
+		}
+  
+  
+  
+  - static yerel değişken ile global değişken arasındaki fark,
+  	- static yerel değişkenleri sadece fonksiyon içerisinde olduğu sürece bellekte korunuyor
+  	yani scope'u fonksiyon içerisinde tanımlı.
+	- global değişkenlere her yerden ulaşabiliyoruz. Scope'u tüm program boyunca devam etmekte.
+	- Yani ikiside static ömürlü iken scope'ları birbirinden farklı.
+
+
+
+- Çağrılan bir fonksiyonun çağıran fonksiyona bir değer iletmesi için yollardan biri static bir 
+yerel değişkenle değer döndürmek.
+	- static yerel değişkenlerin adresini döndüren fonksiyonlar.
+	
+- rastgele bir password oluşturan fonksiyon.
+	- fonksiyona bir adres gönderilir. parolayı o adresteki diziye yazılır.
+	- Ben static yerel bir dizide parolayı oluşturup  ve onun adresini döndüreceğiz.
+	- Ben her parola talebi için bir dinamik dizi oluşturup o dinamik dizinin
+	adresini döndüren bir fonksiyon.
+	
+	
+  
+  - fonksiyona bir adres gönderilir. parolayı o adresteki diziye yazılır.
+  Yukarıdaki yol için bir örnek:
+  
+``
+char* create_password(char* p)
+{
+	size_t len= rand() % 8 + 4;
+
+	for (size_t i = 0; i < len; ++i) {
+		p[i] = rand() % 26 + 'a';
+	}
+	p[len] = '\0';
+	return p;
+}
+
+int main()
+{
+	char buffer[100];
+
+	randomize();
+
+	create_password(buffer);
+	
+	printf("parola : (%s)\n", buffer);
+}
+``
+
+
+Ben static yerel bir dizide parolayı oluşturup  ve onun adresini döndüreceğiz.
+ - yukarıdaki durum için örnek:
+
+``
+char* create_password(void)
+{
+	static char buffer[100];
+	size_t len= rand() % 8 + 4;
+
+	for (size_t i = 0; i < len; ++i) {
+		buffer[i] = rand() % 26 + 'a';
+	}
+	buffer[len] = '\0';
+
+	return buffer;
+}
+
+int main()
+{
+	randomize();
+
+	char* p = create_password();
+	printf("(%s)\n", p);
+	
+}
+``
+Ben her parola talebi için bir dinamik dizi oluşturup o dinamik dizinin
+	adresini döndüren bir fonksiyon.
+	- Yukarıdaki tanıma bir örnek:
+	
+``
+char* create_password(void)
+{
+	size_t len= rand() % 8 + 4;
+
+	char* p = (char*)malloc(len + 1);  // sizeof(char) = 1 olduğundan.
+	// dinamik bellek alanı kontrolü yapıldığı varsayalım.
+
+	for (size_t i = 0; i < len; ++i) {
+		p[i] = rand() % 26 + 'a';
+	}
+	p[len] = '\0';
+
+	return p;
+}
+
+int main()
+{
+	randomize();
+
+	char* ptr = create_password();
+
+
+	puts(ptr);
+	free(ptr);
+	
+}
+``
+  
+  
+- Bir fonksiyon kendisine daha önce yapılan çağrılardan elde ettiği verileri daha sonraki çağrılarda
+kullanıyor.
+
+
+  
+- Bir mülakat sorusu:
+
+	- Bir fonksiyon çağırın ve ekrana o fonksiyon kaçıncı ken çağırıldığını yazdırsın.
+
+			void func(void)
+			{
+				static int cnt = 0;
+				
+				printf("%d kez cagirildi\n", ++cnt);
+			}
+			int main()
+			{
+				func();
+				func();
+			}
+
+
+- İsimlerin bağlantı (linkage) kavramı:
+
+	-Bir isim farklı kaynak dosyalarda aynı isimler kullanıldığında,
+			    bu ismin aynı varlığı mı, yoksa farklı varlığı mı gösterdiğini 
+			    belirleyen özelliğine isimlerin bağlantı özelliği denir.
+		- external linkage: farklı kaynak dosyalardaki iki aynı isim aynı varlığa işaret
+				   ediyorsa external linkage  denir.
+		- internal linkage: ama aynı isim farklı dosyalarda kullanılmasıyla birlikte, 
+				    farklı varlıkları gösteriyorsa (fonksiyon ismi,değişken ismi vs)
+				    internal linkage deniyor.
+		- no linkage: aynı dosyada bile her yerde bilinmeyen kullanılamayan isimlerin
+		 bağlantı özelliğine de no linkage deniyor.
+		 
+  
+  # 2.06.32
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
