@@ -13003,17 +13003,120 @@ kullanmak istiyorsak;
 # Ders 45 28.05.2021
 
 
+- Diğer programlama dillerinde bir değişkeni sadece o kaynak dosyaya erişilebilir yapabilmek için
+private sözcüğü kullanılıyor. Bizde şöyle bir hile yaparak bunu sağlayabiliriz.
+
+		// kaynak dosyanın içerisinde yazılıyor.
+		#define PRIVATE  static
+		
+		PRIVATE const int primes[] = { 2, 3, 4, 7 ... };
+		
+		// ilerde OOB konusunda sıkça kullanacağız.
+		
+		#define PUBLİC  
+		
+		// dışarıya açılan nesne için kullanım şekli.
+		
+- İnclude ettiğimiz birden fazla başlık dosyasından gelen isimler çakışırsa;
+- Yani siz iki farklı başlık dosyası include ettiniz. 
+
+		#include "rudility.h"
+		#include "nudility.h"
+- Yukarıdaki iki kaynak dosyada da aynı isimli değişken kullandınız.
+Siz bu programı çalıştırmaya çalıştığınızda karşınıza linker hatası çıkacaktır.
 
 
+- Bir projede dış bağlantıya açılmış isimler tek olmalı, çakışmamalı. Bu durum için
+fonksiyonu veya o değişkeni kullanmanıza gerek yoktur. 
+
+- Bu problemin önüne geçmek için başlık dosyasında bildirimler yapılırken isimlere başlık 
+dosyasıyla alakalı tipik ön ek kullanılıyor.
+	- Buna şöyle diyorlar:
+	
+			Global Namespace Pollution Problem
+			
+
+- C++ ve farklı dillerde, C'nin yapısından farklı olarak namespace tanımlayarak kendi içinde 
+namespace oluşturabilirken, C'de sadece global namespace mevcut. Ek bir namespace tanımı 
+yapamıyorsunuz.
+
+
+- Bir de function overloading var. C'de bir fonksiyon ismini farklı iki fonksiyonda kullanamazken,
+C++ gibi dillerde iki farklı parametrik yapıya ait fonksiyonu ayrı olarak tanımlayabiliyoruz.
+
+
+- Bir mülakat sorusu:
+		
+	- Herhangi bir kaynak dosyanın içerisinde bir fonksiyon tanımlanmış ama bu fonksiyon aynı
+	kaynak dosya içerisinde hiç çağırılmamış. Derleyicinin böylesi bir durumda bir uyarı 
+	vermesi sizce olumlu olur mu bir fayda sağlar mı, anlamı olur mu?
+		
+			void func(int x) 
+			{
+				
+			}
+	- Fonksiyon yukarıdaki bir yapıda.
+	- Cevap şu olmalı:
+		
+			Tabi ki uyarı mesajı vermemelidir. Bu fonksiyon görüldüğü üzere external 
+			yapıda. static anahtar sözcüğü  olmadığına göre dışarıya açılmış bir 
+			fonksiyon. O zaman bizim neden bu kaynak dosyada bu fonksiyonu çağırmamız 
+			gereksin ki. Diğer modüller tarafından çağırılma ihtimali kesinlikle 
+			unutulmamalıdır.
+	
+	- Eğer soru şu şekilde sorulursa;
+	
+			static void func(int x)
+			{
+				
+			}
+	- Yukarıdaki şekilde tanımlanması, bu fonksiyonun diğer kaynak dosyalardan çağırılması
+	ihtimalini ortadan kaldırıyor. Bu sebeple derleyicinin uyarı mesajı vermesi bizim 
+	yararımıza olacaktır.
+	
+			
+  - Yani toparlarsak;
+
+		static int x = 10; // x sadece bu kaynak dosyada kullanılabilir.
+		static void func(int x)
+		{
+			//func fonksiyonu sadece bu kaynak dosyada kullanılabilir.
+		}
+		
+
+
+- Geriye kalan 3 anahtar sözcüğü kaldı.
+
+		// type qualifiers ( type modifiers)
+		- const
+		- volatile
+		- restrict   C99 ( C++ da yok)
+
 
   
+ - const anahtarı tekrar edelim:
+
+- const correctness : C ve C++'da yazılan kodların kalitesini belirleyen kriterlerden en
+önemlilerinden biridir.(const doğruluğu)
+- const anahtar sözcüğünün kullanımı, sentaks açısından bir hata olmasa da semantik açıdan problem 
+oluşturan kodlardır. Bu kritere göre const anahtar sözcüğü kullanılması gereken her yer de 
+kullanılmış mı onu sorgulayan bir kriterdir.
+
+		const int x = 10; // x hayata 10 ile geldi ve ömrü boyunca değeri 10 olucak.
+		
+
+- Value category
+	- modifiable L value (değeri değiştirilebilen)
+	- non - modifiable L value ( değeri değiştirilemeyen)
+
+- Siz const bir değişken tanımlayıp değiştirmeye kalkarsanız alacağınız hata:
+
+		expression must a modifiable lvalue
+		
+				- olacaktır. 
   
   
-  
-  
-  
-  
-  
+  #00:57:35
   
   
   
