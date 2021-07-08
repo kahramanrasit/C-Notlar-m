@@ -13116,8 +13116,177 @@ kullanılmış mı onu sorgulayan bir kriterdir.
 				- olacaktır. 
   
   
-  #00:57:35
+  - Neden const kullanmalıyız??
+  	- Kendimize yardımcı oluyoruz. Öyle değerler  var ki değerleri değişmemesi gerekiyor.
+  	Değiştirmeniz lojik bir hataya yol açıyor diyelim. Siz const kullandığınızda bu değerleri 
+	sabitlemiş oluyorsunuz ve yanlışlıkla bile 
+	değişme ihtimalini ortadan kaldırıyorsunuz. Yani const kullanarak bir nesne tanımlandığında
+	o nesneyi bir şekilde değiştirmek istendiğinde sentaks hatası alırsınız.
+	Mesela bir asal sayı dizisi kullandığınızı varsayalım. Bu dizinin değerlerinin hep sabit
+	kalması gerekiyor. Eğer herhangi bir noktada bu değerlerden biri değiştirilirse bu durum 
+	ciddi lojik hatalara yol açabilir.
+	Yani kısaca lojik açıdan değeri değişmemesi gereken nesneleri const anahtar sözcüğü ile 
+	tanımlarız.
+	- İkincisi yazdığınız kodu okuyan kişiye de bilgi veriyorsunuz. Yani okuyan kişiye bu 
+	verilerin değiştirilmemesi gerektiği bilgisini veriyorsunuz ve kodu okuyan kişi de 
+	bu nesneyi ona göre kullanabiliyor.
+		- Mutable : Değiştirilebilir.
+		- İmmutable : Değiştirilemez. (C'de const)
+	
+			int const x = 10; // şeklinde kullanım da söz konusudur.
+	- const anahtar sözcüğü bir de derleyicinin optimizasyonuna da yardımcı oluyor. 
+	siz bir nesnenin değişmeyeceğini derleyiciye bildirdiğinizde derleyici de ona göre 
+	bir optimizasyon seçerek daha verimli bir optime sağlıyor.
+	
+	
+	- Asla, asla ve asla const bir değişkeni değiştirme girişiminde bulunmayınız.
+
+			const int x = 10;
+			
+			int *p = (int*)&x;
+			*p = 34; // UB
+			
+   	- Top level const (const pointer)
+
+			int x = 10;
+			int* const p = &x; 
+			p = &y; // hata
+			*p = 20; // doğru kullanım.
+
+	- pointer to const (low level const)
+
+			int x = 20;
+			const int* p = &x;
+			*p = 40 // hata
+			p = &y // geçerli
+			
+  	- const pointer to const int
+  		
+			int x = 10;
+			int y = 30;
+			const int* const p = &x;
+			*p = 30; // hata
+			p = &y; // hata
+			
+	- set function, setter function, mutator function
+
+		void func(T *p);
+		// yukarıdaki gibi bir fonksiyon bildirimi gördüğümüzde
+		// fonksiyona gönderilen adresteki nesnenin değerini değiştirmek için
+		// bu fonksiyon çağırılacağı çıkarımı yapılmalıdır.
+		
+	- Şimdi çok tartışılan bir konuyu ele alalım. 
+		- Bir fonksiyona int bir nesne gönderilsin. Bu fonksiyon çağrısı call by value 
+		olduğu için aslında derleyici açısından da kodu okuyan kişi açısından da 
+		bir fark teşkil etmiyor. Çünkü fonksiyona gönderilen nesne değiştirilmiyor. 
+		Fonksiyona gönderilen nesne kopyalanıyor. Ve bu kopyalanan nesne değiştiriliyor.
+		
+		
+  			void func(const int x);
+			void func(int x);
+			
+
+  	- Geri dönüş değeri olarak kullanılması:
+
+			const T *func(void);
+			
+  	- Yukarıdaki fonksiyon kullanıldığında geri dönüş değerinin adresini siz değiştiremezsiniz.
+  	Yani size gelen geri dönüş değerini okuyarak ordaki nesneye erişim sağlarsınız ama o 
+	pointerdaki adresi değiştiremezsiniz.
   
+  
+  			const int x; // sentaks hatası değil ama yanlış
+			// çöp değeri değiştirmeyeceğim diyorsunuz.
+			
+			const int x = 20; // x'i burada sabit ifadesi olarak bildirsen de
+			int a[x]; // x'in sabit ifadesi gereken yerlerde kullanımı sentaks hatası
+			oluyor. 
+  
+  			// bir kaynak dosyanın içerisinde global alanda tanımlama yapılıyor.
+			const int x = 10; /* const anahtar sözcüğünün kullanılması veya 
+					   kullanılmaması iç veya dış bağlantı oluşunu etkilemiyor.
+					   Yani yukarıdaki const int x nesnesi external(dış) 
+					   bağlantıya açık.*/ 
+  			static const int x = 10; // iç (internal) bağlantıya ait.
+			
+			
+  
+  
+  # Volatile Keyword 
+  
+  - Şimdiye kadar bir değişkenin tanımlanmasından sonra o değişkeni bizim yazdığımız kodlarda
+  değiştiğini gördük.
+  		
+				int x = 10;
+				x = 20; // gibi
+				func(&x); //fonksiyon x'i değiştirecek gibi
+				
+
+  - Öyle senaryolar var ki sizin yazdığınız kod değişkenin değerini  değiştirmese de, program 
+  dışı kaynaklar bu değeri değiştirebiliyor. 
+  	- Önceden belirlenmiş bir nesnenin adresine dışardan bir erişim ile ulaşılıp 
+  	değiştirilebiliyor.
+	- Buna kısaca program dışı kaynaklar tarafından değişkenin değiştirilmesi diyoruz.
+	- Kesme(inturrupt) ile ilgili olabilir. Program akışı dışında oluşturulmuş bir durum bu.
+
+- Eğer program dışı kaynaklar tarafından bir değişkenin değiştirileceğini derleyici bilmezse,
+bir takım optimizasyonlar yapıyor. O bellekteki nesneye erişmek yerine onun daha önce register'da
+tutulan değerini kullanabiliyor. Böylece programımızın lojik yapısında belli farklılıklar oluyor.
+
+  - Mesela bir x nesnesi tanımlayalım. Sonra bu x nesnesiyle sonsuz döngüye girelim. 
+  Bu durumda siz bu x değişkenini dışarıdan erişilebilir şekilde tanımlamazsanız, 
+  x nesnesine dışarıdan erişilip değiştirilse bile derleyici x'in register'daki değerini kullanıyor
+  ve sadece kaynak kodlara bakıyor. Bu durumda x değişkeni program dışı kaynaklar tarafından 
+  değiştirilse de derleyici bunun farkına varamıyor.  
+  
+  - İşte böyle durumlarda nesneyi volatile anahtar kelimesi ile tanımlanır. Yani siz derleyiciye ve 
+  okuyucuya diyorsunuz ki x değişkeninin değeri sen görmesende program dışı kaynaklar tarafından 
+  değiştirilebilir.  Yani derleyiciye diyoruz ki x'i gördüğün yerde herhangi bir optimizasyon 
+  yapmayacaksın ve x'in bellek alanına erişip, oradaki değeri tekrar get ediceksin. Yani x her 
+  kullanıldığında optimize edilmeden gidip bellek alanına bakarak x'in değerinin okunmasını 
+  derleyiciden istemiş oluyorsunuz. 
+  
+  - Çoğunlukla böyle (memory map) değişkenlerer pointerlar yoluyla ulaşılıyor. 
+  - Mesela siz bir tanımlama yaptınız.
+
+		int *p = (int*)0xba12;
+		
+  - Derleyici p pointerını her kullanımda belleğe gidip değerine bakmak yerine register'da tutup
+  belleği açma işleminden optimize edebilir (yaygın kullanılan bir optimizasyon tekniği)
+  
+  - Ama siz volatile ile tanımladığınızda optimize edilmesini ortadan kaldırıyorsunuz ve derleyici
+  her p pointer'ının kullanımında belleğe gidip bakıyor. 
+  
+  
+  - volatile anahtar kelimesi de const'daki gibi konumu önemli:
+  
+  		volatile int* p = (int*)0xba12;
+		*p --> volatile
+		p --> volatile değil
+		
+		int* volatile p = (int*)0xba12;
+		p --> volatile 
+		*p --> volatile değil 
+		
+# restrict
+- C99 ile standardlara eklendi .
+- C++'da bu anahtar sözcük yok.
+		
+		func(int* restrictp, int* q); 
+		// bu fonksiyona geçilen adreslerdeki nesnelerin aynı nesneyi gösterme ihtimali yok.
+		
+  
+- Siz restrict anahtar sözcüğünü kullanmadan bir fonksiyonda adres üzerinden işlem yaparsanız,
+derleyici o pointer'ın gösterdiği adresdeki nesnenin değişip değişmeyeceğinden emin olamadığı için
+o nesne üzerinde bir optimizasyon yapamıyor. Yani o nesneyi gösteren başka bir pointer olabilir.
+Ama siz restrict anahtar sözcüğüyle bunu belirttiğinizde artık derleyiciye garanti vermiş 
+oluyorsunuz. Böylece derleyici optimizasyon yapabiliyor.
+	- Burada siz fonksiyona verdiğiniz garantiye uymazsanız UB'ye yol açabilir. 
+	Yani o fonksiyonda bir nesneyi iki farklı adres gösterirse siz bu verdiğiniz garantiyi
+	çiğnemiş oluyorsunuz bu da derleycinin optimizasyonuna göre UB'ye yol açıyor.
+	
+
+# 45 ders
   
   
   
