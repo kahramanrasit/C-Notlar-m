@@ -13286,7 +13286,19 @@ oluyorsunuz. Böylece derleyici optimizasyon yapabiliyor.
 	çiğnemiş oluyorsunuz bu da derleycinin optimizasyonuna göre UB'ye yol açıyor.
 	
 
-# 45 ders
+# Ders 46 - 31 05 2021
+
+
+# User - Defined Types (Programcı tarafından "kodla" oluşturulan türler)
+	
+- Structures(yapılar)
+- Union(birlikler)
+- Enumarations(numaralandırmalar)
+
+
+# 00:09:59
+
+
   
   
   
