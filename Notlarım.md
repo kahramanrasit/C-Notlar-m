@@ -13291,14 +13291,542 @@ oluyorsunuz. Böylece derleyici optimizasyon yapabiliyor.
 
 # User - Defined Types (Programcı tarafından "kodla" oluşturulan türler)
 	
-- Structures(yapılar)
-- Union(birlikler)
-- Enumarations(numaralandırmalar)
 
 
-# 00:09:59
+- C dili türleri (data types) iki ana kategoriye ayırıyordu.
+	- Basic types (temel türler), 'fundamental types', 'primitive types' da denilebilir.
+		- Dil tarafından hazır gelen türler; int, double gibi..
+	- User Defined Types
+		- Dilin bazı araçlarını kullanarak kendi türümüzü kendimiz oluşturabiliyoruz.
+		Bunun için belli bildirimler yapmamız gerekiyor ve üretimde gerçekten bu türler 
+		çok sık kullanılıyor.
+		Yani User Defined Types, dil ile hazır olarak gelmeyen ancak bir bildirim ile
+		kullanılabilir hale getirdiğimiz türler olarak tanımlayabiliriz.
+		
+		
+- User Defined Type'ı oluşturmak için 3 tane araç var:
+	- Structures (yapılar)
+	- Union (birlikler)
+	- Enumarations (numaralandırmalar)
 
 
+
+# Structures 
+
+- Yapılar herşeyden önce problem domeninde ya da çözüm domeninde ki varlıkların yazılımsal olarak
+ betimlenmesine onların, kod içerisinde temsil edilmesine yarıyorlar.
+	- Örneğin matematikteki bir matris, ya da matematikte bir polinom birer yapı ile ifade 
+	edilebilir.
+	- Diğer taraftan bir dosya, bir resim, bir mp3 dosyası bir yapı ile ifade edilebilir.
+	
+- Diziyle yapının belli noktalarda benzerliği olsa da dizilerde elemanlar aynı türden olmak zorunda 
+iken yapıda böyle bir zorunluluk söz konusu değildir.
+
+	
+- Bir yapıyı oluşturmamız için önce bildirimini yapmamız gerekiyor. Bu bildirim ile 
+derleyici bu türün varlığından haberdar oluyor.
+	- Structure declaration
+	
+```
+
+
+
+		struct Data {
+			int a, b, c;
+			double dval;
+		};
+```
+- structure tag denilen bir ıdentifier (yukarıda Data) 
+- Yukarıdaki structure'ın içinde bildirilen isimlere 'structure members' denir.
+- Bir yapının en az bir elemanı olmak zorundadır.
+
+- Yukarıda oluşturulan türün ismi 'struct Data' olur. Yani sadece Data ismini kullanarak 
+bir yapıyı kullanamazsınız. 
+
+
+		struct Data {
+			int a, b, c;
+			double dval;
+		};
+
+		int main()
+		{
+			struct Data mydata; // Bir ya
+		}
+- Yukarıda kullanımı gösterilmiştir.
+- Bir yapı türünün sizeof değeri (storage ihtiyacı) elemanlarının sizeof değerlerinin toplamı
+kadardır. (İleride "alignment" hizalama konusunda eklemeler yapılacaktır.)
+
+- Yukarıdaki bildirim yapıldıktan sonra mydata'nın türü 'struct Data' olur.
+
+
+
+- Peki biz bu türü nasıl kullanıyoruz.
+
+- Bu türden bir değişken tanımlanabilir, bu türden bir dizi tanımlanabilir, bir pointer 
+tanımlanabilir, bir fonksiyonun geri dönüş türü olabilir.
+
+			
+			struct Data func(struct Data*);
+			int main()
+			{
+				struct Data x;
+				struct Data a[10];
+				struct Data *ptr = &x; 
+			}
+  
+  
+- Peki yapı bildirimleri nerede yapılır?
+
+	- Client (kaynak dosyanın dışından erişilebilir) kodları ilgilendiren bildirimler
+	Başlık dosyasında yapılır. Yani diğer dosyalar tarafından erişilmesi istendiği taktirde 
+	başlık dosyasında yapılır.
+	 
+	 
+  		struct Data g; // yapılar global değişken olarak tanımlanabilirler.
+		
+		void func(struct Data p) // fonksiyon parametresi olabilirler.
+		{
+			struct Data x; // otomatik ömürlü bir değişken olabilirler.
+			static struct Data y; // statik yerel değişken olabilirler.
+		}
+- Yani şimdiye kadar değişkenlerde kullanım alanlarının hepsini yapılarda da kullanabiliriz.
+
+
+		// something.c kaynak dosyasının içinde 
+		static struct Data g; // sadece bu kaynak dosyada kullanılabilir
+		
+		int main()
+		{
+			const struct Data mydata = { 1, 3, 5, 3.5 }
+			// const olarak tanımlayabiliriz. // salt okuma amaçlı erişim
+			// yazma amaçlı erişim söz konusu değil.
+		}
+		
+  
+ 
+- Derleyici bir yapı bildirimi gördüğünde o yapı için bir yer ayırmıyor. Çünkü
+bu bir bildirim, tanımlama değil. Derleyiciye tür hakkında yani böyle bir tür olduğuna dair 
+bilgi veriliyor.
+
+
+  
+- Peki yapının elemanları neler olabilir:
+
+		struct Data {
+			int x; 
+			double y;
+			int *p;
+			int a[20];
+			char str[40];
+			int (*fp)(int); // bir function pointer olabilir.
+			int b[2][5]; // iki boyutlu bir dizi de olabilir.
+		}
+- Peki diğer programlama dillerinden farklı olarak ne yok dersek;
+	- Yapıların elemanı fonksiyon olamaz. Diğer programlaam dillerinde yapılara sınıf deniyor
+	ve sınıfların içerisinde tanımlanan fonksiyonlara da method deniyor. 
+	
+	
+- Yapıları yapı içerisinde kullanabiliriz:
+
+		struct Data {
+			int a, b;
+		}
+		
+		struct Bata {
+			double dval;
+			struct Data data; // yapı içerisinde yapı kullanıldı.
+		}
+  
+- Yapı nesnesinin elemanlarına erişim için;
+	- member selection operators
+		- 1. öncelik seviyesinde yer alan '.' ve '->' operatörleridir.
+		- 1. öncelik seviyesi soldan sağa (left associative) olduğunu hatırlayalım.
+
+- '.' dot operator (nokta operatörü)
+- '->' arrow operator (ok operatörü)
+
+- Yukarıdaki iki operatörün farkına gelecek olursak eğer;
+
+		struct Data {
+			int a, b;
+			double dval;
+		}
+		
+		int main()
+		{
+			struct Data mydata;
+			mydata.a; // a ya erişim
+			struct Data *ptr = &mydata;
+			ptr -> a // pointerlardan a'ya erişim için kullanıldığında  yani adres 
+		}
+
+- Yani aslında ikisi de bir yapı nesnesinin elemanına erişmek için kullanılıyor.
+Ama (.) için yapı nesnesinin elemanını operant olarak kullanıyoruz.
+(->) için ise yapı nesnesinin adresini operant olarak kullanıyoruz.
+
+
+  
+- Nokta operatörü sentaksı;
+	- Binary operator
+	- Sol operantı bir yapı türünden nesne olmak zorunda.
+	- Sağ operantı ise yapı nesnesinin sahip olduğu elemanlarından birinin ismi olmak zorunda.
+	
+	
+			yapı_ismi.yapı_elemanının_ismi;
+	
+	
+#
+
+		int main()
+		{
+			struct Data mydata;
+			int x = 10;
+			mydata.a = 15; 
+			// mydata.a ile x değişkenine yaptığımız herşeyi yapabiliriz.
+			// Farkı ise derleyici sadece x için yer ayırırken yapı söz konusu
+			// olduğunda derleyici yapıdaki tüm elemanlar için 
+			// yer ayırıyor.
+			
+			++mydata.a; // nokta operatörünün öncelik seviyesi birinci seviyede olduğu
+				    // için parantez ile önceliği belirtmemize gerek yoktur.
+				    
+		}
+		
+
+- Array decay yapılarda da geçerli.
+
+		struct Data {
+			int x, y;
+			int a[5];	
+		};
+		
+		int main()
+		{
+			struct Data mydata;
+			
+			int *p = mydata.a; 
+			int *p2 = mydata.a[0]; // yukarıdaki gösterim ile bu aynı.
+		}
+			
+ 
+- Peki yapı nesnesiyle biz neler yapabiliyoruz;
+
+	- Yapı nesnesi bir ifade olarak kullanıldığında, sadece ve sadece 4 tane operatörün
+	operandı olabiliyor.
+		- nokta operatörü, sizeof operatörü, adres operatörü, atama operatörünün operandı 
+		olabilirler ancak ve ancak aynı türden bir başka yapı nesnesi atanabilir.
+	
+			&mydata // bu ifadenin türü struct Data* olur.
+  			struct Data *p = &mydata // gibi kullanım mevcuttur.
+  			*p // mydata nesnesi demek
+  
+ - Yalnız bu atama operatörünün operantı olması konusunda şöyle bir incelik var.
+  Siz aynı yapıdaki türleri birbirine atayabilirsiniz. Farklı yapıda aynı türden eleman içeren
+  yapıları değil.
+  
+  		
+			struct Data {
+				int x, y;
+			};
+			
+			struct Data2 {
+				int x, y;
+			};
+			
+			int main()
+			{
+				struct Data mydata;
+				struct Data2 mydata2;
+				
+				mydata = mydata2; // Bu hatalı bir kullanımdır.
+				
+				struct Data mydata3;
+				
+				mydata = mydata3; // doğru kullanımdır.
+			}
+			
+			
+  
+  - Bu durumun dizilerden farklı olduğuna dikkat çekmek lazım.
+	- Dizilerde dizi ismiyle atama yaptığında array decay ile ilk elemanlar atanmış olur.
+	- Yapılarda array decay söz konusu değildir yapılar uygunsa tüm elemanlar atanmış olur.
+  
+```
+struct Data {
+	int a, b;
+	double dval;
+};
+
+int main()
+{
+	struct Data da; 
+	da.a = 10;
+	da.b = 12;
+	da.dval = 3.4;
+
+	struct Data db;
+	db = da;
+}
+```
+  
+  
+  
+- Dizileri normalde atama operatörünün operantı olarak kullanamıyorduk (array decay)
+Ancak bir yolu var. Dizileri yapı içinde kullanmak:
+  
+  
+```
+struct Array {
+	int a[100];
+};
+
+int main()
+{
+	struct Array a, b;
+
+	//codes
+
+	a = b; // diziler birbirine kopyalanmış olacak.
+}
+```
+
+
+  
+- Biz bir yapıyı başka bir yapıya atamayı daha önce bildiğimiz fonksiyonlarla da yapabiliriz.
+
+  
+```
+struct Data {
+	int a, b;
+	double dval;
+};
+
+int main()
+{
+	struct Data da; 
+	da.a = 10;
+	da.b = 12;
+	da.dval = 3.4;
+
+	struct Data db;
+	memcpy(&db, &da, sizeof(struct Data)); 
+}
+```
+  
+
+
+- Yapı Nesnelerine İlk Değer Verme (İnitialization of Structure Object):
+
+
+		struct Data mydata = { 10, 20, 3.4 }; // bildirimdeki sırayla ilk değerler eşlenir.
+		
+- Eğer ilk değer verilirken bir kaç eleman ilk değer verilir ve ilk değer verilmeyen elemanlar
+olursa, ilk değer verilmeyen elemanlar dizilerdeki gibi 0 değerini alır.
+
+
+ 		struct Data mydata = { 0 }; // yapının tüm elemanları sıfır değerini alır.
+		
+		
+- Yapılar bildirilirken yapının içerisinde bir ilk değer verme söz konusu değildir.
+
+
+		struct Data {
+			int x, y = 10; // hata
+		};
+
+
+
+
+- Yapının elemanı dizi olduğunda ve yapıya ilk değer verildiğinde küme parentezi içerisinde 
+küme parantezi kullanılabilir.
+
+  
+  
+```
+struct Data {
+	int x, y;
+	int a[4];
+	double dval;
+	
+};
+
+int main()
+{
+	struct Data mydata = { 10, 20, {1, 2, 3, 4 }, 4.2 };
+}
+
+```
+  
+  
+- Dizilerde oluduğu gibi structlarda da designated initialization kullanılailir.
+
+
+```
+struct Data {
+	int x, y;
+	int a[4];
+	double dval;
+	
+};
+
+int main()
+{
+	struct Data mydata = { .y = 76, .dval = 3.5, .a = { [2] = 25, [4] = 52 } };
+}
+
+```
+
+
+
+- Struct'larda bildirimi yaptığınız yerde tanımlamak istediğinizde structun } ile bitimine
+ismini de yazarak global alanda tanımlama yapabilirsiniz.
+
+		struct Data {
+			int x, y;
+			double dval;
+		}g = { 1, 2, 3, 4 }, ga; // g burada yapının ismi. İlk değeri verildi.
+		// ga ise ilk değer verilmeden global alanda tanımlanan bir yapı olur.
+		
+		
+		
+- Yapı türünü bildirirken structure tag(yapı ismi)'ni kullanmadan bildirim yapılabiliyor.
+
+		struct {
+			int a, b, c;
+		}x, y, z;
+		// 3 tane yapı değişkeni kullanılarak yapı bildirildi ama structure tag kullaılmadı.
+		
+
+
+
+		
+- Bir yapı aynı structure tag ile iki kez bildirimi (declaration) yapılamaz.
+
+	
+ 
+ 
+
+- Yapı Nesnelerinin Adresleri:
+	- Pointerlar konusunda geçerli olan herşey Yapılar içinde geçerlidir.,
+
+
+- Ok operatörü ( -> )
+
+	- Binary infix bir operatör
+	- Sol operantı bir yapı türünden adres olmak zorunda. Yani yapı gösteren bir pointer.
+	- Sağ operantı ise sol operanttaki yapının içerisindeki elemanlardan birisi olmak zorunda.
+
+
+```
+struct Employee {
+	int id;
+	char name[20];
+	char surname[24];
+	double wage;
+};
+
+int main()
+{
+	struct Employee x = { 1234, "Furkan", "Aksu", 85.90 };
+
+	struct Employee *p = &x;
+
+	printf("%d %s %s %f\n", x.id, x.name, x.surname, x.wage);
+	 
+	(*p).id = 45; // id değiştirildi.
+	p->id = 876; // yine id değiştirildi.
+	strcpy(p->name, "Kayhan"); // name değiştirildi.
+	strcat(p->surname, "Oglu");
+	p->wage += 4.1;
+	
+	printf("%d %s %s %f\n", x.id, x.name, x.surname, x.wage);
+}
+```
+
+
+#
+
+```
+struct Employee {
+	int id;
+	char name[20];
+	char surname[24];
+	double wage;
+};
+
+int main()
+{
+	struct Employee a[3]; // 3 elemanlı, elemanları yapı olan bir dizi.
+
+	a[0].id = 5; // ilk yapının id sine 5 atandı.
+	a->id = 5;  // array decay kullanılarak yukarıdaki işlem yapıldı.
+	(a + 2)->wage = 4.5; // a[2].wage ile aynı anlama gelir.
+	++(a + 2)->id; // id elemanını bir artırıldı.
+}
+```
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
