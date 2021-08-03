@@ -13767,23 +13767,143 @@ int main()
 ```
 
   
+# Ders 47 - 02.06.2021
+
+
+- Yapılar ve typedef bildirimleri:
+
+		struct Data {
+			int a, b, c;
+			double dval;
+		};
+		
+		typedef struct Data MYDATA;
+		 
+# 
+- Farklı bir tanımlanma şekli:
+
+		typedef struct Data {
+			int a, b, c;
+			double dval;
+		}x;
+		
+		int maint()
+		{
+			x mydata = { 1, 2, 3, 4.3 };
+		}
+  
+- Aşağıdaki şekilde tanımlama yapıldığında siz sadece tür eş isimi ile o yapıya ulaşmanıza olanak 
+veriyor.
+
+		typedef struct {
+			int a, b;
+		}Data;
+		
+		int main()
+		{
+			Data mydata = { 1, 2 }; 
+		}
+		
+
+# 
+
+
+		typedef struct Data {
+			int a, b;
+		}*DataPtr; // burada tür eş ismini adresi olarak tanımlanmış
   
   
+# 
+
+		typedef struct {
+			int a, b;
+		}Data, *DataPtr;
+		
+		int main()
+		{
+			Data mydata = { 2, 4 };
+			DataPtr p = &mydata;
+		}
+  
+# 
+- Aşağıdaki gibi bir typedef bildirimi ile bildirimi yapılan yapı türünden
+yalnızca dinamik ömürlü nesne oluşturulabilir. Yani otomatik ömürlü ya da statik 
+ömürlü değişken tanımlama olanağını vermez.
+
+		typedef struct {
+			int x, y;
+		}*DataPtr;
+		
+		int main()
+		{
+			DataPtr  pd = (DataPtr)malloc(sizeof(*pd));
+		}
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+- Yapılar ve Fonksiyonlar:
+
+	
+		struct Data {
+			int x, y;
+			double dval;
+		};
+		
+		void f1(struct Data); // call by value
+		// yukarıdaki fonksiyonu çağırmamız için struct Data türünden bir nesne gönderilmeli.
+		
+		int main()
+		{
+			struct Data y = { 1, 3, 2.4 };
+			f1(y);
+		}
+		
+- C'de parametresi yapı türünden olan fonksiyonlar sık görülmez. Çünkü call by value durumunda
+bir kopyalama söz konusu olduğu için bir bellek bloğu kopyalanıyor ve bu da maliyeti artırıyor.
+
+Bu yüzden call by reference daha yaygın kullanılır. 
+
+		// input parameter
+		void f2(const struct Data*); // get - getter - accessor
+		// yukarıdaki fonksiyona yapının adresi gönderiliyor. Ve salt okuma amaçlı olduğu
+		belirtiliyor.
+		
+		// output parameter
+		void f3(struct Data *p);
+		// yukarıdaki fonksiyon bildiriminde ise yine yapının adresi gönderiliyor ve 
+		bu yapıda değişiklikler yapılacağı belirtiliyor.
+		//setter - mutator
+		
+
+#
+
+
+		struct Data {
+			int x, y;
+		};
+		
+		typedef struct Data* DataPtr;
+		
+		int main() 
+		{
+			struct Data mydata = { 2, 4 };
+			const DataPtr ptr = &mydata;
+			
+			//struct Data *const ptr = &mydata; burdaki gibi olur türü.
+			//const struct Data *ptr = &mydata;
+		}
+	
+
+#
+
+- Fonksiyonların geri dönüş değerlerinde yapı olma söz konusuna bakacak olursak;
+
+		struct Data f1(???); // bir yapı olabilir.
+		struct Data *f2(??); // bir yapı adresi olabilir. (en çok kullanılan)
+		const struct Data * f3(???); // const bir yapı adresi olabilir.
+		
+		
+# 1.25.25
+
   
   
   
