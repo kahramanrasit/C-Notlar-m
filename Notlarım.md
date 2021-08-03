@@ -13902,12 +13902,63 @@ Bu yüzden call by reference daha yaygın kullanılır.
 		const struct Data * f3(???); // const bir yapı adresi olabilir.
 		
 		
-# 1.25.25
+- api -> application programmers' interface
 
+- C tarzı kütüphaneler: Size verilen yapının elemanlarının kullanarak program yazdığınız kütüphaneler.
+	- Birinci dezavantajı her bir elemanın ne anlama geldiğini dökümantasyondan bakılarak
+	öğrenilmesi gerekiyor.
+	
+- OOP (nesne yönelimli programlama) tarzı kütüphaneler : Bu tarz kütüphanelerde yapının elemanını
+bilmeniz gerekmiyor çünkü yapının elemanlarını siz hiç kullanmayacaksınız. Size verilen 
+fonksiyonları çağırıyorsunuz. Yani siz aldığınız adresteki nesneyi elemanlarına erişerek kullanmak
+yerine fonksiyonlara gönderiyorsunuz. Herşey fonksiyonlar yoluyla yapılıyor.  Yapı nesnesinin 
+değerinin değiştirilmesi yapı nesnesinin değerinin elde edilmesi gibi yapı nesnesiyle alakalı 
+bütün işlemler kütüphanenin size sunduğu fonksiyonlar ile yapılıyor. 
+	- OOP tarzı yaklaşım daha sağlam siz çünkü elemanları bilmediğiniz için bozamazsınız da.
+	Çağırdığınız fonksiyonlar erişecek yani siz erişmeyeceksiniz. Öğrenme kolaylığı var.
+	- Yapının elemanlarını siz kullanmadığınız için ilerde yapının elemanlarında bir değişiklik
+	yapıldığında sizin yazdığınız kodların değiştirilmesi gerekmeyecek.
+	
+
+# time.h Modülü
+
+- Bir kütüphaneyi öğrenirken modülde belli türler öğrenilmesi gerekebiliyor.
+
+		time_t -> typedef bildirimiyle oluşturulmuş türler
+		// calender time (takvim zamanı) 
+		// epoche -> orijin gibi bir nokta
+		// derleyiciye bağlı olarak genellikle long long  türünün eş ismidir.
+
+  		time_t x; // epoch'dan geçen saniye sayısı olarak ele alınacak.
+		
+- Burada tutulan değere göre tarih olarak hangi zamanda olduğu kıyaslanabilir.
+
+- struct tm bu kütüphanede bulunan C tipi bi yapı türü.
+- struct tm -> broken - down time (ayrıştırılmış zaman bilgisi)
+- Yani time_t türüne bir saniye değeri atadığınızda bu saniye değerini epoch'a ekleyerek
+hangi tarihde günde ve ayda olduğunu öğrenmenize yarayan bir yapı türü.
+
+		struct tm {
+			int tm_year; // tarihin yıl değeri ancak 1900 den sonra tuttuğu için
+					// bulunulan elemana 1900 eklenmelidir.
+			int tm_mon; // tarih in ay değeridir. 0 -> ocak, 1 -> şubat ...
+			int tm_mday; // ayın gün değeri tutulur.
+			int tm_wday; // ayınz gün değerini tutar. 0 -> pazar, 1 -> pazartesi...
+			int tm_yday; // yılın kaçıncı günü olduğunu tutuyor. 0 -> 1 ocak değerini tutmuş olur.
+			int tm_hour; // 0 - 23 arasında saat değerini tutuyor.
+			int tm_min; // 22.03 için 3 olur
+			int tm_sec; // direk olarak tutulur 45 -> 45. saniye
+			int tm_isdst; // is daylight saving time ( gün ışığı tasarruf modu)
+					// mevsime göre saatin ileri veya geri alınması.
+					// eğer değeri -1 ise bu kullanılan sistemde bilginin
+					// tutulmadığı anlamına geliyor.
+					// eğer değeri 0 ise bu modda olmadığını gösteriyor.
+					// eğer negatif değil ve sıfır dışında bir değerse şuan o modda olduğu anlamına geliyor.
+			
+		};
   
   
-  
-  
+  # 2:10:43
   
   
   
