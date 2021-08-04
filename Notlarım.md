@@ -13958,28 +13958,383 @@ hangi tarihde günde ve ayda olduğunu öğrenmenize yarayan bir yapı türü.
 		};
   
   
-  # 2:10:43
+- time fonksiyonu çağırıldığı zaman çağırıldığı zamana göre time_t (calender time) değerini veriyor.
+Yani epoch'dan geçen saniye sayısını veriyor.
+
+			time_t time(time_t *ptr);
+			
+- Fonksiyona time_t türünden bir nesnenin adresi gönderilecek, bu adresteki nesne set edilecek 
+ epoch'dan geçen saniye sayısıyla set ediliyor.  
+  
+  		time_t timer;
+
+		time(&timer);
+
+		printf("saniye = %lld\n", timer);
+		
+- Yukarıdaki kod yazılıp çalıştırıldığında ekrana epoch'dan sonra çalıştırıldığı zamana kadar 
+kaç saniye geçtiği ekrana yazdırılır.
+
+		printf("%lld\n", time(NULL));
+		printf("%lld\n", time(0));
+- Yukarıdaki gibi fonksiyona NULL pointer ya da 0 değeri gönderildiğinde ise direk olarak geri 
+dönüş değeri epoch'dan geçen saniye sayını verir.
+
+- Bu fonksiyonun en yaygın kullanım şekli elde ettiğimiz saniyeyi (calender time) insanı 
+ilgilendiren forma sokmak. Bunu da localtime fonksiyonu ile yapıyoruz.
+- localtime fonksiyonu calender time'ı broken time'a dönüştürüyor.
+
+		struct tm* localtime(const time_t* p);
+		
+- Geri dönüş değeri bir yapı türünden adres.
+- Fonksiyonun parametresi ise sizden okuma amaçlı time_t türünde bir nesnenin adresini istiyor.
+
+
+
+- Şimdi bir örnekle inceleyelim: Program çalıştırıldığı zamanki tarih gün ve saat değerini ekrana
+yazdırsın. 02 Haziran 2021 Carsamba 22:26:43 gibi..
+
+
+```
+time_t timer; // time_t türünden bir nesne oluşturuldu.
+	time(&timer); // time fonksiyonuyla oluşturulan nesne set edildi.
+
+	const char* const pmons[] = {
+		"Ocak",
+		"Subat",
+		"Mart",
+		"Nisan",
+		"Mayis",
+		"Haziran",
+		"Temmuz",
+		"Agustos",
+		"Eylul",
+		"Ekim",
+		"Kasim",
+		"Aralik"
+	};
+	static const char* const pdays[] = {
+		"Pazartesi",
+		"Sali",
+		"Carsamba",
+		"Persembe",
+		"Cuma",
+		"Cumartesi",
+		"Pazar"
+	};
+
+	struct tm* p = localtime(&timer); /*Bir tm yapısının adresini tutan pointer 
+									  oluşturularak bu pointerın içerisine
+									  localtime fonksiyonuna gönderilen epoch'dan geçen
+									  saniye değerini gönderip geri dönüş değeri 
+									  atandı.*/
+	printf("%02d %s %d %s %02d:%02d:%02d\n",
+		p->tm_mday, pmons[p->tm_mon], p->tm_year + 1900, pdays[p->tm_wday],
+		p->tm_hour, p->tm_min, p->tm_sec);
+
+	// ekrana yazılan yazı
+	// 04 Agustos 2021 Persembe 12:19:51
+	
+	printf("yilin %d. gunu\n", p->tm_yday + 1);
+	
+	if (p->tm_isdst < 0)
+		printf("gun isigi tasarruf modu verisi yok\n");4
+	else if (p->tm_isdst)
+		printf("gun isigi tasarruf modundayiz\n");
+	else
+		printf("gun isigi tasarruf modunda degiliz\n");
+		
+	
+```
+ 
+ 
+ 
+  
+# Ders 48 - 4 Haziran 2021 
+
+
+- localtime fonksiyonun geri dönüş adresinin pointer olduğunu görüyoruz. Pointerlardan 
+hatırlayacak olursak bir fonksiyonun geri dönüş değeri adres olduğunda şu soruyu sormamız 
+gerekiyordu. Dinamik ömürlü bir nesnenin adresini mi döndürüyor yoksa statik ömürlü 
+bir nesnenin adresini mi döndürüyor. Bunu dökümantasyondan elde etmemiz gerekiyor lakin
+bazen dökümantasyon elimizde olmayabiliyor. Bunu aşağıdaki gibi teyit edebiliriz.
+
+		time_t timer;
+		time(&timer);
+		
+		for (int i = 0; i < 10; ++i) {
+			printf("%p\n" , localtime(&timer);
+		}
+		
+- Eğer yukarıdaki kodun sonucunda döngünün her turunda aynı adres ekrana yazdırılıyor ise 
+ bu fonksiyonun statik ömürlü bir nesne döndürdüğü anlamına geliyor.
+- Eğer her turda farklı adres ekrana yazdırılıyor ise dinamik ömürlü bir nesnenin adresinin 
+ döndürdüğü anlaşılıyor.
   
   
+ # valgrind, free unit test tools -> test yapan yardımcı programlar, ya da analiz yapan programlar
+ 
+ 
+ - Bir de gmtime fonksiyonu var, localtime fonksiyonundan tek farkı saat bilgisini tüm dünya 
+ saatine uygun olarak veriyor. çalışma şekli aynı.
+ 
+ 
+ 
+ ```
+ void print_date_time(const struct tm* p)
+{
+	const char* const pmons[] = {
+		"Ocak",
+		"Subat",
+		"Mart",
+		"Nisan",
+		"Mayis",
+		"Haziran",
+		"Temmuz",
+		"Agustos",
+		"Eylul",
+		"Ekim",
+		"Kasim",
+		"Aralik"
+	};
+	static const char* const pdays[] = {
+		"Pazar"
+		"Pazartesi",
+		"Sali",
+		"Carsamba",
+		"Persembe",
+		"Cuma",
+		"Cumartesi",
+		
+	};
+	printf("%02d %s %d %s %02d:%02d:%02d\n",
+		p->tm_mday, pmons[p->tm_mon], p->tm_year + 1900, pdays[p->tm_wday],
+		p->tm_hour, p->tm_min, p->tm_sec);
+}
+
+int main()
+{
+	time_t timer;
+	time(&timer);
+
+	struct tm my_local_time = *localtime(&timer);
+	struct tm my_gmtime = *gmtime(&timer);
+
+	print_date_time(&my_local_time);
+	print_date_time(&my_gmtime);
+	
+}
+ ```
+ 
+ 
+- Tarih ve zaman bilgisini standart ingilizce yazı olarak görmek isterseniz iki fonksiyon mevcut.
+
+		char* ctime(const time_t *p);
+		char* asctime(const struct tm *p);
+
+- ctime için bir örnek:
+
+		time_t timer;
+		time(&timer);
+
+		printf("(%s)", asctime(&timer));
+		
+ - asctime fonksiyonun tek farkı ise timer nesnesinin değil de yapının adresini istemesidir.
+ 
+		time_t timer;
+		time(&timer);
+
+		struct tm x = *localtime(&timer);
+
+		printf("(%s)", asctime(&x));
   
   
+- strftime -> string format time fonskiyonu
+
+		size_t strftime(char *pa, size_t size, const char *pf, const struct tm *p);
+		
+- Bu fonksiyon bir yazı oluşturucak ve sizin birinci parametreyle gönderdiğiniz adresteki dizide  oluşturucak.
+- Fonksiyonun ikinci parametre gönderdiğiniz dizinin boyutu olacak.
+- Fonksiyonun son parametresi yazıya dönüştürülecek tarih zaman bilgisini tutan değişkenin adresi
+- Fonksiyonun 3. parametresi, formatlama bilgisidir.  Bu formatlama bilgisini reference kitaplardan ya da 
+cppreference 'dan bakılabilir.
+- Fonksiyonun geri dönüş değeri yazdığı karakter sayısı.
+
+			char str[SIZE];
+			time_t timer;
+			time(&timer);
+			struct tm* p = localtime(&timer);
+
+			strftime(str, SIZE, "date: %A %B %Y", p); //"%A" gün bilgisini veren format
+							// %B ise ay bilgisini veren format
+							// %Y ise yıl bilgisini verir.
+							
+			printf("%s", str);
+
+
+- strftime locale dependant bir fonksiyondur ileride değinilecek bu konuya.
+
+
   
   
+- Şimdi clock fonksiyonuna bakalım.
+
+		clock_t clock(void);
+		
+- Fonksiyonun geri dönüş değeri clock time dan kısaltma süre gösteren bir tür eş ismidir.
+programın çalışmaya başlamasından yani main fonksiyonun çağırıldığı noktadan itibaren 
+clock fonksiyonun çağırıldığı ana kadar ki geçen süreyi bize veriyor.	
+	- clock_t türüne ingilizce de clock tick denir. Bu tick denilen olay saniye değildir.
+	- Burada bir makro mevcut. "CLOCKS_PER_SEC" makrosu sizin sisteminizde bir tick'in kaç sn
+	ye denk geldiğini ölçüyor.
+	
+
+```
+	int a[SIZE];
+
+	clock_t start = clock();
+
+	set_array_random(a, SIZE);
+	sort_array(a, SIZE);
+
+	clock_t end = clock();
+
+	printf("siralama bitti %f saniye \n", (double)(end - start) / CLOCKS_PER_SEC);
+	getchar();
+	print_array(a, SIZE);
+```
   
+- Yukarıdaki kodda kaç saniyede bir diziye rastgele eleman atanıp sıralandığının süresini buluyoruz.
+
+
+- Bir gecikme fonksiyonu yazarak bu aradaki sürede hiçbir şey yapmadan programın beklemesini sağlamak.
+
+```
+void wait(double sec)
+{
+	clock_t start = clock();
+
+	while ((double)(clock() - start) / CLOCKS_PER_SEC < sec)
+		; // null statement
+}
+
+int main()
+{
+	for (int i = 0; i < 100; ++i) {
+		printf("%d ", i);
+		wait(0.5);
+	}
+}
+```
+
+
+- Standart olmayan ancak C programcılarının sevdiği bir fonksiyon var. Gün ay yıl değerinden 
+hareketle haftanın gününü hesaplıyor.
+	- Sakamuto algorithm
+
+		int day_of_week(int d, int m, int y)
+		{
+			return (d += m < 3 ? y-- : y - 2, 23 * m / 9 + d + 4 + y / 4 - y / 100 + y / 400) % 7;
+		}
+		
+- Bir örnek:
+
+```
+	static const char* const pdays[] = {
+		"Pazar"
+		"Pazartesi",
+		"Sali",
+		"Carsamba",
+		"Persembe",
+		"Cuma",
+		"Cumartesi",
+
+	};
+
+	int d, m, y;
+	
+	printf("dogum tarihinizi (gun ay yil) giriniz: ");
+	scanf("%d%d%d", &d, &m, &y);
+	printf("%s\n", pdays[day_of_week(d, m, y)]);
+```
+
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+ - Nesne yönelimli programlamayı C'de daha iyi anlamamız için tarih işlemleri ile ilgili
+genel destek veren bir kütüphane oluşturacağız.
+	- Yapının elemanlarını client kodun kullanmasını istemiyoruz. Yani kütüphaneden hizmet alan
+	kodlar bizim başlık dosyasında bildirdiğimiz external fonksiyonları çağırarak işini görecek.
+	Bunlar fonksiyon veya fonksiyonel makrolar olabilir.
+	
+- İlk önce header dosyası olan date.h dosyası oluşturuldu.
+
+```
+#ifndef DATE_H
+#define DATE_H
+
+typedef struct {
+	int md; // member day
+	int mm; // member month
+	int my; // member year
+}Date;
+
+//sett function / setters / mutators
+
+Date* set_date(Date* p, int d, int m, int y); /*Bir tarih gönderilecek, gönderilen
+											  tarih gönderilen yapı adresinden erişim
+											  sağlanarak yapıya aktarılacak*/
+Date* set_date_today(Date* p); /*fonksiyona gönderilen yapı adresine fonksiyonun
+							   çağırıldığı tarih atanır.*/
+
+Date* set_date_str(Date* p, const char* pstr); /*Bir yazı adresini alarak birinci
+											parametrede gönderilen yapıya yazıdan 
+											aldığı formatlı tarih bilgisini atıyor.*/
+
+Date* set_date_random(Date* p); /*Rastgele bir tarih oluşturarak gönderilen yapıya 
+								atanır.*/
+
+Date* set_month(Date* p, int mon); /*Tarihin ayını set ediyor*/
+Date* set_year(Date* p, int y); /*Tarihin yılını set ediyor*/
+Date* set_month_day(Date* p, int mday); /*Tarihin ayın gününü set ediyor */
+
+//get functions - getters - accessors 
+
+int get_year(const Date* p); /*Yapıdaki yıl bilgisini geri döndürüyor*/
+int get_month(const Date* p);/*Yapıdaki ay bilgisini geri döndürüyor*/
+int get_month_day(const Date* p);/*Yapıdaki ayın günü bilgisini geri döndürüyor*/
+int get_week_day(const Date* p);/*Yapıdaki haftanın günü bilgisini geri döndürüyor*/
+int get_year_day(const Date* p);/*Yapıdaki yılın bilgisini geri döndürüyor*/
+
+
+// input-output function
+
+void print_date(const Date* p); /*gönderilen yapıdaki tarih değerini ekrana
+								yazdıran fonksiyon.*/
+void scan_date(Date* p); /*yapıya tarih bilgisi giriliyor*/
+
+
+// Utility function
+
+int cmp_date(const Date*, const Date*);  /*Verilen iki tarihin karşılaştırmasını yapsın*/
+int date_diff(const Date* p, const Date*); /*Gönderilen iki tarih arasındaki günlerin
+										   sayısını geri döndürsün*/
+
+Date* ndays_date(Date* pdest, const Date* psource, int n); /* bir tarih gönderilecek
+														   o tarihten n gün sonra hangi
+														   tarihin olduğu bilgisi geri
+														   gönderilecek.*/
+
+
+
+
+#endif
+```
+
+# Ders 49 - 09.06.2021 
+
+
+
+
+
   
   
   
