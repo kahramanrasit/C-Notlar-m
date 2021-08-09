@@ -14083,20 +14083,7 @@ bazen dökümantasyon elimizde olmayabiliyor. Bunu aşağıdaki gibi teyit edebi
  ```
  void print_date_time(const struct tm* p)
 {
-	const char* const pmons[] = {
-		"Ocak",
-		"Subat",
-		"Mart",
-		"Nisan",
-		"Mayis",
-		"Haziran",
-		"Temmuz",
-		"Agustos",
-		"Eylul",
-		"Ekim",
-		"Kasim",
-		"Aralik"
-	};
+	
 	static const char* const pdays[] = {
 		"Pazar"
 		"Pazartesi",
@@ -14334,7 +14321,7 @@ Date* ndays_date(Date* pdest, const Date* psource, int n); /* bir tarih gönderi
 
 
 
-00:46:00
+- Bu derte oluşturulan başlık dosyası ve test kodları Date dosyasının içerisinde verilmiştir.
 
   
   
