@@ -14294,24 +14294,345 @@ göre eksik tanım yapılmış türlerdir.
 		
 		extern struct Data gdata;
 		
+	- Bir pointer türü tanımlanabilir.
+
+		struct Data;
+		
+		int main()
+		{
+			struct Data* ptr = NULL;
+		}
 	
-#1:57:00
+- Incomplete type ile neleri yapamayız ?
+
+	- Bir yapı türünden değişken tanımlamak: Derleyici bu değişken için yer ayırması gerekiyor.
+	Bu yer ayırma işlemi için kaç byte'lık bir yer ayırması gerektiğini bilmesi gerekiyor.
+
+		struct Data;
+
+		int main()
+		{
+			struct Data x;
+		}
+	- Bir yapının elemanı incomplete type türünden olamaz.
+
+		struct Data;
+		
+		struct Database {
+			int x;
+			struct Data d; // hata
+		};
+	
+	- Aşağıdaki işlemler için yapı türünün complete type olması gerekir.
+		- Yapı türünden değişken tanımlamak.
+		- Yapı türünden pointer'ları :
+			- * operatörünün operantı yapmak
+			- -> operatörünün operantı yapmak.
+
+
+	- sizeof operatörünün operantının complete type olması gerekir.
+
+- Peki nerelerde bu incomplete type olarak yapıları kullanıyoruz?
+	- Bir başlık dosyası oluşturulurkan mümkün olduğunda farklı başlık dosyalarının include 
+	edilmesinden kaçınılır. 
+	Bazı durumlarda başlık dosyası oluşturulurken diğer başlık dosyalarında bulunan 
+	yapılar kullanılırken diğer başlık dosyaları include edilmeden incomplete type olarak o yapı 
+	kullanılabilir.
+	
+			//data.h
+			struct Neco;
+			struct Ali;
+			
+			struct Neco* foo(struct Ali*); // gibi
+			
+
+	- Yukarıdaki durumda bu türleri include edilmeden incomplete type olarak kullanılabilir.
+
+
+
+# Ders 50 - 11.06.2021
+
+
+- Composition:
+
+Bir türün elemanlarından birisinin başka bir türden olması, özellikle user-defined türlerden. 
+Bunun C'deki karşılığı bir yapının elemanlarından birisinin başka bir türden olması.
+  
+
+- Bir yapının elemanı kendi türünden olamaz.
+
+		struct Date {
+			struct Data x; // hata. incomplete type türünde hala.
+		};
+- Ancak bir yapının elemanı başka bir yapı türünden olabilir.
+	
+		struct Data {
+			int x, y;
+			double dval;
+		};
+		
+		struct Nec {
+			int a;
+			struct Data data;
+		};
+		
+		int main()
+		{
+			struct Nec nec;
+			
+			nec.data.x = 15; // Data yapısındaki x'e 15 değeri atandı.
+		}
+		
+
+- Bir yapının elemanının kendi yapısı olamayacağını belirtmiştik ancak bir yapının elemanı kendi 
+ yapısını gösteren bir pointer olabilir. Sebebi ise bir pointerın sizeof değeri derleyicide sabitti.
+ sizeof değeri belli olduğu için kendi adresini gösteren bir pointer olmasında bir problem yoktur.
+ Buna "Self referential structure" deniliyor.
+ 
+ 		// Self Referential Structure
+		
+		struct Data {
+			int x;
+			//
+			struct Data* p;
+		};
+		
+- Yapı içinde yapı kullanımı için ilk değer verme şekilleri:
+
+		struct Data {
+			int x, y;
+			double dval;
+		};
+		
+		struct Nec {
+			int i;
+			struct Data data;
+			double dval;
+		};
+		
+		int main()
+		{
+			struct Nec nec = { 10, { 2, 4, 3.4 }, 3.21 };
+			// küme parantezi içinde küme parantezi kullanılmaz ise sıradan 
+			// yapı elemanlarını doldurur.
+			
+			// mesela sadece Data elemanına ilk değer verilmek istense 
+			// designated initialize yapılarak
+			struct Nec nec = { .data = { 10, 20, 4.5 } };
+			// hatta yapının içindeki yapı için de designated initialize kullanılabilir.
+			struct Nec nec = { .data = { .y = 40 } };
+		}
+
+		
+- Bir örnek:
+
+```
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+
+#include "conio.h"
+#include "Rutility.h"
+
+#include "date.h"
+
+#include "Student.h"
+#pragma pack(1)
+#define SIZE 10000
+
+
+int scmp(const void* vp1, const void* vp2)
+{
+	return cmp_student((const Student*)vp1, (const Student*)vp2);
+}
+
+int main()
+{
+	size_t n;
+
+	printf("kac ogrenci: ");
+	scanf("%zu", &n);
+
+	Student* pd = (Student*)malloc(n * sizeof(Student));
+	if (!pd) {
+		fprintf(stderr, "bellek yetersiz!");
+		return 1;
+	}
+
+	for (size_t i = 0; i < n; ++i) {
+		set_student_random(pd + i);
+	}
+
+	clock_t start = clock();
+
+	qsort(pd, n, sizeof(*pd), &scmp);
+
+	clock_t end = clock();
+
+	printf("siralama bitti %f saniye\n", (double)(end - start) / CLOCKS_PER_SEC);
+
+	(void)getchar();
+	(void)getchar();
+	for (size_t i = 0; i < n; ++i) {
+		print_student(pd + i);
+	}
+	free(pd);
+}
+
+```
+		 
+  
+
+- Self - referenced structure
+	- Node (düğüm)
+		- Aslında Node bir yapı. Kendisi bir veriyi tutuyor. Bunun dışında
+		kendisi gibi Node'lara erişmenizi sağlayacak pointer ya da pointerlar tutuyor.
+		
+			struct Node {
+				data
+				struct Data* p;
+				struct Data2* p;
+			};
+			
+	- Böylece struct Node türünden nesneler, dinamik olarak allocate edildiğinde,
+	bunların arasında bir bağlantı oluşturabiliyorum. 
+	- Hangi veri yapıları bu Node'ları kullanıyor.
+		- Linked list
+		- Trees 
+			- Özellikle binary search tree
+		- Graph
+		- Hash Table 
+		
+	
+- Linked lists (bağlı liste) : Her bir eleman bir veri tutarken aynı zamanda bir sonraki elemanı gösteren pointerı
+tutuyor. Son eleman NULL pointer'ı gösterir.
+
+- Dynamic Array
+	- Her bir eleman için o elemanın sizeof'u kadar yer ayırılıyor.
+	- Dinamic bir dizi için allocate yapılırken bir malloc çağrısı yapılıyor.
+	- İndex kavramı ile indexi bilinen elemana direk erişim sağlanabiliyor.
+	- Elemanlara içerik olarak erişmek istersek eğer bir fark yok linked list ile dynamic
+	 Arrayin
+	- Eğer siz dinamik diziye bir ekleme yapmak istediğinizde bütün elemanları kaydırma 
+	yapmak zorundasınız. Yani siz ne kadar çok eleman eklerseniz o kadar kopyalama yapmak 
+	zorundasınız. Aynı işlem silme işlemi için de geçerli.
+	- Siz bir sıralama algoritması kullandığınızda nesneleri kopyalayarak bir swap yapma 
+	durumundasınız bunun dez avantaju bu neslerin büyük veri yapıları olabilir ve bu 
+	da  maliyeti ciddi anlamda büyütecektir.
+	- Önişlemci erişimi ile verilere işleme söz konusu olduğu için daha hızlı bir 
+	kullanım söz konusu olabiliyor.
+	
+- Linked list
+	- Sadece sizeof değeri kadar değil ek olarak bir de pointer için yer ayırılıyor.
+	Yani Node denilen yapı hem içinde tutulacak değeri tutuyor hem de pointer'ı tutuyor.
+	Böylece her veri için bir pointer daha fazla bellek alanına ihtiyacım var. 
+	- Linked listde allocate yapılırken her bir Node için malloc çağrısı yapılıyor.
+	- Burada herhangi bir elemana erişmek için sırasıyla diğer elemanlara erişerek devam
+	etmeniz gerekmektedir.
+	- Elemanlara içerik olarak erişmek istersek eğer bir fark yok linked list ile dynamic
+	 Arrayin
+	- Linked list'in avantajı ise konumunu bildiğimiz bir yerden ekleme veya silme işlemi 
+	yapmakta. Linked list'te ekleme yapılağında bir düğüm oluşturulup istenilen noktadaki
+	düğümlerdeki pointerları eklenilen elemana göre uyarlanarak herhangi bir kopyalama 
+	işlemine gerek duyulmadan ekleme yapılabiliyor. Benzer işlem eleman silmek için de geçerli.
+	- Singly linked list (tekli bağlı liste) sadece tek bir pointer tuttuğu için bir sonraki
+	elemannı gösterdiğinden sadece ileriye doğru bir geçiş söz konusu. Geriye doğru geçiş 
+	yapılamıyor. 
+	- Siz bir sıralama algoritması kullandığınızda swap işlemi için sadece pointerları 
+	swap ederseniz istenilen sonuca çok daha rahat ulaşabilirsiniz. Veriler çok büyük olsa 
+	dahi o verilerin pointerlarını swap etmek maliyeti düşürecektir.
+	- Linked list'lerde ön işlemciden verilere ulaşmak yerine direk bellekten verilere
+	ulaşım söz konusudur.
+	
+	
+  - Şimdi daha önceki oluşturduğumuz başlık dosyaları ile birlikte "studentlist.c", "studentlist.h",
+  "Student.h" ve "Student.c" başlık dosyalarını ekleyerek aşağıda oluşturduğumuz test kodlarını
+  çalıştırarak oluşturulan başlık ve kaynak dosyaları test edilecek. Bu testin uygulanabilmesi için
+  bir önceki sayfadaki başlık ve kaynak dosyalar incelenerek anlamaya çalışılmalıdır.
+  
+  - İlk olarak yazılan test kodu bize bir listede rastgele 10 öğrenci oluşturulacak.
+  Ve sonrasında bu öğrenciler linked list mantığıyla yazdırılacak.
+  
+  ```
+  	Student s;
+
+	randomize();
+
+	for (int i = 0; i < 10; ++i) {
+		set_student_random(&s);
+		print_student(&s);
+		push_front(&s);
+	}
+	printf("\n");
+
+	printf("listede %zu ogranci var\n", get_size());
+	print_list();
+
+	make_empty();
+
+	if (is_empty())
+		printf("liste bos\n");
+
+  ```
+  
+- İkinci test kodunda ise listeye random olarak kaç öğrenci ekleneceği soruluyor ekleme yapılıyor
+ve ekrana yazdırılıyor.
+ 
+ ```
+ 	size_t n;
+	Student s;
+
+	printf("listeye kac ogrenci eklenecek: ");
+	scanf("%zu", &n);
+
+	randomize();
+
+	for (int i = 0; i < n; ++i) {
+		set_student_random(&s);
+		push_front(&s);
+	}
+	printf("listede %zu ogrenci var\n", get_size());
+	_getch();
+	print_list();
+ ```
   
   
+- Listeye kaç öğrenci ekleneceği bilgisi kullanıcıdan alınarak ekrana yazdırılır.
+Sonrasında ise listedeki öğrenciler baştan birer bire her döngüde siliniyor.
+
+```
+	size_t n;
+	Student s;
+
+	printf("kac ogrenci: ");
+	scanf("%zu", &n);
+
+	for (size_t i = 0; i < n; ++i) {
+		set_student_random(&s);
+		push_front(&s);
+	}
+
+	while (!is_empty()) {
+		printf("listede %zu ogrenci var\n", get_size());
+		print_list();
+		_getch();
+		system("cls");
+		pop_front();
+	}
+```
   
+
+
+# Ders 51 - 14.06.2021
+
+
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+   
   
   
   
