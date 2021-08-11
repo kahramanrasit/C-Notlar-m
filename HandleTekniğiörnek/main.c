@@ -7,6 +7,7 @@
 #include "date.h"
 #include "Student.h"
 #include "studentlist.h"
+#pragma pack(1)
 
 #define NLIST		1000
 
