@@ -11,8 +11,8 @@ typedef struct Node {
 
 
 struct List {
-	Node* gpfirst;
-	size_t gcount;
+	Node* pfirst;
+	size_t count;
 
 };
 
@@ -23,8 +23,8 @@ ListHandle create_list(void)
 		fprintf(stderr, "bellek yetersiz\n");
 		exit(EXIT_FAILURE);
 	}
-	pd->gcount = 0;
-	pd->gpfirst = NULL;
+	pd->count = 0;
+	pd->pfirst = NULL;
 
 	return pd;
 }
@@ -44,9 +44,9 @@ void push_front(ListHandle h, const Student* p)
 	}
 
 	pnewnode->s = *p;
-	pnewnode->pnext = h->gpfirst;
-	h->gpfirst = pnewnode;
-	++h->gcount;
+	pnewnode->pnext = h->pfirst;
+	h->pfirst = pnewnode;
+	++h->count;
 }
 
 
@@ -57,7 +57,7 @@ void get_first(ListHandle h, Student* p)
 		exit(EXIT_FAILURE);
 	}
 
-	*p = h->gpfirst->s;
+	*p = h->pfirst->s;
 }
 
 void pop_front(ListHandle h)
@@ -66,10 +66,10 @@ void pop_front(ListHandle h)
 		printf("bos liste hatasi\n");
 		exit(EXIT_FAILURE);
 	}
-	Node* ptemp = h->gpfirst;
-	h->gpfirst = h->gpfirst->pnext;
+	Node* ptemp = h->pfirst;
+	h->pfirst = h->pfirst->pnext;
 	free(ptemp);
-	--h->gcount;
+	--h->count;
 }
 
 void make_empty(ListHandle h)
@@ -81,17 +81,17 @@ void make_empty(ListHandle h)
 
 size_t get_size(ListHandle h)
 {
-	return h->gcount;
+	return h->count;
 }
 
 int is_empty(ListHandle h)
 {
-	return h->gpfirst == 0;
+	return h->pfirst == 0;
 }
 
 void print_list(ListHandle h)
 {
-	for (Node* p = h->gpfirst; p != NULL; p = p->pnext) {
+	for (Node* p = h->pfirst; p != NULL; p = p->pnext) {
 		print_student(&p->s);
 	}
 	printf("--------------------------------------------------------\n");
