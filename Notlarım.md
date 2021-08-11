@@ -14631,29 +14631,197 @@ Sonrasında ise listedeki öğrenciler baştan birer bire her döngüde siliniyo
 # Ders 51 - 14.06.2021
 
 
+- Handle tekniği: Kütüphane oluştururken ulaşılması istenmeyen verilerin gizlenmesini sağlayan bir 
+yol.
+
+
+- Handle tekniği adlı dosyadan başlık ve kaynak dosyalara ulaşabilirsiniz.
   
-   
+- Fopen gibi standart fonksiyonlar handle tekniğine çok benzer şekilde yazılmıştır.
+
+
+- Yapılara dair bir ayrıntı: Siz eğer bir yapıyı bir yapının içerisinde tanımlarsanız bu içeride 
+tanımlanan yapının ömrü ana yapının ömrü kadar değildir. İstenilen yerde kullanılabilir.
+
+			struct Neco {
+				struct Data { // nested structure
+					int a, b, c;
+				}dx, dy, dz;
+				
+				int x, y, z;
+			};
+			
+			int main()
+			{
+				struct Data mydata;
+			}
+
+ 
+
+# Alignment (Hizalama)
+
+- Sizin değişkenleriniz bellekte tutuluyor. İşlemcinin bellekte bu değişkenlere erişebilmesi için
+değişkenlerin türlerine bağlı olarak belirli adreslere yerleştirilmesi gerekiyor. 
+Örneğin ikinin katları olan adreslere. Belirli değişkenler kolay erişilsin diye örneğin ikinin, 
+dördün, sekizin katları olan adreslere yerleştiriliyor. Çünkü bu şekilde işlemci onlara daha kolay
+daha düşük maliyetle erişiyor. 
+
+- Her veri türü için "aligment requirement" değeri vardır. Yani işaretsiz tam sayı türünden 
+bir değer ( 1 2 4 8 olabilir) 
+
+- Alignment requirement c11 standartlarına kadar bu değeri elde etmek mümkün değildi. 
+derleyicilerin eklentileri kullanılıyordu.  Mesela visual studio c11 standartlarını desteklemediği 
+için __alignof denilen bir extention kullanılıyor. 
+
+Ancak c11 standartları ile bu bir keyword haline geldi. _Alignof olarak.
+
+
+	printf("char = %zu\n", __alignof(char));
+	printf("short %zu\n", __alignof(short));
+	printf("int %zu\n", __alignof(int));
+	printf("long %zu\n", __alignof(long));
+	printf("long long %zu\n", __alignof(long long));
+	printf("float %zu\n", __alignof(float));
+	printf("double  %zu\n", __alignof(double));
+	
+	
+- Bu şekilde bir yerleştirme işlemi, işlemcinin o bellek alanlarına daha kolay erişmesini ve 
+erişim maliyetinin daha düşük olmasını sağlıyor o yüzden böyle yerleştiriyor. 
+
+- Yani toparlayacak olursak her tür için bir alignment requirement var ve o tür için belleğe 
+yerleştirme sistemi o türün alignment requirement değerinin katlarına göre bellekteki adreslere
+yerleştiriliyor. Yani int türünün alignment requirement'ı 4 ise bu türün belleğe yerleştiği
+adres değerleri (pointerları) 4'ün katları oluyor.
+
+- Alignment requirement daha çok bizi yapı türlerinde ilgilendiriyor. Bir yapıdaki nesnelerin 
+belleğe yerleşimi yapı içindeki nesnelerin en büyük alignment requirement değerine göre 
+yerleştiriliyor. 
+		
+		typedef struct {
+			char c1;
+			int i;
+			char c2;
+		}Data;
+		
+		int main()
+		{
+			printf("sizeof(Data) = %zu\n", sizeof(Data)); //12
+		}
+
+
+ - Yukarıdaki kodda yapının sizeof değerinin 6 olması beklenirken ekrana 12 yazdırıldığı 
+ görülür. Sebebi ise alignment requirement'dır. Yukarıdaki yapının alignment requirement'ı 
+ 4 olduğu için char türünün sizeof'u 1 olmasına rağmen int türünün doğru alignment yerleşimi 
+ yapılması için char türü 1 byte'ya yerleştirilip diğer 3 byte atlanır yani o kullanılmayan byte'lar
+ boş bırakılır. Buna ingilizce olarak **padding** byte ya da **hole** denilir.
+ 
+ - Yani siz bir yapının elemanlarını bildirme sıranız, yapı türünün sizeof değerini ve yapı 
+ nesnelerinin içinde padding byte olup olmadığını ya da kaç tane padding byte olduğunu 
+ doğrudan belirliyor. 
+ - Peki yapı türünde padding byte bırakılmasının zararları nelerdir?
+ 	- Mesela yukarıdaki örnek için bellekte 12 byte yer ayırılırken sadece 6 byte'ı 
+ 	kullanılacaktır. 6 byte'ını hiç kullanmıyorsunuz. Yani siz büyük bir yapı oluşturduğunuzda
+	bu yapının büyüklüğüne göre yarı yarıya bir bellek kullanımı zararına yol açacaktır. 
+	- padding byte'ları engellemenin iki yolu var. 
+		- Yapı bildirilirken ki sıralama padding byte'ları minimal düzeyde kalacak şekilde
+		bildirilmeesi. 
+				
+				struct Data {
+					int x;
+					char c;
+					char y;
+				};
+		
+	- Yukarıdaki gibi yapı bildirildiğinde sizeof değeri 8 e düşer.
+  	- Eğer bu şekilde bir minimalize edilme sözkonusu ise uyulması gereken kural
+  	alignment requirement'ı büyük olandan küçük olana göre tanımı yapılması gerekmektedir.
+	
+	- Eğer biz hiç padding byte olmadan yerleştirilmesini istersek ;
+		- Donanıma bağlı olarak böyle birşey mümkün olmayabilir. (mikroişlemcinin
+		özelliğine göre
+		- Derleyiciyi bu şekilde kod üretmeye zorlayabilirsiniz. Ama bu ekstra bir maliyet
+		getirir. Mesela visual studio da böyle birşey mümkün.
+		
+			#pragma pack(1) // standart değil
+			#pragma pack(2) // 2 nin katlarına yerleştirilmesi isteniyor.
+			
+	- Yukarıdaki pack durumunun iyi ve kötü yanları mevcut.
+		- Yukarıdaki standart olmayan pragma kullanılırsa yapı nesneleri için bellekte
+		daha az yer kaplanacak yani hafıza daha verimli kullanılmış olacak.
+		Ama işlem maliyeti artacak. Burada tercihiniz bellekte az yer kaplaması ise yani
+		kodun yavaş çalışması sizin için önemli değilse pragma kullanılabilir ama siz kodun
+		hızlı çalışmasını istiyorsanız bellek önemli değil diyorsanız yapıda sıralı bir 
+		şekilde tanımlama yapmak tercihiniz olabilir. 
+	
+  
+ 
+ - Uyarılar:
+ 	- Bir yapının sizeof değerini bir yerder kullanacaksanız hiç bir zaman sabit kullanmayın
+ 	sizeof operatörünü kullanarak elde etmeye dikkat edin.
+	- Yapılar söz konusu olduğunda pointer aritmetiği kullanılmamalıdır çünkü padding byte'lar
+	söz konusu olduğunda istediğiniz sonucu elde edemezsiniz.
+		
+			typedef struct {
+				char c1;
+				int i;
+				char c2;
+			}Data;
+			
+			int main()
+			{	
+				Data mydata = { 1, 1249, 2 };
+				char* p = &mydata.c1;
+				int* ptr = (int*)(p + 1);
+			}// yukarıda ptr i nesnesini gösteremez.
   
   
+- İlla pointer aritmetiği kullanılmak istenirse stddef.h başlık dosyasında bir makro mevcut.
+
+	 		#include <stdio.h>
+			#include <stddef.h>
+			
+			typedef struct {
+				char c1;
+				int i;
+				char c2;
+			}Data;
+			
+			int main()
+			{	
+				offsetof(Data, i)		
+			}
+  - offsetof makrosunun ilk parametresi yapı türü, ikinci argüman o yapının elemanlarından birini
+  yazıyorsunuz. Bu makronun açılması sonucu oluşan ifadenin türü size_t size 0, 1, 2, 4, 5 gibi
+  bir tamsayı değer veriyor. Bu değer gönderilen yapı nesnesinin adresinden başlayarak kaç byte
+  sonrasında yer aldığı değerini veriyor. 
   
   
+  			#include <stdio.h>
+			#include <stddef.h>
+			
+			typedef struct {
+				char c1;
+				int i;
+				char c2;
+			}Data;
+			
+			int main()
+			{	
+				Data mydata = { 1, 23432, 2 };
+				
+				char* p = &mydata.c1;
+				
+				(int*)(p+ offsetof(Data, i)) // i nesnesinin adresi.
+			}
+  			
   
   
+ - Mülakatlarda sık sorulan sorulardan birisi offsetof makrosunun nasıl implemente edildiği.
+
+ 
+  		#define moffsetoff(s, e)    (size_t)(&(((s*)0)->e))   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  # 02:09:30
   
   
   
