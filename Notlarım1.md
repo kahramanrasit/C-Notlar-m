@@ -14811,7 +14811,7 @@ yerleştiriliyor.
 				
 				char* p = &mydata.c1;
 				
-				(int*)(p+ offsetof(Data, i)) // i nesnesinin adresi.
+				(int*)(p  + offsetof(Data, i)) // i nesnesinin adresi.
 			}
   			
   
@@ -14821,7 +14821,61 @@ yerleştiriliyor.
  
   		#define moffsetoff(s, e)    (size_t)(&(((s*)0)->e))   
   
-  # 02:09:30
+ 
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
