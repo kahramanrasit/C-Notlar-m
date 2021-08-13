@@ -473,6 +473,321 @@ olmak zorundadır.**
                 - flexible array
 
 
+# Ders 53 - 18.06.2021
+
+
+- Bitsel İşlemler (Bitwise Manipulations / Operations)
+
+    - Bitwise operators
+        - ~ (bitwise not)
+        - >>, << (bitwise left/right shift) bitsel kaydırma 
+        - & (bitwise and) 
+        - ^  (bitwise exor)
+        - | (bitwise or)
+        - |=, >>=, <<=, &= 
+
+- Yukarıdaki operatörlerin hepsi bitsel işlem yapıyor.
+- Bu operatörlerin operantları int type türünden olmak zorunda. 
+
+
+- ~ (bitwise not) 
+    - unary prefix bir operatör.
+    - Operant tam sayı türünden olmalı. integer promotion burada da geçerli.
+    - Operatörün ürettiği değer, operantın bitlerinin tersinin alınmasıyla elde edilen değerdir.
+    - Bu operatörün bir yan etkisi yoktur. (no side effect)
+    
+            int x;
+            printf("bir tam sayi girin: ");
+            scanf("%d", &x);
+
+            bprint(x);
+            bprint(~x);
+        
+- <<, >> bitwise left/right shift (bitsel sola sağa kaydırma operatörü)
+
+
+        a << 2
+- Yukarıdaki kod için a nın değeri 2 bit sola kaydırılacak. Yani a'nın solundaki iki bit silinecek
+ve sağına 2 bit 0 olarak eklenecek.
+
+        1110010101110101 iken
+        1001010111010100 olacak.
+
+- Yani burda dikkat edilmesi gereken nokta, sayı işaretli veya işaretsiz türden de olsa her zaman
+sağdan yapılan besleme (feed) 0 olacaktır. 
+
+- Operatörün yine yan etkisi yok (no side effect)
+- Atama yapmak istiyorsanız:
+
+        a <<= 2; // olarak kullanılabilir.
+        
+
+- Eğer sağ operant negatif değerde ise ya da sağ operand, sol operand olan ifadenin ait olduğu türün 
+bit sayısına eşit veya büyük değerde ise **tanımsız davranıştır.**
+
+        a << b için;
+        a -> int 4 byte 32 bit olduğu için b en fazla 31 bit bir değere sahip olabilir.
+        
+- Kayan bitler için bir örnek:
+
+            #include <Windows.h> // standart bir fonksiyon değil
+
+
+
+            int main()
+            {
+                int x = 1;
+
+                while (x) {
+                    bprint(x);
+                    x <<= 1;
+                    Sleep(200);
+                }
+
+
+            }
+            
+- Bitsel sola kaydırma işleminde feed her zaman 0 oluyordu ancak bitsel sağa kaydırmada durum tamamen
+aynı değil.
+    - Eğer sol operant işaretsiz ise besleme 0 ile yapılır.
+    - Eğer sol operant işaretli ama pozitif değer ise besleme yine 0 ile yapılır.
+    - Ancak eğer sol operant işaretli ama negatif değer ise 
+        - Soldan yapılacak beslemenin 0 veya 1 ile yapılması tamamen derleyiciye bağlıdır.
+         ( implementation defined )
+        - Besleme 1 ile yapılıyorsa ; aritmetik besleme ( sign extension )
+        - Besleme 0 ile yapılıyorsa ; lojik besleme ( logic extension )
+        
+
+
+- Bir idiyomatik ifade:
+
+                (~(~0u >> 1)) -> ifadesinin sonucu 100..00-> 32 bit
+                // 0000 0000 0000 0000 0000 0000 0000 0000
+                // 1111 1111 1111 1111 1111 1111 1111 1111
+                // 1000 0000 0000 0000 0000 0000 0000 0000  olur.
+                // bu sayi işaretli olarak kullanılırsa ;
+                // işaretli tam sayı türünün en küçük değerine eşit olur. 
+        
+- Bu sayı limits.h başlık dosyasında INTMIN makrosunun değeridir.
+
+
+- Aşağı kodda 1 bitini soldan sağa kaydırma işlemi yapıyor.
+
+        unsigned int x = ~(~0u >> 1);
+
+        while (x) {
+            bprint(x);
+            x >>= 1;
+        }
+
+- Bitsel & operatörü:
+    - Tam sayıları bitsel işleme sokuyor.
+
+
+            int x = 154645, y = 9589;
+
+            bprint(x);
+            bprint(y);
+            bprint(x & y);
+            
+            
+ - Bitsel operatörlerin short circuit behavior yoktur.
+
+  
+  
+- exor (exclusive or)
+    - !!x != !!y  işlemine eşittir. 
+    
+- İki sayıyı iki kere exor işlemine sokarsanız soldaki değeri tekrar elde edersiniz.
+
+- İki tam sayıyı üçüncü bir değişken olmadan takas etmek mülakat sorusunun cevabıdır.
+    - exorswap
+    
+            int x = 124, y = 687;
+	
+
+            x ^= y;
+            y ^= x;
+            x ^= y;
+            printf("x = %d, y = %d ", x, y);
+             
+- Hatta tek bir satırda da yazılabilir.
+
+            x ^= y, y ^= x, x ^= y;
+
+
+- Bir mülakat sorusu:
+    - İşaretli iki tam sayının x, y zıt işaretli olup olmadığını test eden bir ifade yazınız.
+
+            x ^ y işleminin sıfırdan küçük olması bu testin karşılığıdır.
+            
+            if ((x ^ y) < 0) 
+            
+
+- Bir tam sayının belirli bir bitini bir'lemek ( to set the bit - to turn the bit on)
+- Bir tam sayının belirli bir bitini sıfır'lamak ( to reset the bit - to clear the bit- to turn the bit off)
+- Bir tam sayının belirli bir bitini değiştirmek (  to flip the bit- to toggle the bit)
+- Bir tam sayının belirli bir bitini 1 mi 0 mmı olduğunu anlamak. ( to get the bit )
+
+
+
+- bitmask: belirli bitsel manipulasyon için kullanılana sabitler. Değişiklik yapılmak istenen bitin 1
+olduğu diğer bitlerin ise 0 olduğu bitsel değerler.
+
+            10110101010011*10010
+            00000000000000100000  // bitmask
+            10110101010011110010
+
+
+- x biti set edilecek sayı olsun n set edilecek bitin indeksi olsun.
+
+
+        x |= (1 << n) // x'in n. bitinin birlenmiş halidir.
+
+
+- mesela bir sayının 5. bitini 1 leyelim.
+
+
+            int x = 15;
+            
+            bprint(x);
+            
+            x |= 1 << 5; // x sayısının beşinci biti birlendi.
+            
+            bprint(x);
+            
+
+- istenilen bitin birlendiği bir örnek yazalım:
+
+
+        int x = 0;
+        int n;
+        
+        bprint(x);
+        printf("kacinci bit birlensin");
+        scanf("%d", &n);
+        
+        x |= 1 << n;
+        
+        bprint(x);
+        
+        
+- Bir örnek:
+
+
+            int x = 0;
+
+            randomize();
+
+            while (x != -1) {
+                x |= (1 << (rand() % 32));
+                bprint(x);
+                Sleep(50); //Windows.h başlık dosyasından.
+            }
+            bprint(x);
+
+
+
+- x biti clear edilecek sayı olsun n clear edilecek bitin indeksi olsun:
+
+            x & ~(1 << n);
+            x &= ~(1 << n); // x e sonuç atandı.
+
+
+- x sayısının 27. biti sıfırlansın.
+
+        int x = -1;
+        
+        bprint(x);
+        
+        x &= ~(1 << 27);
+        bprint(x);
+
+
+
+
+- Bir örnek:
+
+            int x = 0;
+
+            randomize();
+
+            while (x != -1) {
+                x |= (1 << (rand() % 32));
+                bprint(x);
+                Sleep(50); //Windows.h başlık dosyasından.
+            }
+            bprint(x);
+            
+            while (x) {
+                x &= ~(1 << (rand() % 32));
+                bprint(x);
+                Sleep(50); //Windows.h başlık dosyasından.
+            }
+            bprint(x);
+
+
+- toggle işlemi: Yani bir bitin tersini alma işlemi:
+
+        x ^= (1 << n) 
+
+
+- Bir tam sayının bir bitinin ne olduğunu elde etmek:
+    - x biti get edilece ksayı olsun n get edilecek bitin indeksi olsun:
+
+            if ( x & (1 << n))
+
+- Bir örnek:
+
+            static char str[40];
+            
+            _itoa(x, str, 2);
+            printf("%032s\n", str);
+            
+            int n;
+            printf("kacinci bit: ");
+            scanf("%d", &n);
+            
+            if (x & (1 << n))
+                printf("%d. bit 1\n", n);
+            else
+                printf("%d. bit 0\n", n);
+                
+- Daha idiyomatik hali:
+
+            int x;
+            printf("bir tamsayi girin: ");
+            scanf("%d", &x);
+            
+            for (int i = 0; i < 32; ++i) {
+                printf("sayinin %d. biti %c\n", i, (x & (1 << i)) ? '1': '0');
+            }
+
+
+
+# 1:56:06
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
