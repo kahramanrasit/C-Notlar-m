@@ -765,48 +765,204 @@ olduğu diğer bitlerin ise 0 olduğu bitsel değerler.
 
 
 
-# 1:56:06
+- Bitsel operatörleri kullanarak bir sayının bitlerini yazan fonksiyon:
+
+
+		void bit_print(int x)
+		{
+		    unsigned int mask = ~(~0u >> 1);
+
+		    while (mask) {
+			putchar(x & mask ? '1' : '0');
+			mask >>= 1
+		    }
+		    putchar('\n');
+		}
+
+- Bu sefer mask i 0 değerleri üzerinden düşünerek yazalım:
+
+		void bit_print(int x)
+		{
+		    for (int i = sizeof(int) * 8 - 1; i >= 0; --i) {
+			putchar((x >> i) & 1 ? '1' : '0');
+		    }
+		    putchar('\n');
+		}
+
+
+
+- Bir mülakat sorusu:
+	- if (x & 1) ifadesi neyi sorguluyor?
+		- x'in sıfırıncı bitiinin 1 olup olmadığı sınanıyor.
+		Ayrıca bu ifadenin anlamı ise sayının tek olup olmadığı sınanıyor.
+		Yani if (x % 2 != 0) ifadesi ile aynı anlama gelmektedir.
+		
+		
+
+- Bir soru:
+	- x bir tam sayı değişken, x'in en düşük anlamlı 4 biti tam sayı olarak kaçtır. 
+
+			int x = 122532;
+			
+			bprint(x);
+			
+			printf("%d\n", x & 15); // 15 -> 1111
+
+
+
+- Bir tam sayının set edilmiş bitlerinin sayısını bulmak, yani kaç biti 1 dir.
+
+
+			int set_bit_count(int x)
+			{
+			    int cnt = 0;
+			    unsigned int mask = ~(~0u >> 1);
+
+			    while (mask) {
+				if (x & mask) 
+				    ++cnt;
+				mask >>= 1;
+			    }
+
+			    return cnt;
+			}
+
+
+
+- Çok meşhur bir mülakat sorusu:
+	- Öyle bir ifade yazınız ki, x bir tam sayı değişken olsun, x 2'nin kuvveti mi?
+	- Ve bunu bir makro haline getirin.
+
+- Cevap: Bir istisna hariç bir sayı 2 nin kuvveti ise o sayıdan 1 çıkarılıp kendisiyle & işlemine
+sokulduğunda sonuç 0 olmalıdır.
+
+		0001 0000
+		0000 1111
+		
+		0000 0000 olur:
+		
+		!(x & (x - 1))
+Buradaki istisna 1 sayısıdır. 1'in bir eksiğiyle 1'i & lerseniz yine 0 elde edersiniz ancak 0, 2'nin 
+kuvveti değildir.
+
+		x != 0 && !(x & (x - 1)) 
+		x && !(x & (x - 1))  olarak son halini alır. 
+
+
+# Ders 54- 23.06.2021
+
+- Bit twiddings hacks: Mülakata girmeden önce bitsel manipülasayona dair kısa yolların bulunduğu bir 
+döküman kesinlikle incelenmelidir.
+
+ 
+
+- Bir byte'ın reverse'ünü elde etmek:
+		
+		1100 1101
+		1011 0011 reverse edilmiş hali.
+		
+
+- bit twiddings hacks'e bakınız..
+
+
+
+- Meşhur mülakat sorularından bir tanesi:
+	- 16 bitlik işaretsiz bir tam sayınız var, bu tam sayının ortasındaki 8 bitin değerini elde edin.
+
+		1001 0101 0101 1001 sayısının ortadaki 8 biti yani
+		     0101 0101  kısmını elde etmeniz isteniyor.
+		     
+- Çözümlerden birisi: sayıyı 4 sağa kaydırıp 16 sayısıyla & lemek
+
+		x >> 4 & 16;
+		
+- Ama daha kolay bir yolu var:
+	- x'i 4 sola kaydır, Bunu da 8 sağa kaydır.
+
+		x << 4 >> 8;
+		
+- Bir işaretsiz tam sayının bitlerini bir boolean vector olarak kullanmak:
+
+
+- Bitsel işlemlerin önemli bir kısmıda formatsız veri alış verişi için kullanılır.
+	- Acaba biz bir tamsayının belirli bit alanlarını ayrı değişkenler olarak kullanabilir miyiz?
+
+- bitfields members of structures - yapıların bit alanı elemanları:
+	- bitsel olarak değişken oluşturma üzerinde belirli işlemler yapma gibi standart olan
+	bir yolu.
+	
+	
+		//bitfield member:
+
+		typeddef struct  {
+			unsigned int x : 3; // buradaki 3 değerin kaç bitlik alanda tutulacağı.
+		}Data;
+
+
+- Normal yapılara göre bir kısıtlama mevcut. normalde bir yapının elemanın adresi alınabiliyordu.
+Ancak bitsel düzeyde olduğunda adresi alınamıyor.
+
+		Data mydata;
+		
+		&mydata.x; // hata
+ 
+
+- alignment için kullanılmayacak olan bitler için bir belirtme söz konusu olabilir.
+
+		struct Data {
+			unsigned int x : 5;
+			unsigned int   : 3; // gibi
+			unsigned int y : 4;
+			unsigned int z : 3;
+		};
 
 
 
 
 
 
+- Birlikler ile bitsel işlemlerin birlikte kullanım şekli çok yaygın.
+	
+		typedef union {
+			uint32_t uval;
+			struct {
+				unsigned int mday : 5;
+				unsigned int mon  : 4;
+				unsigned int year : 7; // 1980
+				unsigned int hour : 5;
+				unsigned int min  : 6;
+				unsigned int sec  : 5;
+			};
+		}DateTime;
+		
+		int main()
+		{
+			DateTime dt = {
+					.mday = 14,
+					.mon = 3,
+					.year = 1995 - 1980,
+					.hour = 21,
+					.min = 36,
+					.sec = 45 / 2;
+					};
+					
+			printf("%u\n", dt.uval); // değeri :  3029671534
+		}
+		------- ya da -----------------------------------------------
+	
+		int main()
+		{
+			DateTime dt = {
+					.uval = 3029671534;
+					};
+					
+			printf("%02u-%02u-%u  %02u:%02u:%02u\n", dt.mday, dt.mon, dt.year + 1980,
+							dt.hour, dt.min, dt.sec * 2);
+		}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# 1:55:30
 
 
 
