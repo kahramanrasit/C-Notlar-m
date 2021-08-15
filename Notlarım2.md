@@ -962,7 +962,164 @@ Ancak bitsel düzeyde olduğunda adresi alınamıyor.
 
 
 
-# 1:55:30
+
+
+- Bitler e rahat erişim için bir örnek:
+
+		typedef union {
+			struct {
+				unsigned int bit0 : 1;
+				unsigned int bit1 : 1;
+				unsigned int bit2 : 1;
+				unsigned int bit3 : 1;
+				unsigned int bit4 : 1;
+				unsigned int bit5 : 1;
+				unsigned int bit6 : 1;
+				unsigned int bit7 : 1;
+				unsigned int bit8 : 1;
+				unsigned int bit9 : 1;
+				unsigned int bit10 : 1;
+				unsigned int bit11 : 1;
+				unsigned int bit12 : 1;
+				unsigned int bit13 : 1;
+				unsigned int bit14 : 1;
+				unsigned int bit15 : 1;
+				unsigned int bit16 : 1;
+				unsigned int bit17 : 1;
+				unsigned int bit18 : 1;
+				unsigned int bit19 : 1;
+				unsigned int bit20 : 1;
+				unsigned int bit21 : 1;
+				unsigned int bit22 : 1;
+				unsigned int bit23 : 1;
+				unsigned int bit24 : 1;
+				unsigned int bit25 : 1;
+				unsigned int bit26 : 1;
+				unsigned int bit27 : 1;
+				unsigned int bit28 : 1;
+				unsigned int bit29 : 1;
+				unsigned int bit30 : 1;
+				unsigned int bit31 : 1;
+			};
+			uint32_t uval;
+		}Bits;
+
+
+		int main()
+		{
+			Bits x = { .uval = 3651910 };
+			x.bit7 = 0;
+
+		}
+
+
+
+
+- endianness: Bir değişkenin belleğer byte - byte yerleşimi yapılmasında düşük anlamlı byte'ın 
+yüksek numaralı adrese veya düşük numaralı adrese yerleşmesine göre ayrılmasındaki kullanılan terim:
+
+
+		int  x = 10;
+		
+		0000 0000 0000 0000 0000 0000 0000 1010
+		
+		- Düşük anlamlı byte yüksek sayısal adreste, yüksek anlamlı byte düşük sayısal adreste,
+			- big-endian
+			- motorala tarzı
+		4000 -> 0000 0000
+		4001 -> 0000 0000
+		4002 -> 0000 0000
+		4003 -> 0000 1010
+		
+		
+		- Düşük anlamlı byte düşük sayısal adreste, yüksek anlamlı byte yüksek sayısal adreste
+			- little endian
+			- intel tarzı
+		4000 -> 0000 1010
+		4001 -> 0000 0000
+		4002 -> 0000 0000
+		4003 -> 0000 0000
+		
+		- arm her ikisindede kullanılıyor olabilir.
+
+- Mülakatlarda sık sorulan bir mülakat sorusu: 
+	- Öyle bir C kodu yazınız ki, çalıştırıldığı zaman çalıştırıldığı sistemin big endian mı little
+	endian mı olduğunu ekrana yazdırsın.
+	
+		int x = 1;
+		
+		char *p = (char*)&x
+		
+		if (*p)
+			printf("little endian\n");
+		else
+			printf("big endian\n");
+
+	- Daha kolay yazımı:
+
+		int x = 1;
+		
+		char *p = (char*)&x
+		
+		if (*p)
+			printf("little endian\n");
+		else
+			printf("big endian\n");
+			
+
+- Bellekte nasıl tutulduğunu tam olarak gözle görülmek istendiğinde:
+
+		unsigned int x = 0x12AB45DE;
+
+		unsigned char* p = (unsigned char*)&x;
+
+		printf("%p %x\n", p, *p);
+		++p;
+		printf("%p %x\n", p, *p);
+		++p;
+		printf("%p %x\n", p, *p);
+		++p;
+		printf("%p %x\n", p, *p)
+
+
+- Öyle bir makro yazınız ki big endien ı little endien a, little endien ı big endien e dönüştürsün:
+
+	
+		#define enc16(x)  ((uint16_t)(x >> 8)) | ((uint16_t)(x << 8))  // 16 bit için
+		#define enc32(x)  ((x >> 24) | (x << 24)) | ((((x << 8) >> 24) << 8) | ((((x << 16) >> 24) << 16))) // 32 bit için
+
+
+# Ders 55 - 25.06.2021
+
+
+- Komut Satırı Argümanları:
+	- Commend Line Arguments (CLI)
+
+
+		int main(int argc, char *argv[])
+		{
+
+
+		}	
+- argc : komut satırından gönderilen argüman sayısı.
+- argv: komut satırından gönderilen argümanların yazılarını gönderen pointer dizi.
+	- copy ali.c veli.c için argc si 3 olur ve argv[0] = copy, argv[1] = ali.c, argv[2] = veli.c 
+	olur.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
