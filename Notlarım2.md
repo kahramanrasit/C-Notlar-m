@@ -1108,12 +1108,18 @@ yüksek numaralı adrese veya düşük numaralı adrese yerleşmesine göre ayr�
 
 
 
+- Dosya İşlemleri ( File Operation)
+	- Dosya dediğimiz de aklımıza 1 ler ve 0 lar gelmeli ancak burdaki 1 ler ve 0 lar
+	bellekteki (ram) veriler değil ikincil saklama ortamındaki 1 ler ve 0 lar gelmeli. 
+	- Bu 1 ler ve 0 lar ise ne anlama geliyor dediğimizde aklımıza dosyanın formatı gelmeli(file 
+	format). Her dosyanın bir formatı vardır. Yani ikincil saklama ortamlarında tutulan 1 ler ve 
+	0 ların ne anlama geldiğini bilmeniz için o dosyanın formatını bilmeniz gerekiyor.
+	- Mesela txt formatında her bit byte bir ascıı koduna karşılık gelmektedir.
+ 
 
 
 
-
-
-
+# 01:03:37
 
 
 
