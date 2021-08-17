@@ -1118,8 +1118,166 @@ yüksek numaralı adrese veya düşük numaralı adrese yerleşmesine göre ayr�
  
 
 
+- C'de dosya işlemi yapabilmeniz için fopen fonksiyonuna çağrı yapmanız gerekmektedir.
+- fopen fonksiyone bize işlem yapacağımız dosya ile ilgili kritik bilgileri tutan bir yapı nesnesinin
+adresini döndürüyor. 
 
-# 01:03:37
+	FILE *f = fopen(??);
+	//code
+	fclose(f);
+
+- Dosyalar üzerinde hangi işlemler yapılıyor:
+	- Dosyadan okuma (read)
+	- Dosyaya yazma (write)
+	- Dosya konum göstericisi (file pointer)
+
+
+
+		FILE * fopen(const char *pfname, const char *popenmode);
+	-  Geri dönüş değeri FILE *
+	-  Birinci parametresi açılacak dosyanın ismini içeren yazının adresi.
+	-  Fonksiyonun ikinci parametresi, dosyanın açış modu dediğimiz bilgiyi içeren yazı adresi. 
+
+- Dosya açış modu bilgisi:
+	- Dosya varsa ne olacak yoksa ne olacak.
+	- Dosya üzerinde okuma veya yazma işlemi iznimiz var mı?
+
+- Açış modu:
+	- Dosyayı okuma (read) modunda açabiliriz.
+	- Dosyayı yazma (write) modunda açabiliriz.
+	- Dosyanın sonuna ekleme (append) modunda açabiliriz.
+
+- Dosyanın okuma (read) modu varsa; dosya açılır, yoksa açılmaz.
+- Dosyanın yazma (write) modu varsa; dosya sıfırlanır (truncate), yoksa oluşturulacak.
+- Dosyanın sona ekleme (append) modunda varsa; açılacak, yoksa oluşturulacak.
+
+- Peki neler yapabiliriz:
+	- Okuma modunda açıldığında dosya okunabilir ama yazılamaz.
+	- Yazma modunda açıldığında dosyaya yazabiliriz ama dosyayı okuyamayız.
+	- Sona ekleme modunda, dosyanın sadece sonuna yazabiliriz, ama okuyamayız. 
+
+
+- Bir de bu modların + 'lı modları mevcut.
+	- Artılı okuma modunda hem okuma hem yazma işlemi yapabiliyoruz.
+	- Artılı yazma modunda hem yazma hem okuma işlemi de yapabiliyoruz.
+	- Artılı sona ekleme modunda sona yazabiliyoruz ve okuyadabiliyoruz.
+
+
+
+
+- Dosyalara text modunda ve binary mod olarak açılabilir.
+
+
+- Modlar için yazılara bakalım: İlave karakter kullanılmadığında default olarak text modunda dosya açılır.
+	- Okuma için -> "r" ---artılı mod için--- "r+"
+	- Yazma için -> "w" ---artılı mod için--- "w+"
+	- Sona ekleme için -> "a" ---artılı mod için--- "a+"
+- Dosyayı binary modda açmak için b eklenir:
+	- Okuma için -> "rb" ---artılı mod için--- "r+b" veya "rb+"
+	- Yazma için -> "wb" ---artılı mod için--- "w+b" veya "wb+"
+	- Sona ekleme için -> "ab" ---artılı mod için--- "a+b" veya "ab+"
+
+
+
+- Geri dönüş değeri ise stdio başlık dosyasında typedef i yapılmış bir yapı isimdir (FILE) . 
+	 - Geri dönüş değeri NULL pointer ise dosya açma işleminde başarısız olunmuş demektir. 
+	 ! geri dönüş değeri mutlaka test edilmelidir.
+	 
+	
+			FILE* f = fopen("mustafa.txt", "r");
+
+			if (!f) {
+				fprintf(stderr, "dosya acilamadi\n");
+				return 1;
+			}
+
+			printf("dosya acildi\n");
+
+			// 
+			fclose(f);
+
+
+
+- fclose parametrik yapısı:
+
+		int fclose(FILE *);
+	- Geri dönüş değeri  fonksiyonun başarısını temsil ediyor. 
+		- non-zero değer dönmesi dosyanın kapatılamadığı bilgisini verir.
+		- 0 değer dönmesi ise başarılı olduğu bilgisini verir.
+
+
+
+			int fcloseall(void); // standard değil
+			
+	- Aynı zamanda birden fazla dosya açıksa ve tek kodda tüm dosyalar kapatılmak isteniyorsa 
+	fcloseall kodu kullanılır.
+	- Geri dönüş değeri kapatılan dosya sayısıdır.
+	
+	
+- fgetch(): formatsız okuma fonksiyonu:
+	- Bu fonksiyon dosyadan tek bir byte'ı yani tek bir karakteri okuyor. 
+
+
+- Dosya işlemlerinde hiçbir fonksiyon bizden hangi byte'dan okuma veya yazma işlemini yapacağı 
+bilgisini istemez. 
+- Bir file pointer yani Dosya Konum Gösterici var. File pointer sizin erişiminize kapatılmış bir 
+tam sayı değişken. Bu tam sayı değişken dosyanın neresinden okuma/yazma işlemi yapılacağını 
+gösteriyor.
+- Dosya işlemlerinin bu şekilde yapılmasına sequential access (sıralı erişim) deniliyor. 
+- random access (rastgele erişim) belirli fonksiyonlar yardımıyla file pointer set edilerek
+istenilen byte'dan erişimin sağlanmasına deniliyor.
+
+
+
+
+	int fgetc(FILE *);
+- Geri dönüş değeri dosyadan okunan byte'ın tam sayı değeri.
+- Okuma başarılı ise okunan byte'ın tam sayı değeri döndürülüyor. Eğer başarısız olurs -1 döndürüyor.
+- stdio başlık dosyasında fgetc'nin başarısızlık bilgisi sorgulanması için değeri -1 olan
+bir makro var :
+
+		#define EOF  	(-1) 
+		
+		
+
+- Bir örnek:
+
+
+			FILE* f = fopen("date.h", "r");
+			if (!f) {
+				fprintf(stderr, "dosya acilamadi\n");
+				return 1;
+			}
+
+			int c;
+
+			while ((c = fgetc(f)) != EOF) {
+				putchar(c); // printf("%c", c);
+			}
+
+			fclose(f);
+
+
+# 56
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
