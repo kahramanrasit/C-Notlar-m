@@ -1258,8 +1258,10 @@ bir makro var :
 			fclose(f);
 
 
-# 56
+# Ders 56 - 28.06.2021
 
+
+#29:01
 
 
 
