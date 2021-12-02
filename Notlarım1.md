@@ -5,6 +5,7 @@
 
 # Token (Atom)
 
+
  - Derleyicinin anlamlandırabildiği en küçük program parçasıdır.
 
  - Derleyici "Tokenizing" işlemi ile kodu atomlarına ayırır.
